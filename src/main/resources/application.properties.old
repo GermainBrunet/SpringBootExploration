@@ -1,0 +1,10 @@
+spring.datasource.url= jdbc:postgresql://localhost:5433/salefinder
+spring.datasource.username=salefinderadmin
+spring.datasource.password=admin
+#spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.hibernate.ddl-auto=update
+
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQL95Dialect
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+spring.datasource.driver-class-name=org.postgresql.Driver
