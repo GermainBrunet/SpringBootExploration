@@ -1,7 +1,15 @@
 package ca.gb.sf.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import ca.gb.sf.models.ProductLowestPriceView;
+import ca.gb.sf.util.PageWrapper;
+import ca.gb.sf.web.form.SearchForm;
 
 @Controller
 public class HomeController {
@@ -9,7 +17,7 @@ public class HomeController {
     @GetMapping("/")
     public String root() {
         // return "index";
-        return "productList";
+        return "productListNew";
     }
 
     @GetMapping("/user")
@@ -18,10 +26,15 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(SearchForm searchForm, Model model) {
+
+    	System.out.println("login");
+    	
+    	model.addAttribute("searchForm", new SearchForm());        
+    	
         return "login";
     }
-
+    
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "/error/access-denied";

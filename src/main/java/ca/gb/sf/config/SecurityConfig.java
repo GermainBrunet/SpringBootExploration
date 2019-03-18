@@ -31,6 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(
                     		"/registration**",
                     		"/workPage",
+                    		"/exerciseList**",
+                    		"/exercisePage/**",
                     		"/searchNew",
                     		"/favicon.ico",
                             "/",

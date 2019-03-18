@@ -10,11 +10,27 @@
 <body>
 	<div layout:fragment="content" th:remove="tag">
 
+		<div class="container my-5">
+			<h2 class="mb-5">Exercise Page</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="form-group col-md-6">
+							<label for="name" class="col-form-label">Instructions</label>
+							<p th:text="${exercise.instructions}"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
-				<h1>Work Page</h1>
 
-	 <script id="rendered-js" >
+	 <script th:inline="javascript" id="rendered-js" >
+	 
+	  var initialWord = /*[[${exercise.initialWord}]]*/ 'default';
+	 
       var game = new Phaser.Game(640, 480, Phaser.AUTO, '', {
   preload: function () {
     this.scale.pageAlignHorizontally = true;
@@ -98,11 +114,11 @@
                            ];
                            **/
 
-    displayText = new DisplayText('annie');
+    displayText = new DisplayText(initialWord);
     displayText.display();
     console.log('b4');
-    displayText.addLetter('g');
-    console.log('b5');
+    // displayText.addLetter('g');
+    // console.log('b5');
 
     // t.display();
 

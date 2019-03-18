@@ -20,9 +20,10 @@
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
+					    <!-- Search Form -->
+					    <!-- 
 						<li>
 							<div class="mx-auto">
-								<!-- Search form -->
 								<form class="form-inline" th:action="@{/searchNew}" th:object="${searchForm}" method="post">
 									<i class="fas fa-search" aria-hidden="true"></i> 
 									<input
@@ -32,6 +33,7 @@
 								</form>
 							</div>
 						</li>
+						 -->
 						<li sec:authorize="!isAuthenticated()"><a href="/login"
 							th:href="@{/login}"> <span class="glyphicon glyphicon-log-in"
 								aria-hidden="true"></span>&nbsp;Log In
