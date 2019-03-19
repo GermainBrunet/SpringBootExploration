@@ -6,6 +6,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ca.gb.sf.models.ProductLowestPriceView;
 import ca.gb.sf.util.PageWrapper;
@@ -28,8 +29,6 @@ public class HomeController {
     @GetMapping("/login")
     public String login(SearchForm searchForm, Model model) {
 
-    	System.out.println("login");
-    	
     	model.addAttribute("searchForm", new SearchForm());        
     	
         return "login";

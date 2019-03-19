@@ -1,4 +1,4 @@
-package ca.gb.sf.dto;
+package ca.gb.sf.web.form;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
@@ -12,7 +12,7 @@ import ca.gb.sf.constraint.FieldMatch;
         @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
         @FieldMatch(first = "email", second = "confirmEmail", message = "The email fields must match")
 })
-public class UserRegistrationDTO {
+public class UserRegistrationForm {
 
     @NotEmpty
     private String displayName;

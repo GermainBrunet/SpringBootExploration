@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h1>Login page</h1>
+            <h1 th:text="#{login.title}"></h1>
             <form th:action="@{/login}" method="post">
                 <div th:if="${param.error}">
                     <div class="alert alert-danger">
@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="username">Username</label>:
+                    <label for="username" th:text="#{login.username}"></label>:
                     <input type="text"
                            id="username"
                            name="username"
@@ -32,7 +32,7 @@
                            placeholder="Username">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>:
+                    <label for="password" th:text="#{login.password}"></label>:
                     <input type="password"
                            id="password"
                            name="password"
@@ -46,7 +46,7 @@
                                    name="login-submit"
                                    id="login-submit"
                                    class="form-control btn btn-info"
-                                   value="Log In">
+                                   th:value="#{login.button}">
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+    <p><a href="/" th:href="@{/}" th:text="#{login.back}"></a></p>
 
 </div>
 </body>

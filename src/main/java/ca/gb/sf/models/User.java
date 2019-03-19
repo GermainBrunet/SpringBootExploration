@@ -5,11 +5,16 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+		discriminatorType = DiscriminatorType.STRING,
+		name = "user_type"
+) 
 public class User extends PersistentObject {
 
-    private String displayName;
-    private String email;
-    private String password;
+    protected String displayName;
+    protected String email;
+    protected String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -68,14 +73,22 @@ public class User extends PersistentObject {
         this.roles = roles;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + getId() +
-                ", displayName='" + displayName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + "*********" + '\'' +
-                ", roles=" + roles +
-                '}';
-    }
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("User [");
+		if (displayName != null)
+			builder.append("displayName=").append(displayName).append(", ");
+		if (email != null)
+			builder.append("email=").append(email).append(", ");
+		if (password != null)
+			builder.append("password=").append(password).append(", ");
+		if (roles != null)
+			builder.append("roles=").append(roles).append(", ");
+		if (super.toString() != null)
+			builder.append("toString()=").append(super.toString());
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ca.gb.sf.dto.UserRegistrationDTO;
 import ca.gb.sf.models.User;
 import ca.gb.sf.service.UserService;
+import ca.gb.sf.web.form.UserRegistrationForm;
 
 @Controller
 @RequestMapping("/registration")
@@ -23,8 +23,8 @@ public class UserRegistrationController {
     private UserService userService;
 
     @ModelAttribute("user")
-    public UserRegistrationDTO userRegistrationDTO() {
-        return new UserRegistrationDTO();
+    public UserRegistrationForm userRegistrationDTO() {
+        return new UserRegistrationForm();
     }
 
     @GetMapping
@@ -33,7 +33,7 @@ public class UserRegistrationController {
     }
 
     @PostMapping
-    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDTO userDto,
+    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationForm userDto,
                                       BindingResult result){
 
         User existing = userService.findByEmail(userDto.getEmail());

@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import ca.gb.sf.dto.UserRegistrationDTO;
 import ca.gb.sf.models.Role;
 import ca.gb.sf.models.User;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.web.form.UserRegistrationForm;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User save(UserRegistrationDTO registration){
+    public User save(UserRegistrationForm registration){
         User user = new User();
         user.setDisplayName(registration.getDisplayName());
         user.setEmail(registration.getEmail());
