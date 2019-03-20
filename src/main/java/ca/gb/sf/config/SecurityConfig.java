@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ca.gb.sf.exceptions.LoggingAccessDeniedHandler;
-import ca.gb.sf.service.UserService;
+import ca.gb.sf.web.service.UserService;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

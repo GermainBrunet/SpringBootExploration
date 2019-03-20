@@ -1,4 +1,4 @@
-package ca.gb.sf.service;
+package ca.gb.sf.web.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

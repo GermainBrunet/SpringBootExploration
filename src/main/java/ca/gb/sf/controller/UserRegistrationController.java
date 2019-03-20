@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ca.gb.sf.models.User;
-import ca.gb.sf.service.UserService;
 import ca.gb.sf.web.form.UserRegistrationForm;
+import ca.gb.sf.web.service.UserService;
 
 @Controller
 @RequestMapping("/registration")

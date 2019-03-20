@@ -1,78 +1,143 @@
 package ca.gb.sf.models;
 
-import javax.persistence.*;
 import java.util.Collection;
+
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+/**
+ * User represents an individual using this system. Can be assigned different
+ * roles that represent different levels of access. Is extended by the Educator
+ * and Student classes.
+ * 
+ * Normal users that register with the system will be registered with this class
+ * and have access to publicly available assignments.
+ */
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-		discriminatorType = DiscriminatorType.STRING,
-		name = "user_type"
-) 
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_type")
 public class User extends PersistentObject {
 
-    protected String displayName;
-    protected String email;
-    protected String password;
+	// Name that will be visually displayed representing this user.
+	protected String displayName;
+	
+	// Email address associated with this user.  Used for password recovery.
+	protected String email;
+	
+	// Password to identify this user.
+	protected String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Collection<Role> roles;
 
-    public User() {
-    }
+	// Constructor
+	public User() {
+	}
 
-    public User(String displayName, String email, String password) {
-        this.displayName = displayName;
-        this.email = email;
-        this.password = password;
-    }
+	// Constructor
+	public User(String displayName, String email, String password) {
+		this.displayName = displayName;
+		this.email = email;
+		this.password = password;
+	}
 
-    public User(String displayName, String email, String password, Collection<Role> roles) {
-        this.displayName = displayName;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
+	// Constructor
+	public User(String displayName, String email, String password, Collection<Role> roles) {
+		this.displayName = displayName;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
 
-    public String getDisplayName() {
-        return displayName;
-    }
+	/**
+	 * Getter for the display name.
+	 * 
+	 * @return
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
+	/**
+	 * Setter for the display name.
+	 * 
+	 * @param displayName
+	 */
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	/**
+	 * Getter for the email.
+	 * 
+	 * @return
+	 */
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	/**
+	 * Setter for the email.
+	 * 
+	 * @param email
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	/**
+	 * Getter for the password.
+	 * 
+	 * @return
+	 */
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	/**
+	 * Setter for the password.
+	 * 
+	 * @param password
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public Collection<Role> getRoles() {
-        return roles;
-    }
+	/**
+	 * Getter for the roles.
+	 * 
+	 * @return
+	 */
+	public Collection<Role> getRoles() {
+		return roles;
+	}
 
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
-    }
+	/**
+	 * Setter for the roles.
+	 * 
+	 * @param roles
+	 */
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
+	}
 
+	/**
+	 * String representation of this object. Includes the parent object toString.
+	 * Used for debugging purposes. 
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

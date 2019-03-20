@@ -14,6 +14,9 @@ import ca.gb.sf.constraint.FieldMatch;
 })
 public class UserRegistrationForm {
 
+	@NotEmpty
+	private String userType;
+	
     @NotEmpty
     private String displayName;
 
@@ -33,8 +36,16 @@ public class UserRegistrationForm {
 
     @AssertTrue
     private Boolean terms;
+    
+    public String getUserType() {
+		return userType;
+	}
 
-    public String getDisplayName() {
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public String getDisplayName() {
         return displayName;
     }
 
