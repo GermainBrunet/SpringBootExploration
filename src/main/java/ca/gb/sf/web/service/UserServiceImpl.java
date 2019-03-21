@@ -31,6 +31,10 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByEmail(email);
 	}
 
+	public User findByDisplayName(String displayName) {
+		return userRepository.findByDisplayName(displayName);
+	}
+	
 	public User save(UserRegistrationForm registration) {
 
 		System.out.println("user type : " + registration.getUserType());
@@ -52,8 +56,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(email);
+	public UserDetails loadUserByUsername(String displayName) throws UsernameNotFoundException {
+		// User user = userRepository.findByEmail(email);
+		User user = userRepository.findByDisplayName(displayName);
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
