@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import ca.gb.sf.models.Assignment;
 import ca.gb.sf.models.Educator;
 import ca.gb.sf.models.Exercise;
 import ca.gb.sf.models.Student;
+import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.util.PageWrapper;
@@ -36,6 +38,9 @@ public class StudentController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private AssignmentRepository assignmentRepository;
 
     @ModelAttribute("student")
     public StudentForm studentDTO() {
@@ -50,7 +55,7 @@ public class StudentController {
     }
 
     @GetMapping("/studentEdit/{id}")
-    public String studentEdit(@PathVariable("id") long id, Model model) {
+    public String studentEdit(@PathVariable("id") long id, @PageableDefault(size = 5) Pageable pageable, Model model) {
     	
     	Student student = (Student) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
     	
@@ -59,6 +64,14 @@ public class StudentController {
     	studentForm.setDisplayName(student.getDisplayName());
     	
     	model.addAttribute("student", studentForm);
+    	
+    	Page<Assignment> assignmentPage = assignmentRepository.findByStudent(pageable, student);
+    	
+    	PageWrapper<Assignment> assignments = new PageWrapper<Assignment> (assignmentPage, "/assignmentPage");
+    	
+    	model.addAttribute("assignments", assignments);
+
+    	
     	
     	return "studentEdit";
         

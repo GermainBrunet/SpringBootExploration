@@ -1,11 +1,15 @@
 package ca.gb.sf.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import ca.gb.sf.SpringContextIntegrationTest;
+import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 import ca.gb.sf.web.service.UserService;
 import ca.gb.sf.web.service.UserServiceImpl;
@@ -40,6 +44,29 @@ public class UserServiceTest extends SpringContextIntegrationTest {
 		userService.save(userRegistrationForm);
 		
 	}
+	
+	@WithMockUser("educator")
+	@Test
+	public void createStudent() {
+		
+		Random rand = new Random();
+		
+		int n = rand.nextInt(100000);
+		
+		StudentForm studentForm = buildStudentForm(String.valueOf(n));
+
+		List<String> exerciseIds = new ArrayList<String>();
+		
+		exerciseIds.add("15");
+		exerciseIds.add("16");
+		exerciseIds.add("17");
+		
+		studentForm.setExerciseIds(exerciseIds);
+		
+		userService.saveStudent(studentForm);
+		
+		
+	}
 
 	private UserRegistrationForm buildUserRegistrationForm(String seed, String userType) {
 		
@@ -55,6 +82,18 @@ public class UserServiceTest extends SpringContextIntegrationTest {
 		userRegistrationForm.setUserType(userType);
 		
 		return userRegistrationForm;
+		
+	}
+	
+	private StudentForm buildStudentForm(String seed) {
+		
+		StudentForm studentForm = new StudentForm();
+		
+		studentForm.setDisplayName("student_" + seed);
+		studentForm.setPassword("password");
+		studentForm.setConfirmPassword("password");
+		
+		return studentForm;
 		
 	}
 	

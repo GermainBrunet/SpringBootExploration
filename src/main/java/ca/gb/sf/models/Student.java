@@ -1,10 +1,14 @@
 package ca.gb.sf.models;
 
+import java.util.Collection;
+
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Students extend the User class and are associated with an Educator. Educators
@@ -20,6 +24,9 @@ public class Student extends User {
 	@JoinColumn(name = "educator_id")
 	private Educator educator;
 
+    @OneToMany(mappedBy="student", cascade = CascadeType.ALL)
+    private Collection<Assignment> assignment;
+	
 	// Constructor
 	public Student() {
 	}
@@ -51,6 +58,24 @@ public class Student extends User {
 	}
 
 	/**
+	 * Getter for assignments
+	 * 
+	 * @return
+	 */
+	public Collection<Assignment> getAssignment() {
+		return assignment;
+	}
+
+	/**
+	 * Setter for assignments
+	 * 
+	 * @param assignment
+	 */
+	public void setAssignment(Collection<Assignment> assignment) {
+		this.assignment = assignment;
+	}
+
+	/**
 	 * String representation of this object. Includes the parent object toString.
 	 * Used for debugging purposes.  Present the educator's display name only
 	 * to prevent circular references.
@@ -60,11 +85,15 @@ public class Student extends User {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Student [");
 		if (educator != null)
-			builder.append("educator=").append(educator.getDisplayName()).append(", ");
+			builder.append("educator=").append(educator).append(", ");
+		if (assignment != null)
+			builder.append("assignment=").append(assignment).append(", ");
 		if (super.toString() != null)
 			builder.append("toString()=").append(super.toString());
 		builder.append("]");
 		return builder.toString();
 	}
+
+
 
 }
