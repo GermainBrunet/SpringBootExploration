@@ -1,15 +1,15 @@
 package ca.gb.sf.web.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,9 +18,11 @@ import org.springframework.util.StringUtils;
 
 import ca.gb.sf.models.Educator;
 import ca.gb.sf.models.Role;
+import ca.gb.sf.models.Student;
 import ca.gb.sf.models.User;
 import ca.gb.sf.repositories.RoleRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
 @Service
@@ -73,7 +75,23 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(user);
 	}
 
-	
+	public Student saveStudent(StudentForm studentForm) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	
+    	Educator educator = (Educator) userRepository.findByEmail(auth.getName());
+		
+    	Student student = new Student();
+    	
+    	student.setDisplayName(studentForm.getDisplayName());
+    	
+    	student.setPassword(passwordEncoder.encode(studentForm.getPassword()));    	
+    	
+    	student.setEducator(educator);
+    	
+    	return userRepository.save(student);
+		
+	}
 	
 	public Role findRoleByName(String name) {
 		
@@ -83,17 +101,11 @@ public class UserServiceImpl implements UserService {
 		
 		Role role = roleRepository.findByName(name);
 		
-		System.out.println("role id = " + role.getId());
-		
 		if (role != null) {
 			return role;
 		}
 		
-		role = new Role(name);
-		
 		Role savedRole = roleRepository.save(role);
-		
-		System.out.println("HERE!!!" + role.getId());
 		
 		return savedRole;
 		

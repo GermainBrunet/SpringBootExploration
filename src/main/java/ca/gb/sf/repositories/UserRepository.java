@@ -1,7 +1,7 @@
 package ca.gb.sf.repositories;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	User findByDisplayName(String displayName);
 	
 	@Query("SELECT s FROM Student s WHERE s.educator = :educator")
-	List<Student> findByEducator(Educator educator);
-	
+	Page<Student> findByEducator(Pageable pageable, Educator educator);
+
 }

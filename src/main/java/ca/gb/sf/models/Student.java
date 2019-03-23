@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * Students extend the User class and are associated with an Educator. Educators
@@ -13,7 +12,6 @@ import javax.persistence.Table;
  */
 
 @Entity(name = "Student")
-// @Table(name = "student")
 @DiscriminatorValue("Student")
 public class Student extends User {
 

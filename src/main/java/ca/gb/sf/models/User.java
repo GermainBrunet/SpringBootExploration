@@ -3,7 +3,6 @@ package ca.gb.sf.models;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
