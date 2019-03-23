@@ -1,7 +1,5 @@
 package ca.gb.sf.config;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,8 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ca.gb.sf.exceptions.LoggingAccessDeniedHandler;
@@ -26,6 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoggingAccessDeniedHandler accessDeniedHandler;
 
+    @Autowired
+    private SecurityHandler successHandler;
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -51,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                     .loginPage("/login")
-                    .successHandler(successHandler())
+                    .successHandler(successHandler)
                     .permitAll()
                 .and()
                 .logout()
@@ -65,11 +64,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .accessDeniedHandler(accessDeniedHandler);
     }
     
+    /**
     @Bean
     public AuthenticationSuccessHandler successHandler() {
+    	
         SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler("/exerciseList");
+        
+        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        if (roles.contains("ROLE_ADMIN")) {
+            response.sendRedirect("admin/home.html");
+        }
+        
         return handler;
-    }
+    }**/
     
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){

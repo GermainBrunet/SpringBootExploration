@@ -1,6 +1,9 @@
 package ca.gb.sf.models;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
@@ -39,9 +42,14 @@ public class User extends PersistentObject {
 	// Password to identify this user.
 	protected String password;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Collection<Role> roles;
+	// @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinTable(name = "users_roles", 
+			joinColumns = { @JoinColumn(name = "user_id") }, 
+			inverseJoinColumns = { @JoinColumn(name = "role_id") })
+		// joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
+		// inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Set<Role> roles = new HashSet<Role>();
 
 	// Constructor
 	public User() {
@@ -55,7 +63,7 @@ public class User extends PersistentObject {
 	}
 
 	// Constructor
-	public User(String displayName, String email, String password, Collection<Role> roles) {
+	public User(String displayName, String email, String password, Set<Role> roles) {
 		this.displayName = displayName;
 		this.email = email;
 		this.password = password;
@@ -130,7 +138,7 @@ public class User extends PersistentObject {
 	 * 
 	 * @param roles
 	 */
-	public void setRoles(Collection<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 

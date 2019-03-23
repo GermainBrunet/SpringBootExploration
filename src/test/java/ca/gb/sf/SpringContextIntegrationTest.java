@@ -10,7 +10,7 @@ import ca.gb.sf.Start;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Start.class)
-@Transactional
+// @Transactional
 public class SpringContextIntegrationTest {
 
     @Test

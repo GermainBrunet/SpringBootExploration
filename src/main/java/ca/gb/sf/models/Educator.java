@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 
 @Entity(name = "Educator")
-@Table(name = "educator")
+// @Table(name = "educator")
 @DiscriminatorValue("Educator")
 public class Educator extends User {
 
