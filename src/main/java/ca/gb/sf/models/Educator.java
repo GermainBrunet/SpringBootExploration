@@ -6,7 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  * Extends the User class and are associated with students. An educator can have
@@ -16,7 +15,6 @@ import javax.persistence.Table;
  */
 
 @Entity(name = "Educator")
-// @Table(name = "educator")
 @DiscriminatorValue("Educator")
 public class Educator extends User {
 

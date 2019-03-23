@@ -1,14 +1,12 @@
 package ca.gb.sf.models;
 
-import java.util.Comparator;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "roles", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-public class Role extends PersistentObject implements Comparable {
+public class Role extends PersistentObject implements Comparable<Role> {
 
     private String name;
 
@@ -61,9 +59,9 @@ public class Role extends PersistentObject implements Comparable {
     }
 
 	@Override
-	public int compareTo(Object arg0) {
+	public int compareTo(Role arg0) {
 		
-		return getName().compareTo(((Role) arg0).getName()); 
+		return getName().compareTo(arg0.getName()); 
 		
 	}
 }

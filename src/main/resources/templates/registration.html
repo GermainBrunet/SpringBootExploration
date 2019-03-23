@@ -45,7 +45,7 @@
 						method="post">
 
 						<p class="error-message" th:if="${#fields.hasGlobalErrors()}"
-							th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
+							th:each="error : ${#fields.errors('global')}" th:text="#{${error}}">Validation
 							error</p>
 
 						<div class="form-group"
@@ -116,7 +116,7 @@
 							th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
 							<input id="terms" type="checkbox" th:field="*{terms}" /><label
 								class="control-label" for="terms"><span
-								th:text="#{registration.iAgreeStart}"></span><a href="#"
+								th:text="#{registration.iAgreeStart}"></span>&nbsp;<a href="#"
 								th:text="#{registration.iAgreeMiddle}"></a>&nbsp;<span
 								th:text="#{registration.iAgreeEnd}"></span> </label>
 							<p class="error-message"
