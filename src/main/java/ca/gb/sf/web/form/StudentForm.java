@@ -11,6 +11,8 @@ import ca.gb.sf.constraint.FieldMatch;
 })
 public class StudentForm {
 
+	private String id;
+	
     @NotEmpty
     private String displayName;
 
@@ -21,6 +23,14 @@ public class StudentForm {
     private String confirmPassword;
     
     private Collection<String> exerciseIds;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getDisplayName() {
         return displayName;
@@ -58,6 +68,8 @@ public class StudentForm {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("StudentForm [");
+		if (id != null)
+			builder.append("id=").append(id).append(", ");
 		if (displayName != null)
 			builder.append("displayName=").append(displayName).append(", ");
 		if (password != null)
@@ -65,11 +77,10 @@ public class StudentForm {
 		if (confirmPassword != null)
 			builder.append("confirmPassword=").append(confirmPassword).append(", ");
 		if (exerciseIds != null)
-			builder.append("exerciseIds=").append(exerciseIds).append(", ");
-		if (super.toString() != null)
-			builder.append("toString()=").append(super.toString());
+			builder.append("exerciseIds=").append(exerciseIds);
 		builder.append("]");
 		return builder.toString();
 	}
+
 
 }

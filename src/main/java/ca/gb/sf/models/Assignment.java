@@ -18,9 +18,9 @@ public class Assignment extends PersistentObject {
     @JoinColumn(name = "student_id", nullable = false)
 	Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "exercise_id", nullable = false)
-	Exercise excercise;
+	Exercise exercise;
     
     Long speedToComplete;
     
@@ -38,12 +38,12 @@ public class Assignment extends PersistentObject {
 		this.student = student;
 	}
 
-	public Exercise getExcercise() {
-		return excercise;
+	public Exercise getExercise() {
+		return exercise;
 	}
 
-	public void setExcercise(Exercise excercise) {
-		this.excercise = excercise;
+	public void setExcercise(Exercise exercise) {
+		this.exercise = exercise;
 	}
 
 	public Long getSpeedToComplete() {
@@ -82,10 +82,10 @@ public class Assignment extends PersistentObject {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Assignment [");
-		if (student != null)
-			builder.append("student=").append(student).append(", ");
-		if (excercise != null)
-			builder.append("excercise=").append(excercise).append(", ");
+//		if (student != null)
+//			builder.append("student=").append(student).append(", ");
+		if (exercise != null)
+			builder.append("exercise=").append(exercise).append(", ");
 		if (speedToComplete != null)
 			builder.append("speedToComplete=").append(speedToComplete).append(", ");
 		if (stepsToComplete != null)

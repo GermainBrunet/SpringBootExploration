@@ -1,5 +1,8 @@
 package ca.gb.sf.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +41,10 @@ public class StudentController {
 
     @Autowired
     private UserRepository userRepository;
-    
+
+    @Autowired
+    private ExerciseRepository exerciseRepository;
+
     @Autowired
     private AssignmentRepository assignmentRepository;
 
@@ -55,11 +61,13 @@ public class StudentController {
     }
 
     @GetMapping("/studentEdit/{id}")
-    public String studentEdit(@PathVariable("id") long id, @PageableDefault(size = 5) Pageable pageable, Model model) {
+    public String studentEdit(@PathVariable("id") long id, @PageableDefault(size = 10) Pageable pageable, Model model) {
     	
     	Student student = (Student) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
     	
     	StudentForm studentForm = new StudentForm();
+    	
+    	studentForm.setId(String.valueOf(student.getId()));
     	
     	studentForm.setDisplayName(student.getDisplayName());
     	
@@ -71,8 +79,6 @@ public class StudentController {
     	
     	model.addAttribute("assignments", assignments);
 
-    	
-    	
     	return "studentEdit";
         
     }
@@ -87,6 +93,40 @@ public class StudentController {
 
     }
     
+    @GetMapping("/studentDelete/{id}")
+    public String studentDelete(@PathVariable("id") long id, Model model) {
+    	
+    	Student student = (Student) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
+    	
+    	userRepository.delete(student);
+    	
+        return "redirect:/educatorPage";
+        
+    }
+    
+    @GetMapping("/studentAssign/{id}")
+    public String studentAssign(@PathVariable("id") long id, @PageableDefault(size = 10) Pageable pageable, Model model) {
+    	
+    	Student student = (Student) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
+    	
+    	StudentForm studentForm = new StudentForm();
+    	
+    	studentForm.setId(String.valueOf(student.getId()));
+    	
+    	studentForm.setDisplayName(student.getDisplayName());
+    	
+    	model.addAttribute("student", studentForm);
+    	
+    	Page<Assignment> assignmentPage = assignmentRepository.findByStudent(pageable, student);
+    	
+    	PageWrapper<Assignment> assignments = new PageWrapper<Assignment> (assignmentPage, "/assignmentPage");
+    	
+    	model.addAttribute("page", assignments);
+
+    	return "studentAssign";
+        
+    }
+
 
     
 }

@@ -9,19 +9,18 @@
 	<div layout:fragment="content" th:remove="tag">
 
 		<div class="container">
+		
+		
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
 
 					<h1 th:text="#{educator.title}"></h1>
 
 					<label for="displayName" class="control-label"
-						th:text="#{educator.displayName}"></label>: <span
-						th:text="${educator.displayName}"></span>
+						th:text="#{student.displayName}"></label>: <span
+						th:text="${student.displayName}"></span>
 
-					<p sec:authorize="isAuthenticated()" class="my-5">
-						<a href="/studentAdd" class="btn btn-primary"><i
-							class="fas fa-user-plus ml-2">&nbsp;<lable>Add Student</lable></i></a>
-					</p>
+					<h2>Assignment List</h2>
 
 					<div th:switch="${page.content}" class="container my-5">
 						<div class="row">
@@ -36,12 +35,12 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr th:each="student : ${page.content}">
-												<td th:text="${student.displayName}"></td>
+											<tr th:each="assignment : ${page.content}">
+												<td th:text="${assignments.id}"></td>
 												<td><a th:href="@{/studentEdit/{id}(id=${student.id})}"
 													class="btn btn-primary"><i
 														class="fas fa-user-edit ml-2"></i></a>&nbsp; <a
-													th:href="@{/studentExercise/{id}(id=${student.id})}"
+													th:href="@{/studentAssign/{id}(id=${student.id})}"
 													class="btn btn-primary"><i
 														class="fas fa-clipboard-list ml-2"></i></a> &nbsp;<a
 													th:href="@{/studentDelete/{id}(id=${student.id})}"
@@ -64,7 +63,7 @@
 												<span th:if='${not page.hasPreviousPage}'>←</span> <a
 												th:if='${page.hasPreviousPage}'
 												th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'
-												title='Go to previous page'>←</a>
+												title='Go to previous page'></a>
 											</li>
 											<li th:each='item : ${page.items}'
 												th:class="${item.current}? 'active' : ''"><span
@@ -92,10 +91,9 @@
 					</div>
 
 
-
-
 				</div>
 			</div>
+			
 		</div>
 	</div>
 </body>

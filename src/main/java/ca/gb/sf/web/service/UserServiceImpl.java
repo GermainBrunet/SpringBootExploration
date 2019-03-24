@@ -30,6 +30,7 @@ import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.RoleRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.web.form.ExerciseSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ExerciseRepository exerciseRepository;
-	
+
 	@Autowired
 	private AssignmentRepository assignmentRepository;
 
@@ -97,7 +98,15 @@ public class UserServiceImpl implements UserService {
 
 		Educator educator = (Educator) userRepository.findByEmail(auth.getName());
 
-		Student student = new Student();
+		Student student = null;
+
+		if (!StringUtils.isEmpty(studentForm.getId())) {
+			new Student();
+			Optional<User> optionalStudent = userRepository.findById(Long.valueOf(studentForm.getId()));
+			student = (Student) optionalStudent.get();
+		} else {
+			student = new Student();
+		}
 
 		student.setDisplayName(studentForm.getDisplayName());
 
@@ -106,33 +115,121 @@ public class UserServiceImpl implements UserService {
 		student.setEducator(educator);
 
 		userRepository.save(student);
-		
-		if (!studentForm.getExerciseIds().isEmpty()) {
+
+		if (studentForm.getExerciseIds() != null && !studentForm.getExerciseIds().isEmpty()) {
 
 			for (String exerciseId : studentForm.getExerciseIds()) {
 
 				Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
 
 				Exercise exercise = optionalExercise.get();
-				
+
 				Assignment assignment = new Assignment();
-				
+
 				assignment.setExcercise(exercise);
-				
+
 				assignment.setStudent(student);
-				
+
 				assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
 
 				assignmentRepository.save(assignment);
 
 			}
-		
-			
+
 		}
 
 		return student;
 
 	}
+
+	public void saveSelectedExercises(ExerciseSelectionForm exerciseSelectionForm) {
+
+		Optional<User> optionalStudent = userRepository
+				.findById(Long.valueOf(String.valueOf(exerciseSelectionForm.getStudentId())));
+		Student student = (Student) optionalStudent.get();
+		
+		System.out.println(exerciseSelectionForm);
+		
+		for (String exerciseId : exerciseSelectionForm.getAllExercises()) {
+			
+			Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
+			
+			Exercise exercise = optionalExercise.get();
+			
+			System.out.println("Student id = " + student.getId());
+			System.out.println("Exercise id= " + exercise.getId());
+			
+			Assignment assignment = assignmentRepository.findByStudentAndExercise(student, exercise);
+			
+			System.out.println(assignment);
+			
+			if (contains(exerciseId, exerciseSelectionForm.getSelectedExercises())) {
+				
+				System.out.println("select : " + exerciseId);
+				
+				// This exercise is selected.
+				
+				if (assignment == null) {
+					
+					assignment = new Assignment();
+
+					assignment.setExcercise(exercise);
+
+					assignment.setStudent(student);
+
+					assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
+
+					assignmentRepository.save(assignment);
+					
+				}
+				
+				
+			} else {
+
+				// This exercise is not selected.
+				
+				if (assignment != null) {
+					
+					assignmentRepository.delete(assignment);
+					
+				}
+				
+			}
+//			
+//			Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
+//
+//			Exercise exercise = optionalExercise.get();
+//
+//			Assignment assignment = new Assignment();
+//
+//			assignment.setExcercise(exercise);
+//
+//			assignment.setStudent(student);
+//
+//			assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
+//
+//			assignmentRepository.save(assignment);
+
+		}
+
+	}
+	
+	public boolean contains(String value, String[] arrayList) {
+		
+		for (String arrayListValue : arrayList) {
+			
+			if (value.contentEquals(arrayListValue)) {
+				
+				return true;
+				
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
 
 	public Role findRoleByName(String name) {
 
