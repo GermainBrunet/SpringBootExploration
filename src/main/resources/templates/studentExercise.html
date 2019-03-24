@@ -7,91 +7,89 @@
 </head>
 <body>
 	<div layout:fragment="content" th:remove="tag">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
 
-		<div class="container">
+				<h1 th:text="#{studentExercise.title}"></h1>
 
-			<div class="row">
-				<div class="col-md-6 col-md-offset-3">
+				<label for="displayName" class="control-label"
+					th:text="#{studentExercise.displayName}"></label>: <span
+					th:text="${student.displayName}"></span>
 
-					<h1 th:text="#{studentExercise.title}"></h1>
+				<form th:action="@{/exerciseSelectionSave}"
+					th:object="${exerciseSelectionForm}" method="post">
 
-					<label for="displayName" class="control-label"
-						th:text="#{studentExercise.displayName}"></label>: <span
-						th:text="${student.displayName}"></span>
+					<div class="form-group">
+						<button type="submit" class="btn btn-success"
+							th:text="#{studentExercise.button}"></button>
+						<a th:href="@{/educatorPage}" th:text="#{student.return}"></a>
+					</div>
 
-					<form th:action="@{/exerciseSelectionSave}"
-						th:object="${exerciseSelectionForm}" method="post">
+					<input type="hidden" name="studentId" th:field="*{studentId}" />
 
-						<div class="form-group">
-							<button type="submit" class="btn btn-success"
-								th:text="#{studentExercise.button}"></button>
-						</div>
+					<div th:switch="${page.content}" class="container my-5">
+						<div class="row">
+							<div class="col-md-6">
+								<h2 th:case="null">No exercises yet!</h2>
+								<div th:case="*">
+									<table class="table table-striped table-responsive-md">
+										<thead>
+											<tr>
+												<th th:text="#{studentExercise.selection}"></th>
+												<th th:text="#{studentExercise.exerciseName}"></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="exercise : ${page.content}">
+												<td><input type="checkbox" name="selectedExercises"
+													th:value="${exercise.id}"
+													th:checked="${#lists.contains(assignmentIds, '' + exercise.id)}" />
+													<input type="hidden" name="allExercises"
+													th:value="${exercise.id}" /></td>
+												<td th:text="${exercise.targetWord}"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 
-						<input type="hidden" name="studentId" th:field="*{studentId}" />
-
-						<div th:switch="${page.content}" class="container my-5">
-							<div class="row">
-								<div class="col-md-6">
-									<h2 th:case="null">No exercises yet!</h2>
-									<div th:case="*">
-										<table class="table table-striped table-responsive-md">
-											<thead>
-												<tr>
-													<th th:text="#{studentExercise.selection}"></th>
-													<th th:text="#{studentExercise.exerciseName}"></th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr th:each="exercise : ${page.content}">
-													<td><input type="checkbox" name="selectedExercises"
-														th:value="${exercise.id}"
-														th:checked="${#lists.contains(assignmentIds, '' + exercise.id)}" />
-														<input type="hidden" name="allExercises" th:value="${exercise.id}" /></td>
-													<td th:text="${exercise.targetWord}"></td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-
-									<!-- Pagination Bar -->
-									<div th:fragment='paginationbar'>
-										<div class='pagination pagination-centered'>
-											<ul class="pagination">
-												<li th:class="${page.firstPage}? 'disabled' : ''"><span
-													th:if="${page.firstPage}">«</span> <a
-													th:if="${not page.firstPage}"
-													th:href="@{${page.url}(page=1,size=${page.size})}">«</a></li>
-												<li th:class="${page.hasPreviousPage}? '' : 'disabled'">
-													<span th:if='${not page.hasPreviousPage}'>←</span> <a
-													th:if='${page.hasPreviousPage}'
-													th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'
-													title='Go to previous page'>←</a>
-												</li>
-												<li th:each='item : ${page.items}'
-													th:class="${item.current}? 'active' : ''"><span
-													th:if='${item.current}' th:text='${item.number}'>1</span> <a
-													th:if='${not item.current}'
-													th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span
-														th:text='${item.number}'>1</span></a></li>
-												<li th:class="${page.hasNextPage}? '' : 'disabled'"><span
-													th:if='${not page.hasNextPage}'>→</span> <a
-													th:if='${page.hasNextPage}'
-													th:href='@{${page.url}(page=${page.number},size=${page.size})}'
-													title='Go to next page'>→</a></li>
-												<li th:class="${page.lastPage}? 'disabled' : ''"><span
-													th:if='${page.lastPage}'>»</span> <a
-													th:if='${not page.lastPage}'
-													th:href='@{${page.url}(page=${page.totalPages},size=${page.size})}'>»</a></li>
-											</ul>
-										</div>
+								<!-- Pagination Bar -->
+								<div th:fragment='paginationbar'>
+									<div class='pagination pagination-centered'>
+										<ul class="pagination">
+											<li th:class="${page.firstPage}? 'disabled' : ''"><span
+												th:if="${page.firstPage}">«</span> <a
+												th:if="${not page.firstPage}"
+												th:href="@{${page.url}(page=1,size=${page.size})}">«</a></li>
+											<li th:class="${page.hasPreviousPage}? '' : 'disabled'">
+												<span th:if='${not page.hasPreviousPage}'>←</span> <a
+												th:if='${page.hasPreviousPage}'
+												th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'
+												title='Go to previous page'>←</a>
+											</li>
+											<li th:each='item : ${page.items}'
+												th:class="${item.current}? 'active' : ''"><span
+												th:if='${item.current}' th:text='${item.number}'>1</span> <a
+												th:if='${not item.current}'
+												th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span
+													th:text='${item.number}'>1</span></a></li>
+											<li th:class="${page.hasNextPage}? '' : 'disabled'"><span
+												th:if='${not page.hasNextPage}'>→</span> <a
+												th:if='${page.hasNextPage}'
+												th:href='@{${page.url}(page=${page.number},size=${page.size})}'
+												title='Go to next page'>→</a></li>
+											<li th:class="${page.lastPage}? 'disabled' : ''"><span
+												th:if='${page.lastPage}'>»</span> <a
+												th:if='${not page.lastPage}'
+												th:href='@{${page.url}(page=${page.totalPages},size=${page.size})}'>»</a></li>
+										</ul>
 									</div>
 								</div>
 							</div>
 						</div>
+					</div>
 
-					</form>
+				</form>
 
-				</div>
 			</div>
 
 		</div>

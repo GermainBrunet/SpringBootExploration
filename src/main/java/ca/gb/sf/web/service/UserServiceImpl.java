@@ -113,6 +113,8 @@ public class UserServiceImpl implements UserService {
 		student.setPassword(passwordEncoder.encode(studentForm.getPassword()));
 
 		student.setEducator(educator);
+		
+		student.setEmail(studentForm.getDisplayName());
 
 		userRepository.save(student);
 
@@ -147,30 +149,30 @@ public class UserServiceImpl implements UserService {
 		Optional<User> optionalStudent = userRepository
 				.findById(Long.valueOf(String.valueOf(exerciseSelectionForm.getStudentId())));
 		Student student = (Student) optionalStudent.get();
-		
+
 		System.out.println(exerciseSelectionForm);
-		
+
 		for (String exerciseId : exerciseSelectionForm.getAllExercises()) {
-			
+
 			Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
-			
+
 			Exercise exercise = optionalExercise.get();
-			
+
 			System.out.println("Student id = " + student.getId());
 			System.out.println("Exercise id= " + exercise.getId());
-			
+
 			Assignment assignment = assignmentRepository.findByStudentAndExercise(student, exercise);
-			
+
 			System.out.println(assignment);
-			
+
 			if (contains(exerciseId, exerciseSelectionForm.getSelectedExercises())) {
-				
+
 				System.out.println("select : " + exerciseId);
-				
+
 				// This exercise is selected.
-				
+
 				if (assignment == null) {
-					
+
 					assignment = new Assignment();
 
 					assignment.setExcercise(exercise);
@@ -180,20 +182,19 @@ public class UserServiceImpl implements UserService {
 					assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
 
 					assignmentRepository.save(assignment);
-					
+
 				}
-				
-				
+
 			} else {
 
 				// This exercise is not selected.
-				
+
 				if (assignment != null) {
-					
+
 					assignmentRepository.delete(assignment);
-					
+
 				}
-				
+
 			}
 //			
 //			Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
@@ -213,23 +214,28 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
-	
+
 	public boolean contains(String value, String[] arrayList) {
-		
-		for (String arrayListValue : arrayList) {
-			
-			if (value.contentEquals(arrayListValue)) {
-				
-				return true;
-				
-			}
+
+		if (value == null || arrayList == null) {
+
+			return false;
 			
 		}
-		
+
+		for (String arrayListValue : arrayList) {
+
+			if (value.contentEquals(arrayListValue)) {
+
+				return true;
+
+			}
+
+		}
+
 		return false;
-		
+
 	}
-	
 
 	public Role findRoleByName(String name) {
 
@@ -257,7 +263,9 @@ public class UserServiceImpl implements UserService {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
 		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoles()));
+		 		mapRolesToAuthorities(user.getRoles()));
+		//return new org.springframework.security.core.userdetails.User(user.getDisplayName(), user.getPassword(),
+		// 		mapRolesToAuthorities(user.getRoles()));
 	}
 
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

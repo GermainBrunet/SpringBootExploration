@@ -18,6 +18,11 @@ public class HomeController {
     public String userIndex() {
         return "user/index";
     }
+    
+    @GetMapping("/legal")
+    public String legal() {
+        return "legal";
+    }
 
     @GetMapping("/login")
     public String login(SearchForm searchForm, Model model) {
