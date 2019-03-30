@@ -27,6 +27,9 @@
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 
+<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+<!-- <input onclick="responsiveVoice.speak('Hello World', 'French Female');" type="button" value="Play" /> -->
+
 	 <script th:inline="javascript" id="rendered-js" >
 	 
 	  var initialWord = /*[[${exercise.initialWord}]]*/ 'default';
@@ -98,21 +101,8 @@
   create: function () {
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
-    // this.hueso = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'hueso');
-
-
-
-
+    
     console.log('before');
-
-    /**
-                           var characters2 = [
-                               new DisplayCharacter('t', 20, 20).display(),
-                               new DisplayCharacter('o', 60, 20).display(),
-                               new DisplayCharacter('p', 100, 20).display()
-                           ];
-                           **/
 
     displayText = new DisplayText(initialWord);
     displayText.display();
@@ -517,8 +507,6 @@ function DisplayText(letters) {
 
   this.displayLocation = function () {
 
-
-
     var arrayLength = this.displayCharacters.length;
 
     for (var j = 1; j < 100; j++) {
@@ -543,6 +531,16 @@ function DisplayText(letters) {
 
     }
     // alert(arrayLength);
+
+    var newMessage2 = "";
+    var arrayLength2 = this.displayCharacters.length;
+    for (var i = 0; i < arrayLength2; i++) {
+        var char = this.displayCharacters[i];
+        newMessage2 = newMessage2 + char.letter;
+    }
+    responsiveVoice.speak(newMessage2, 'French Female');
+    
+    
   };
 
 }
