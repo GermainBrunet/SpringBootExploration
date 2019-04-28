@@ -7,6 +7,8 @@
 <title>Product List</title>
 <script
 	src='//cdnjs.cloudflare.com/ajax/libs/phaser/2.2.1/phaser.min.js'></script>
+<script
+	src='/js/letters.js'></script>
 </head>
 <body>
 	<div layout:fragment="content" th:remove="tag">
@@ -33,56 +35,94 @@
 
 				<script th:inline="javascript" id="rendered-js">
 	 
+	  var gameWindowWidth = window.innerWidth;
+	  var gameWindowHeight = window.innerHeight - 260;
+	  var letterSize = calculateLetterSize(gameWindowWidth);
+	  var spaceSize = Math.floor(letterSize / 10);
+
+	// Keyboard Settings
+	var sideSpace = Math.floor(gameWindowWidth / 2) - ((letterSize + spaceSize) * 8);
+	var line1 = gameWindowHeight - letterSize * 3 - spaceSize * 3;
+	var line2 = gameWindowHeight - letterSize * 2 - spaceSize * 2;
+	var line3 = gameWindowHeight - letterSize * 1 - spaceSize * 1;
+
+
+	  
+	  console.log('window size: ' + gameWindowWidth + ' x ' + gameWindowHeight);
+		
 	  var initialWord = /*[[${exercise.initialWord}]]*/ 'default';
 	  
-	  var gameWindowWidth = 480;
-	 
-      var game = new Phaser.Game(640, gameWindowWidth, Phaser.AUTO, '', {
-    	  preload: function () {
+      var game = new Phaser.Game(gameWindowWidth, gameWindowHeight, Phaser.AUTO, '', {
+    	  preload: preload, create: create });
+    		  
+function preload() {    		  
     		  
     this.scale.pageAlignHorizontally = true;
-    // this.game.load.image('hueso', huesoURI);
-    // this.game.load.image('flecha', flechaURI);
-    this.game.load.image('aIcon', aIconURI);
-    this.game.load.image('bIcon', bIconURI);
-    this.game.load.image('cIcon', cIconURI);
-    this.game.load.image('dIcon', dIconURI);
-    this.game.load.image('eIcon', eIconURI);
-    this.game.load.image('fIcon', fIconURI);
-    this.game.load.image('gIcon', gIconURI);
-    this.game.load.image('hIcon', hIconURI);
-    this.game.load.image('iIcon', iIconURI);
-    this.game.load.image('jIcon', jIconURI);
-    this.game.load.image('kIcon', kIconURI);
-    this.game.load.image('lIcon', lIconURI);
-    this.game.load.image('mIcon', mIconURI);
-    this.game.load.image('nIcon', nIconURI);
-    this.game.load.image('oIcon', oIconURI);
-    this.game.load.image('pIcon', pIconURI);
-    this.game.load.image('qIcon', qIconURI);
-    this.game.load.image('rIcon', rIconURI);
-    this.game.load.image('sIcon', sIconURI);
-    this.game.load.image('tIcon', tIconURI);
-    this.game.load.image('uIcon', uIconURI);
-    this.game.load.image('vIcon', vIconURI);
-    this.game.load.image('wIcon', wIconURI);
-    this.game.load.image('xIcon', xIconURI);
-    this.game.load.image('yIcon', yIconURI);
-    this.game.load.image('zIcon', zIconURI);
-    this.game.load.image('spaceIcon', spaceIconURI);
-    this.game.load.image('trashIcon', trashIconURI);
-    this.game.load.image('speakerIcon', speakerIconURI);
+    
+    this.game.load.image('trashIcon', letters.get('trashIconURI' + letterSize));
+    this.game.load.image('upIcon', letters.get('upIconURI' + letterSize));
+    this.game.load.image('downIcon', letters.get('downIconURI' + letterSize));
+    this.game.load.image('speakerIcon', letters.get('speakerIconURI' + letterSize));
+    
+    this.game.load.image('aIcon', letters.get('C0061IconURI' + letterSize));
+    this.game.load.image('bIcon', letters.get('C0062IconURI' + letterSize));
+    this.game.load.image('cIcon', letters.get('C0063IconURI' + letterSize));
+    this.game.load.image('dIcon', letters.get('C0064IconURI' + letterSize));
+    this.game.load.image('eIcon', letters.get('C0065IconURI' + letterSize));
+    this.game.load.image('fIcon', letters.get('C0066IconURI' + letterSize));
+    this.game.load.image('gIcon', letters.get('C0067IconURI' + letterSize));
+    this.game.load.image('hIcon', letters.get('C0068IconURI' + letterSize));
+    this.game.load.image('iIcon', letters.get('C0069IconURI' + letterSize));
+    this.game.load.image('jIcon', letters.get('C006AIconURI' + letterSize));
+    this.game.load.image('kIcon', letters.get('C006BIconURI' + letterSize));
+    this.game.load.image('lIcon', letters.get('C006CIconURI' + letterSize));
+    this.game.load.image('mIcon', letters.get('C006DIconURI' + letterSize));
+    this.game.load.image('nIcon', letters.get('C006EIconURI' + letterSize));
+    this.game.load.image('oIcon', letters.get('C006FIconURI' + letterSize));
+    this.game.load.image('pIcon', letters.get('C0070IconURI' + letterSize));
+    this.game.load.image('qIcon', letters.get('C0071IconURI' + letterSize));
+    this.game.load.image('rIcon', letters.get('C0072IconURI' + letterSize));
+    this.game.load.image('sIcon', letters.get('C0073IconURI' + letterSize));
+    this.game.load.image('tIcon', letters.get('C0074IconURI' + letterSize));
+    this.game.load.image('uIcon', letters.get('C0075IconURI' + letterSize));
+    this.game.load.image('vIcon', letters.get('C0076IconURI' + letterSize));
+    this.game.load.image('wIcon', letters.get('C0077IconURI' + letterSize));
+    this.game.load.image('xIcon', letters.get('C0078IconURI' + letterSize));
+    this.game.load.image('yIcon', letters.get('C0079IconURI' + letterSize));
+    this.game.load.image('zIcon', letters.get('C007AIconURI' + letterSize));
+    
+    this.game.load.image('eAiguIcon', letters.get('C00E9IconURI' + letterSize));
+    this.game.load.image('eGraveIcon', letters.get('C00E8IconURI' + letterSize));
+    this.game.load.image('eCirconflexIcon', letters.get('C00EAIconURI' + letterSize));
+    this.game.load.image('eTremaIcon', letters.get('C00EBIconURI' + letterSize));
+    
+    this.game.load.image('aGraveIcon', letters.get('C00E0IconURI' + letterSize));
+    this.game.load.image('aCirconflexIcon', letters.get('C00E2IconURI' + letterSize));
+    this.game.load.image('iCircomflexIcon', letters.get('C00ECIconURI' + letterSize));
+    this.game.load.image('iTremaIcon', letters.get('C00EFIconURI' + letterSize));
 
+    this.game.load.image('oCircomflexIcon', letters.get('C00F4IconURI' + letterSize));
+    this.game.load.image('uCirconflexIcon', letters.get('C00FBIconURI' + letterSize));
+    this.game.load.image('uGraveIcon', letters.get('C00F9IconURI' + letterSize));
+    this.game.load.image('cCedilleIcon', letters.get('C00E7IconURI' + letterSize));
+
+    this.game.load.image('dashIcon', letters.get('C002DIconURI' + letterSize));
+    this.game.load.image('spaceIcon', letters.get('C0020IconURI' + letterSize));
+    
     // Respond to keyboard events.
     game.input.keyboard.onDownCallback = function (e) {
       var res = String.fromCharCode(e.keyCode).toLowerCase();
       keyPressed(res);
     };
 
-  },
+}
 
-  create: function () {
 
+function create() {
+
+	// this.game.stage.backgroundColor = "#ffffff";
+	this.game.stage.backgroundColor = "#efefef";
+	
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
     // Start the class that controls the display of letters with an initial word.
@@ -117,19 +157,33 @@
     this.xIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'xIcon');
     this.yIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'yIcon');
     this.zIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'zIcon');
+
+    this.eAiguIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'eAiguIcon');
+    this.eGraveIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'eGraveIcon');
+    this.eCirconflexIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'eCirconflexIcon');
+    this.eTremaIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'eTremaIcon');
+    
+    this.aGraveIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'aGraveIcon');
+    this.aCirconflexIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'aCirconflexIcon');
+    this.iCircomflexIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'iCircomflexIcon');
+    this.iTremaIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'iTremaIcon');
+    
+    this.oCircomflexIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'oCircomflexIcon');
+    this.uCirconflexIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'uCirconflexIcon');
+    this.uGraveIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'uGraveIcon');
+    this.cCedilleIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'cCedilleIcon');
+    
     this.spaceIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'spaceIcon');
+    this.dashIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'dashIcon');
+
     this.trashIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'trashIcon');
     this.speakerIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'speakerIcon');
+    this.upIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'upIcon');
+    this.downIcon = this.game.add.sprite(this.game.world.centerX, this.game.world.height, 'downIcon');
+
+    var iconSize = letterSize;
+    var iconSpacing = spaceSize;
     
-
-    var sideSpace = 5;
-    var iconSize = 32;
-    var iconSpacing = 4;
-
-    var line1 = this.game.world.height - iconSize * 4 - iconSpacing * 3 - sideSpace;
-    var line2 = this.game.world.height - iconSize * 3 - iconSpacing * 2 - sideSpace;
-    var line3 = this.game.world.height - iconSize * 2 - iconSpacing * 1 - sideSpace;
-
 	// Function that will call the displayText when a letter is added.
     function addLetterEvent(text) {
       return function () {
@@ -153,186 +207,279 @@
 
     	}
     };
-    /**
-  	    // displayText.addLetter(key);
-		var newMessage2 = "";
-		var arrayLength2 = displayText.displayCharacters.length;
-		for (var i = 0; i < arrayLength2; i++) {
-			var char = displayText.displayCharacters[i];
-			newMessage2 = newMessage2 + char.letter;
-		}
-  	    
-		console.log('newMessage: ' + newMessage2);
-		
-		// responsiveVoice.speak(newMessage2, 'French Female');
-	};
-    **/
 
-    // Display Keyboard - Line 1
+    // Line 1 - Speaker
+   	this.speakerIcon.anchor.setTo(0, 0);
+    this.speakerIcon.x = sideSpace;
+    this.speakerIcon.y = line1;
+    this.speakerIcon.inputEnabled = true;
+    this.speakerIcon.events.onInputDown.add(speakerPressed(), this);    
+    
+    // Line 1 - Display Keyboard
    	this.qIcon.anchor.setTo(0, 0);
-    this.qIcon.x = sideSpace;
+    this.qIcon.x = sideSpace + (iconSize + iconSpacing) * 1 + Math.floor((iconSize + iconSpacing) / 2);
     this.qIcon.y = line1;
     this.qIcon.inputEnabled = true;
     this.qIcon.events.onInputDown.add(addLetterEvent('q'), this);
     
     this.wIcon.anchor.setTo(0, 0);
-    this.wIcon.x = sideSpace + iconSize * 1 + iconSpacing * 1;
+    this.wIcon.x = sideSpace + (iconSize + iconSpacing) * 2 + Math.floor((iconSize + iconSpacing) / 2);
     this.wIcon.y = line1;
     this.wIcon.inputEnabled = true;
     this.wIcon.events.onInputDown.add(addLetterEvent('w'), this);
 
     this.eIcon.anchor.setTo(0, 0);
-    this.eIcon.x = sideSpace + iconSize * 2 + iconSpacing * 2;
+    this.eIcon.x = sideSpace + (iconSize + iconSpacing) * 3 + Math.floor((iconSize + iconSpacing) / 2);
     this.eIcon.y = line1;
     this.eIcon.inputEnabled = true;
     this.eIcon.events.onInputDown.add(addLetterEvent('e'), this);
 
     this.rIcon.anchor.setTo(0, 0);
-    this.rIcon.x = sideSpace + iconSize * 3 + iconSpacing * 3;
+    this.rIcon.x = sideSpace + (iconSize + iconSpacing) * 4 + Math.floor((iconSize + iconSpacing) / 2);
     this.rIcon.y = line1;
     this.rIcon.inputEnabled = true;
     this.rIcon.events.onInputDown.add(addLetterEvent('r'), this);
 
     this.tIcon.anchor.setTo(0, 0);
-    this.tIcon.x = sideSpace + iconSize * 4 + iconSpacing * 4;
+    this.tIcon.x = sideSpace + (iconSize + iconSpacing) * 5 + Math.floor((iconSize + iconSpacing) / 2);
     this.tIcon.y = line1;
     this.tIcon.inputEnabled = true;
     this.tIcon.events.onInputDown.add(addLetterEvent('t'), this);
 
     this.yIcon.anchor.setTo(0, 0);
-    this.yIcon.x = sideSpace + iconSize * 5 + iconSpacing * 5;
+    this.yIcon.x = sideSpace + (iconSize + iconSpacing) * 6 + Math.floor((iconSize + iconSpacing) / 2);
     this.yIcon.y = line1;
     this.yIcon.inputEnabled = true;
     this.yIcon.events.onInputDown.add(addLetterEvent('y'), this);
 
     this.uIcon.anchor.setTo(0, 0);
-    this.uIcon.x = sideSpace + iconSize * 6 + iconSpacing * 6;
+    this.uIcon.x = sideSpace + (iconSize + iconSpacing) * 7 + Math.floor((iconSize + iconSpacing) / 2);
     this.uIcon.y = line1;
     this.uIcon.inputEnabled = true;
     this.uIcon.events.onInputDown.add(addLetterEvent('u'), this);
 
     this.iIcon.anchor.setTo(0, 0);
-    this.iIcon.x = sideSpace + iconSize * 7 + iconSpacing * 7;
+    this.iIcon.x = sideSpace + (iconSize + iconSpacing) * 8 + Math.floor((iconSize + iconSpacing) / 2);
     this.iIcon.y = line1;
     this.iIcon.inputEnabled = true;
     this.iIcon.events.onInputDown.add(addLetterEvent('i'), this);
 
     this.oIcon.anchor.setTo(0, 0);
-    this.oIcon.x = sideSpace + iconSize * 8 + iconSpacing * 8;
+    this.oIcon.x = sideSpace + (iconSize + iconSpacing) * 9 + Math.floor((iconSize + iconSpacing) / 2);
     this.oIcon.y = line1;
     this.oIcon.inputEnabled = true;
     this.oIcon.events.onInputDown.add(addLetterEvent('o'), this);
 
     this.pIcon.anchor.setTo(0, 0);
-    this.pIcon.x = sideSpace + iconSize * 9 + iconSpacing * 9;
+    this.pIcon.x = sideSpace + (iconSize + iconSpacing) * 10 + Math.floor((iconSize + iconSpacing) / 2);
     this.pIcon.y = line1;
     this.pIcon.inputEnabled = true;
     this.pIcon.events.onInputDown.add(addLetterEvent('p'), this);
 
-    // Display Keyboard - Line 2
+    // Line 1 - Accented Line 1 - éèêë
+    this.eAiguIcon.anchor.setTo(0, 0);
+    this.eAiguIcon.x = sideSpace + (iconSize + iconSpacing) * 12;
+    this.eAiguIcon.y = line1;
+    this.eAiguIcon.inputEnabled = true;
+    this.eAiguIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(130)), this);
+    
+    this.eGraveIcon.anchor.setTo(0, 0);
+    this.eGraveIcon.x = sideSpace + (iconSize + iconSpacing) * 13;
+    this.eGraveIcon.y = line1;
+    this.eGraveIcon.inputEnabled = true;
+    this.eGraveIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(138)), this);
+
+    this.eCirconflexIcon.anchor.setTo(0, 0);
+    this.eCirconflexIcon.x = sideSpace + (iconSize + iconSpacing) * 14;
+    this.eCirconflexIcon.y = line1;
+    this.eCirconflexIcon.inputEnabled = true;
+    this.eCirconflexIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(136)), this);
+
+    this.eTremaIcon.anchor.setTo(0, 0);
+    this.eTremaIcon.x = sideSpace + (iconSize + iconSpacing) * 15;
+    this.eTremaIcon.y = line1;
+    this.eTremaIcon.inputEnabled = true;
+    this.eTremaIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(137)), this);
+    
+
+    // Line 2 - Trash
+   	this.trashIcon.anchor.setTo(0, 0);
+    this.trashIcon.x = sideSpace;
+    this.trashIcon.y = line2;
+    this.trashIcon.inputEnabled = true;
+    this.trashIcon.events.onInputDown.add(speakerPressed(), this);    
+    
+    // Line 2 - Display Keyboard
     this.aIcon.anchor.setTo(0, 0);
-    this.aIcon.x = sideSpace + iconSize / 2;
+    this.aIcon.x = sideSpace + (iconSize + iconSpacing) * 2;
     this.aIcon.y = line2;
     this.aIcon.inputEnabled = true;
     this.aIcon.events.onInputDown.add(addLetterEvent('a'), this);
 
     this.sIcon.anchor.setTo(0, 0);
-    this.sIcon.x = sideSpace + iconSize * 1 + iconSpacing * 1 + iconSize / 2;
+    this.sIcon.x = sideSpace + (iconSize + iconSpacing) * 3;
     this.sIcon.y = line2;
     this.sIcon.inputEnabled = true;
     this.sIcon.events.onInputDown.add(addLetterEvent('s'), this);
 
     this.dIcon.anchor.setTo(0, 0);
-    this.dIcon.x = sideSpace + iconSize * 2 + iconSpacing * 2 + iconSize / 2;
+    this.dIcon.x = sideSpace + (iconSize + iconSpacing) * 4;
     this.dIcon.y = line2;
     this.dIcon.inputEnabled = true;
     this.dIcon.events.onInputDown.add(addLetterEvent('d'), this);
 
     this.fIcon.anchor.setTo(0, 0);
-    this.fIcon.x = sideSpace + iconSize * 3 + iconSpacing * 3 + iconSize / 2;
+    this.fIcon.x = sideSpace + (iconSize + iconSpacing) * 5;
     this.fIcon.y = line2;
     this.fIcon.inputEnabled = true;
     this.fIcon.events.onInputDown.add(addLetterEvent('f'), this);
 
     this.gIcon.anchor.setTo(0, 0);
-    this.gIcon.x = sideSpace + iconSize * 4 + iconSpacing * 4 + iconSize / 2;
+    this.gIcon.x = sideSpace + (iconSize + iconSpacing) * 6;
     this.gIcon.y = line2;
     this.gIcon.inputEnabled = true;
     this.gIcon.events.onInputDown.add(addLetterEvent('g'), this);
 
     this.hIcon.anchor.setTo(0, 0);
-    this.hIcon.x = sideSpace + iconSize * 5 + iconSpacing * 5 + iconSize / 2;
+    this.hIcon.x = sideSpace + (iconSize + iconSpacing) * 7;
     this.hIcon.y = line2;
     this.hIcon.inputEnabled = true;
     this.hIcon.events.onInputDown.add(addLetterEvent('h'), this);
 
     this.jIcon.anchor.setTo(0, 0);
-    this.jIcon.x = sideSpace + iconSize * 6 + iconSpacing * 6 + iconSize / 2;
+    this.jIcon.x = sideSpace + (iconSize + iconSpacing) * 8;
     this.jIcon.y = line2;
     this.jIcon.inputEnabled = true;
     this.jIcon.events.onInputDown.add(addLetterEvent('j'), this);
 
     this.kIcon.anchor.setTo(0, 0);
-    this.kIcon.x = sideSpace + iconSize * 7 + iconSpacing * 7 + iconSize / 2;
+    this.kIcon.x = sideSpace + (iconSize + iconSpacing) * 9;
     this.kIcon.y = line2;
     this.kIcon.inputEnabled = true;
     this.kIcon.events.onInputDown.add(addLetterEvent('k'), this);
 
     this.lIcon.anchor.setTo(0, 0);
-    this.lIcon.x = sideSpace + iconSize * 8 + iconSpacing * 8 + iconSize / 2;
+    this.lIcon.x = sideSpace + (iconSize + iconSpacing) * 10;
     this.lIcon.y = line2;
     this.lIcon.inputEnabled = true;
     this.lIcon.events.onInputDown.add(addLetterEvent('l'), this);
 
-    // Display Keyboard - Line 3
+    // Line 2 - Accented - àâîï
+    this.aGraveIcon.anchor.setTo(0, 0);
+    this.aGraveIcon.x = sideSpace + (iconSize + iconSpacing) * 12;
+    this.aGraveIcon.y = line2;
+    this.aGraveIcon.inputEnabled = true;
+    this.aGraveIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(133)), this);
+    
+    this.aCirconflexIcon.anchor.setTo(0, 0);
+    this.aCirconflexIcon.x = sideSpace + (iconSize + iconSpacing) * 13;
+    this.aCirconflexIcon.y = line2;
+    this.aCirconflexIcon.inputEnabled = true;
+    this.aCirconflexIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(131)), this);
+
+    this.iCircomflexIcon.anchor.setTo(0, 0);
+    this.iCircomflexIcon.x = sideSpace + (iconSize + iconSpacing) * 14;
+    this.iCircomflexIcon.y = line2;
+    this.iCircomflexIcon.inputEnabled = true;
+    this.iCircomflexIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(140)), this);
+
+    this.iTremaIcon.anchor.setTo(0, 0);
+    this.iTremaIcon.x = sideSpace + (iconSize + iconSpacing) * 15;
+    this.iTremaIcon.y = line2;
+    this.iTremaIcon.inputEnabled = true;
+    this.iTremaIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(139)), this);
+
+    
+    // Line 3 - Arrow
+   	this.upIcon.anchor.setTo(0, 0);
+    this.upIcon.x = sideSpace;
+    this.upIcon.y = line3;
+    this.upIcon.inputEnabled = true;
+    this.upIcon.events.onInputDown.add(speakerPressed(), this);    
+    
+    
+    // Line 3 - Display Keyboard
     this.zIcon.anchor.setTo(0, 0);
-    this.zIcon.x = sideSpace + iconSize;
+    this.zIcon.x = sideSpace + (iconSize + iconSpacing) * 2 + Math.floor((iconSize + iconSpacing) / 2);
     this.zIcon.y = line3;
     this.zIcon.inputEnabled = true;
     this.zIcon.events.onInputDown.add(addLetterEvent('z'), this);
 
     this.xIcon.anchor.setTo(0, 0);
-    this.xIcon.x = sideSpace + iconSize * 1 + iconSpacing * 1 + iconSize;
+    this.xIcon.x = sideSpace + (iconSize + iconSpacing) * 3 + Math.floor((iconSize + iconSpacing) / 2);
     this.xIcon.y = line3;
     this.xIcon.inputEnabled = true;
     this.xIcon.events.onInputDown.add(addLetterEvent('x'), this);
 
     this.cIcon.anchor.setTo(0, 0);
-    this.cIcon.x = sideSpace + iconSize * 2 + iconSpacing * 2 + iconSize;
+    this.cIcon.x = sideSpace + (iconSize + iconSpacing) * 4 + Math.floor((iconSize + iconSpacing) / 2);
     this.cIcon.y = line3;
     this.cIcon.inputEnabled = true;
     this.cIcon.events.onInputDown.add(addLetterEvent('c'), this);
 
     this.vIcon.anchor.setTo(0, 0);
-    this.vIcon.x = sideSpace + iconSize * 3 + iconSpacing * 3 + iconSize;
+    this.vIcon.x = sideSpace + (iconSize + iconSpacing) * 5 + Math.floor((iconSize + iconSpacing) / 2);
     this.vIcon.y = line3;
     this.vIcon.inputEnabled = true;
     this.vIcon.events.onInputDown.add(addLetterEvent('v'), this);
 
     this.bIcon.anchor.setTo(0, 0);
-    this.bIcon.x = sideSpace + iconSize * 4 + iconSpacing * 4 + iconSize;
+    this.bIcon.x = sideSpace + (iconSize + iconSpacing) * 6 + Math.floor((iconSize + iconSpacing) / 2);
     this.bIcon.y = line3;
     this.bIcon.inputEnabled = true;
     this.bIcon.events.onInputDown.add(addLetterEvent('b'), this);
 
     this.nIcon.anchor.setTo(0, 0);
-    this.nIcon.x = sideSpace + iconSize * 5 + iconSpacing * 5 + iconSize;
+    this.nIcon.x = sideSpace + (iconSize + iconSpacing) * 7 + Math.floor((iconSize + iconSpacing) / 2);
     this.nIcon.y = line3;
     this.nIcon.inputEnabled = true;
     this.nIcon.events.onInputDown.add(addLetterEvent('n'), this);
 
     this.mIcon.anchor.setTo(0, 0);
-    this.mIcon.x = sideSpace + iconSize * 6 + iconSpacing * 6 + iconSize;
+    this.mIcon.x = sideSpace + (iconSize + iconSpacing) * 8 + Math.floor((iconSize + iconSpacing) / 2);
     this.mIcon.y = line3;
     this.mIcon.inputEnabled = true;
     this.mIcon.events.onInputDown.add(addLetterEvent('m'), this);
     
     this.spaceIcon.anchor.setTo(0, 0);
-    this.spaceIcon.x = sideSpace + iconSize * 7 + iconSpacing * 7 + iconSize;
+    this.spaceIcon.x = sideSpace + (iconSize + iconSpacing) * 9 + Math.floor((iconSize + iconSpacing) / 2);
     this.spaceIcon.y = line3;
     this.spaceIcon.inputEnabled = true;
     this.spaceIcon.events.onInputDown.add(addLetterEvent(' '), this);
 
+    this.dashIcon.anchor.setTo(0, 0);
+    this.dashIcon.x = sideSpace + (iconSize + iconSpacing) * 10 + Math.floor((iconSize + iconSpacing) / 2);
+    this.dashIcon.y = line3;
+    this.dashIcon.inputEnabled = true;
+    this.dashIcon.events.onInputDown.add(addLetterEvent('-'), this);
+
+    // Line 3 - Accented - ôûùç
+    this.oCircomflexIcon.anchor.setTo(0, 0);
+    this.oCircomflexIcon.x = sideSpace + (iconSize + iconSpacing) * 12;
+    this.oCircomflexIcon.y = line3;
+    this.oCircomflexIcon.inputEnabled = true;
+    this.oCircomflexIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(147)), this);
+    
+    this.uCirconflexIcon.anchor.setTo(0, 0);
+    this.uCirconflexIcon.x = sideSpace + (iconSize + iconSpacing) * 13;
+    this.uCirconflexIcon.y = line3;
+    this.uCirconflexIcon.inputEnabled = true;
+    this.uCirconflexIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(150)), this);
+
+    this.uGraveIcon.anchor.setTo(0, 0);
+    this.uGraveIcon.x = sideSpace + (iconSize + iconSpacing) * 14;
+    this.uGraveIcon.y = line3;
+    this.uGraveIcon.inputEnabled = true;
+    this.uGraveIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(151)), this);
+
+    this.cCedilleIcon.anchor.setTo(0, 0);
+    this.cCedilleIcon.x = sideSpace + (iconSize + iconSpacing) * 15;
+    this.cCedilleIcon.y = line3;
+    this.cCedilleIcon.inputEnabled = true;
+    this.cCedilleIcon.events.onInputDown.add(addLetterEvent(String.fromCharCode(135)), this);
+    
+    
+    /**
     this.speakerIcon.anchor.setTo(0, 0);
     this.speakerIcon.x = sideSpace + iconSize * 10 + iconSpacing * 10 + iconSize;
     this.speakerIcon.y = line1;
@@ -344,7 +491,7 @@
     this.trashIcon.y = line1;
     this.trashIcon.inputEnabled = true;
     this.trashIcon.events.onInputDown.add(addLetterEvent(' '), this);
-    
+    **/
     
     // Enable keyboard.
     this.game.physics.arcade.enable(this.aIcon);
@@ -374,14 +521,49 @@
     this.game.physics.arcade.enable(this.yIcon);
     this.game.physics.arcade.enable(this.zIcon);
     this.game.physics.arcade.enable(this.spaceIcon);
+    this.game.physics.arcade.enable(this.dashIcon);
 
-  },
-});
+};
 
 
-// var keys;
-// var key1;
 var displayText;
+
+/**
+ * Function that calculates the size of letters to use for display purposes.
+ * Aims to put 20 letters on the screen.
+ */
+function calculateLetterSize(windowWidth) {
+	
+	var count = Math.floor(windowWidth / 20);
+	
+	var letterSize;
+	
+	switch (true) {
+		case (count > 100):
+			letterSize = 100;
+			break;
+		case (count > 72):
+			letterSize = 72;
+			break;
+		case (count > 58):
+			letterSize = 58;
+			break;
+		case (count > 42):
+			letterSize = 42;
+			break;
+		case (count > 32):
+			letterSize = 32;
+			break;
+		default:
+			letterSize = 24;
+			break;
+	}
+	
+	console.log('using letter size: ' + letterSize);
+			
+	return letterSize;
+	
+}
 
 /**
  * Class used to manage the display of letters.
@@ -391,8 +573,7 @@ function DisplayText(letters) {
 	// Sets the initial letters.
 	this.letters = letters;
 
-	// Sets the x and y coordinates for where the word is going to be displayed.
-	this.x = 20;
+	// this.x = 200; // this.middle();
 	this.y = 20;
   
 	// Create an array of display characters.
@@ -402,7 +583,20 @@ function DisplayText(letters) {
 	this.display = function () {
 		//console.log(this.letters + " " + this.y);
 		
-		var xx = this.x;
+		// Calculate middle.
+		var xx = gameWindowWidth / 2;
+		var letterCount = this.letters.length;
+		// console.log("letterCount: " + letterCount);
+		if (letterCount != 0) {
+			// console.log("xx1: " + xx);
+			xx = xx - (letterSize / 2 * letterCount);
+			// console.log("xx2: " + xx);
+			xx = xx - (letterCount + 1) % 2;
+			// console.log("xx3: " + xx);
+			xx = xx - ((Math.trunc((letterCount + 1) / 2) - 1) * spaceSize);
+			// console.log("xx41: " + ((Math.trunc((letterCount + 1) / 2) - 1) * 3));
+			console.log("xx: " + xx);
+		}
 		
 		for (var i = 0; i < this.displayCharacters.length; i++) {
 			var displayCharacter = this.displayCharacters[i];
@@ -418,7 +612,7 @@ function DisplayText(letters) {
 			// console.log('positions: ' + displayCharacter.data);
 			displayCharacter.display();
 			this.displayCharacters.push(displayCharacter);
-			xx = xx + 32 + 3;
+			xx = xx + letterSize + spaceSize;
 		}
 		
 		console.log('word: ' + this.letters);
@@ -443,19 +637,26 @@ function DisplayText(letters) {
 		var xx = this.x;
 		for (var i = 0; i < this.letters.length; i++) {
 			var letter = this.letters.charAt(i);
-			xx = xx + 32 + 3;
+			xx = xx + letterSize + spaceSize;
 		}
 	};
 
 	// Function that supports the addition of letters
 	this.addLetter = function (addLetter) {
-		// console.log('addLetter!' + addLetter);
+		
+		console.log('addLetter: ' + addLetter);
+		
 		this.letters = this.letters + addLetter;
-		var xx = this.x + (this.letters.length - 1) * (32 + 3);
-		// this.displayCharacters.push(new DisplayCharacter(addLetter, xx, this.y).display());
+		
+		var xx = this.x + (this.letters.length - 1) * (letterSize + spaceSize);
+		
 		var displayCharacter = new DisplayCharacter(addLetter, this.letters.length - 1, xx, this.y);
+
 		displayCharacter.display();
+		
 		this.displayCharacters.push(displayCharacter);
+		
+		this.display();
 	};
 
 	this.deleteLetter = function(icon) {
@@ -481,12 +682,6 @@ function DisplayText(letters) {
 		// this.letters = this.letters.slice(icon.data);
 		
 		console.log('letters after = ' + this.letters);
-
-		//for (var i = 0; i < this.letters.length; i++) {
-		//	if (icon === this.letters.charAt(i)) {
-		//		console.log('removing : ' + i);	
-		//	}
-		//}
 		
 		icon.destroy();
 		
@@ -497,7 +692,9 @@ function DisplayText(letters) {
 	this.location = function (icon, x, y) {
 		
 		console.log('y = ' + y);
-		if (y > 350) {
+		
+		if (y > line1) {
+		// if (y > 350) {
 			// 
 			console.log('deleting letter');
 			this.deleteLetter(icon);
@@ -525,6 +722,7 @@ function DisplayText(letters) {
 
 		for (var i = 0; i < arrayLength; i++) { 
 			var proposedDistance = Math.abs(icon.x - this.displayCharacters[i].x);
+			console.log('prop dist: ' + proposedDistance);
 			if (minDistance > proposedDistance || minDistance == -1) {
 				newLocation = this.displayCharacters[i].icon.data;
 				minDistance = proposedDistance;
@@ -556,9 +754,25 @@ function DisplayText(letters) {
 			}
 		}
 
+		// Calculate middle.
+		var mx = gameWindowWidth / 2;
+		var letterCount = this.letters.length;
+		// console.log("letterCount: " + letterCount);
+		if (letterCount != 0) {
+			// console.log("xx1: " + xx);
+			mx = mx - (letterSize / 2 * letterCount);
+			// console.log("xx2: " + xx);
+			mx = mx - (letterCount + 1) % 2;
+			// console.log("xx3: " + xx);
+			mx = mx - ((Math.trunc((letterCount + 1) / 2) - 1) * spaceSize);
+			// console.log("xx41: " + ((Math.trunc((letterCount + 1) / 2) - 1) * 3));
+			console.log("mx: " + xx);
+		}
+
+		
 		var arrayLength = this.displayCharacters.length;
 		for (var i = 0; i < arrayLength; i++) { 
-			this.displayCharacters[i].x = 20 + i * 35;
+			this.displayCharacters[i].x = mx + i * (letterSize + spaceSize);
 			this.displayCharacters[i].icon.data = i;
 		}
 
@@ -585,18 +799,8 @@ function DisplayText(letters) {
         this.displayCharacters[i].icon.x = this.displayCharacters[i].x + xdif;
         this.displayCharacters[i].icon.y = this.displayCharacters[i].y + xdif;
 
-        // console.log('location x/y: ' + char.x + '/' + char.y);
-
       }
-
-
     }
-    // alert(arrayLength);
-
-
-    
-    // responsiveVoice.speak(newMessage2, 'French Female');
-    
     
   };
 
@@ -619,10 +823,38 @@ function DisplayCharacter(letter, position, x, y) {
 	// Adds a sprite to display.
 	this.display = function () {
 		
-		console.log('this pisition = ' + this.position);
+		console.log("ASCII = " + this.letter.charCodeAt(0));
+		
 		if (this.letter === ' ') {
 			this.icon = game.add.sprite(20, 20, 'spaceIcon');
-				
+		} else if (this.letter === '-') {
+			this.icon = game.add.sprite(20, 20, 'dashIcon');
+			console.log('dash');
+			
+		} else if (this.letter === String.fromCharCode(130)) {
+			this.icon = game.add.sprite(20, 20, 'eAiguIcon');
+		} else if (this.letter === String.fromCharCode(138)) {
+			this.icon = game.add.sprite(20, 20, 'eGraveIcon');
+		} else if (this.letter === String.fromCharCode(136)) {
+			this.icon = game.add.sprite(20, 20, 'eCirconflexIcon');
+		} else if (this.letter === String.fromCharCode(137)) {
+			this.icon = game.add.sprite(20, 20, 'eTremaIcon');
+		} else if (this.letter === String.fromCharCode(133)) {
+			this.icon = game.add.sprite(20, 20, 'aGraveIcon');
+		} else if (this.letter === String.fromCharCode(131)) {
+			this.icon = game.add.sprite(20, 20, 'aCirconflexIcon');
+		} else if (this.letter === String.fromCharCode(140)) {
+			this.icon = game.add.sprite(20, 20, 'iCircomflexIcon');
+		} else if (this.letter === String.fromCharCode(139)) {
+			this.icon = game.add.sprite(20, 20, 'iTremaIcon');
+		} else if (this.letter === String.fromCharCode(147)) {
+			this.icon = game.add.sprite(20, 20, 'oCircomflexIcon');
+		} else if (this.letter === String.fromCharCode(150)) {
+			this.icon = game.add.sprite(20, 20, 'uCirconflexIcon');
+		} else if (this.letter === String.fromCharCode(151)) {
+			this.icon = game.add.sprite(20, 20, 'uGraveIcon');
+		} else if (this.letter === String.fromCharCode(135)) {
+			this.icon = game.add.sprite(20, 20, 'cCedilleIcon');
 		} else {
 			this.icon = game.add.sprite(20, 20, this.letter + 'Icon');
 		}
@@ -647,51 +879,10 @@ function DisplayCharacter(letter, position, x, y) {
 }
 
 function stopDrag(startIcon, endIcon) {
-  // console.log('stopDrag Start!' + startIcon.position.x + ' ' + startIcon.position.y);
-
-  // var selectedIcon = (startIcon.position.x - 20) / 35;
-
-  // console.log('selected icon = ' + selectedIcon);
-
-  // console.log('stopDrag End!  ' + endIcon.position.x + ' ' + endIcon.position.y);
-  // displayText.location(endIcon.position.x, endIcon.position.y);
   displayText.location(startIcon, endIcon.x, endIcon.y);
 }
 
-var aIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAALCSURBVFiFxZe9T1NRGMZ/5/aTQmmBUgLIh4KAFIPfJloNREPpZhx0100XR8ZOyr/gaOLg6CI2LgRLjIQYU42JFGJE0EihfAm0lMJxUG+5UFraUnm25/Q97/nd97m9txVSSq70D/dKgQ/oBMwUVjEgKCS+QJ/bL9yPAr1S8LLAh6aUkHiVv1d+KJICn8KfsR+WOhUKn3k6mZV8dpv0CiUmfV4EOe1WBDy43oTH5cSoFwxPzPNwYJxofDP7XrkA3D5fy80z1RSbdBh0Ct2tDu51NebSKnsAi1HHXXfDrvUbp6uptWd/O2UN0N3mwGzYvU0AHpez8ADejuQhkZU4n3+uqL6n0AA1djOddTbVD4UiDI7Nqf5ImRlXjbVwAL0dTsQ2Pzg2x9BYRFOTbQz7BhBox7+wtkFwapnphShfZtfU9WsnHOgVkaJDngCddTaqbcm7/HUowpaUAAyFkjHYigxcPFZ28ADbrx7QZD8Uyj2GfQGYDQrdbQ7VL0UTvP+2pPqJ8Co/FmOqdzeXU2zSHRzA1eMVWIzJhoHxCJtbUlOzfQpGvUJXq4P9aF/vAu/JKi1QSwXnGu2ataIdD6del5MXH2byB3BaTZxt0B5WatZTak6/9VS9DWepifDyetq6jBF4XJVk8a1SJYCe9sqMdRknsHP8S9HErvzVQwWUWQyq97icPH07nTtAe42V+vIi1W9sSm49HmV1PfV7XwDP71+gosQIwFGHhZaqEkIzKynrIUME7uZyjX83ubjn4QASGJ6Y16xdakr/UEoLMPsrrvH+T+G0zQBe7aiJb6aO65909dfv+Pb6cHI+it1ioNikY+BjmGej3zMCzCyvs57Ywmk1Mfp1kSdvpogntvasF5f7A+kRC6y8fhUfFEAsY1XhFFOA4CECBBUhD++/oZD4lECf2y8kXmCE/xNHDBgREm+gz+3/DYrDxW62DQDbAAAAAElFTkSuQmCC';
-var bIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKOSURBVFiFxZfLT1NBFMZ/c/u0IOWlWNugCaAQQ4gkKJES40pgYYwrNGli+BtcNK6auICFCfEPMG5cuMGViQ3o6moiJj5QQANWE0WkRSCUV28oHReVmltMeyW33m83Z8458835TuYhpJR0Dz3rkYII0Aa4KS1SwISQRNRwMCqCg2qPFDwu8aJ/hZD0Kr93bgmkIKKQLbtVaFMoveaF4FYsXBwAuxEnt0Ph2tkAwcZqXHbbnvl4UiO2uMHIq3kWkto/ERBdQ6os5tTXWsfNvqaiybR0huGxGI/exQ0TMCRBx/FKQ8lcdoUbFxtpPlJuLgFFCN04kdSYnl9jJr5ORuoLaFcEV88EDBMw1AP5ePjmB/dfzAHgPWDn1uUW2uu9ufkWn8kVKITVrTQPXn7X2dKZom1lHgEAf5X+KHn7bdVw7L4kcNoVyl12HDbBuYZq+jv8uTktnWF0arG0BAa66hnoqt9jT6xphEc+MBNfN5zL1JNwJyO50FxLTbnTGgI+r5tQZ4B7109z6uhBQzH7kuD9XJKPC9kye5w22o958Xn/NGJ1mYPIpZOE7r4mtZ0xn8Dz2HLuHNhFd1MNg1dacmOf1013Uw1j04Ub0jQJ1Nklvvzc1NkaDpUVjTONgMdpo67CpbNtaOmicfuSIB+HK1yEOgN4nPqrOr8iphHo7/DT11oHZC8qf5Ubkeezoe0wNb9mDoF0Rt/JlR4HlR5HwZjhJzFWNreL5jbUA+rsshE3ANa1NHeefiY6mTDkb6gC6uwSt0c/cf5E7R6dAVLbO8ytpPi6vEV0MsHqVvGd78LQk6yUsPxVrJD9q1mFlAJMWEhgQhHSur+hkEQUNRyMCkkvMM7/kSMFjAtJrxoORn8BgQPCdkwu1bgAAAAASUVORK5CYII=';
-var cIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAALISURBVFiFxZc9TFNRFMf/97WFlpZSvqvVahtpaiA21QgDNURDIk0cnNTFxcXBhBinDg6dlMEwOOluQuLg4IBV42BqRBa1KZhI8qBKlY8WsB+0j/b1XQeU+Cj0XUs//ts997xzfvfcm3PvI5RSnBt7N0IJ/ABcALSorgQAIULhD/o8AeK5HxyhBC+qnHRPEQov92fldREl8HPYLnu95OJQ/T0vJS130AgcIbCYtNCoygulLucjt7UFQ452OM3N6OnWo1HNQaIUi+sC+Ngm3vPreDmzCsoQiwyOBVn8AAAaFcHNoeO4etYCouD76XsCoxNhRQjmuh1q0eLxdReuMSQHtqs0YG9V9GMGuHvJAUe3ochekCgiaxkIealoLicW23aL6Qxc7O2C64hRZltKCHjwikdoMQkhXwBHCKztOpyyGHHmmAkzP5L4vJg4OIChUY1b520y29xKGneezuJXJr9jkyhFJJ5BJJ7B89Ayy7oAMGzBgN2ENr1GZnv4ZkGW/CBSBLB36GXjLz9TTKWtHEBnk2w8u5SqWHImANuuCkTXs7UFkKi8lRQoc9+qDMB8bFM2PtqqqzFAPCMb9x427uNZJYCFmBygz9IMt7WldgBT8xtYTW7JbLeH7Wg3NFQEQGUdvuEv5SBKFKupHC44O3ZsbfoGDJ/sxHJCQEoQkc1LMDVpcNpqwmW3GT5vD/ptrQhHU0hviSUBmK/j8St96LeZ9pxLCiKM2uKu/uzjEsZf8yXjMt+G9ybn9u2AeyUHti8sJTEDxNM5jE6E8ehtBKKkXLSvy2lMhlcU/f7rSSZR4MmHKKb4DQyeaIPTbIDTbECXsRHpLRGReBbf1jIIRZMIzKyAgbO8NyEf2wT/T4PSNaiQzRXKCcW+BaVUbvK/AMonpXoSOAChOgKEOELr929IKPxc0OcJEAovgGnUZjsEANOEwhv0eQK/AZN2+Q+MwX7dAAAAAElFTkSuQmCC';
-var dIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJuSURBVFiFxZdPaBNBFMa/maRJSJtoEptUG0xNUStFipbSqql4UGzQixcFURGE3r3loJCbxYMHL0JBRb15EG8G1ENdrRalmpPSdmOooDZ/TKVJmmSzGQ+pwY0xu7Wb3Q/2MG/ezPvtvJ23M4QxhtGJl2OMIAxgAIAFrVUBQJQwhLlQIEIC17gxRvCkxUEbijAE6dqb6yJGEKaoLrteGqBofc6byUJ1DA4AMMo5eOxmnB32YtC3CZSQmr3CGL7/LIJP5hBL5sEnc1hI5NQHGD/sw/F+d8O+HpcVI35HrT3N/8D1yAJS2ZJiANkUjPidiic72OvEg0v7/wn8XwCGOg9BZBDECgSRNfS3WYy4enIXBn2bFQHIpqBe4/c/YH4t126bGb1uK07s9eDI7i0Sv8vH/Lh45z3Klcagv7WhXZBYKeI1n8GVx59w83lM0tfjsuL0ULfsHKptw4fvvuJtfFliO7WvSzsAALj7alHS9tgtMBmbh1AVYG5JWgcoAbyO5oVWVYCCIGI5L0hs251W7QCAaoX8U+1mg3YAljYKZ7tJYltMr2oH0Ndl+8v2OZXXDuD8Aa+kncqWkC2WtQE4M9SN4R0OiW1qLi07bt2luM1Aa3u7s8OEvq0dOLqnE6M7XRK/5EoJky/i6gNMXlB2grvxlEeuKG4cQJT5mdRrtSTi1lQc3Lz88gMKvoFnH1OKg7+JZXDu9iwezX5TPEZ2Be5Nf0FZrKB/mx2USPsyeQF8Mld9EnnE0823XCORQxPc+tZYZel+Kqao3tX0UoECiOoIEKWE6Xc3JAxhyoUCEcIQBDADbdJRADBDGIJcKBD5BeoSvvIXlS5gAAAAAElFTkSuQmCC';
-var eIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHZSURBVFiFzZc/SxxRFMV/72VdVyUkkChEmwhLAjYWkiZuCg0EF0sbP4FlmjRbWCxYRBK/QZpAUlkHskIM4ohoCIFtkiCLIv4p1LAJi+u6u/NuCmOxZKNvMjM7nu7OnHvvmXfm3ZmnRIRHsytjosgCg0CCcFEB8krIOplUTqWeO2OieB9y06ZQQlr/efJIIIqs5mzZo8KgJnzPL0JCR9gcgJgXcrKni8kHfQz0Xm9634jwZfsXb9d2OSidBi9gevweyZ6uCzl3b3US04oXCwWrmtYW3Ohou7T5Odrb7J21XoHO+LW/rtVc0xAbgU9bRV6v7gQvoBlG5lb9pAMeLAgLkQvwZUE81qjfNYJrpHUCPj572BBX64aljR+8XChwUnWtagRqQTymeTLQzej929Y5obwDxXLNmuvLgq/7pYa4XHVZ/H7E2maxNQKm3uT9pANXYBtGLiDQOQBQqxu8TIJA5wDA3s8Kr5a3+fDt0KqGtQV1Yy4nAX03Ezx93I9WdnWtBRyWqhQOjq24xXIN24nsyYKZdxtMDN0h2f3vH5OtozLzn/eta6rhWcfb1yNgRL4NNWdntahQ0YD/efr/yGsl0Z0NlZDVTiaVU0IaWKc1dlSAdSWknUwq9xutIIl4w+zICAAAAABJRU5ErkJggg==';
-var fIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGxSURBVFiF7VdPSwJBHH0zu4ZFgSRBCBFEQUTgoQ5RW7dAD93Cc1+hm8e9JUFd+gQdovoEWRAEG4WChBBUkJCFEJRS5H/d/XUoEkV0l3XdDr7TzvLm93vz3sywy4gIy6FLHzHIALwAnLAWRQBxRpCVoBRm0pbiI4YTi5s2BSP4+e/KbQExyBw/ttsFL4f1mbeCk9vYHAAgGiG7BhwIzHsgTbohcNaUk86VcRRN4SqR6byAjcUxrM95WnLG3f2YHh3E2l4EparWtqahCBYmhnXxRM7gEPSVNuSAKNTbXtUIRFT37u2rjP3rF2RL1c4LaMTm8S1unj/NlDAWgRWwXYCpCBwCQ59YW4OqEVSNWszosIDdwGzduKJquHhIY/v0EYWyqqtGRyNwCByrMyNYmXLrnmPJHsjkyrq5piJ4SueRL9WsLlRUnN+9I5bUfzRNCdg5S/TugZ6A7grQGm65xrHlAmLJj7/nXEnF/WvWtABDx/AgksKQU4TH5cRhNKXri6cd2FJIMe+jCfyLTVi0sX+RA4jbKCDOGdn3b8gIMleCUpgR/AAi6E4cRQARRvArQSn8DWhZiMTWtCgDAAAAAElFTkSuQmCC';
-var gIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAOFSURBVFiFxZdPTNtlGMc/76+0lAItpYHCgG5s2TCTMWEHFOsSDyarW0x0ZhdjtnD26AFNTBo9uIteuRiVLPFidMlEhwcTQnWOqCjMbbaLG5PKWv4IpYX+6L/XQwX3s/39Sq3I9/Y87/Pn+z7P+1dIKXnq4tenpMAPHAes7C5UYFpI/IEh75jwvh04JQVXdzlpUQiJT/lr5nsCKfAr5Mu+VziusPs9N4JVqcjbbKLdWYPV/O/DVJVjrAjwdbt5zOPgkZY69rtsKCI/Fktm+CUS5+rPC0yElkllcv8tgaZ6C2+c6aLP4yg67qipor/TSX+nkz/W07w5GuT72dXSk9pJ8oFDjYwM9ukm/ycaa828e66b/oPOygm46iz4n+vCbtUWKycloWiC8eASoWgCNZ3VBhbwfG9rSQIlW/DK053YLCaN7vKPDxgen2Uj9XdSq9nEC32tXBjo2LYPryQrI9DrcfDM0SaN7sNrc7wXuF9gq6azfDQZ5qvbizx7zE1OSi5PPaiMgK+7WSMvxlOMXJszDBhd2+SDb34rmXgLhmvgYFOtRv5kap50dmfba6fQrYAi4IDLptEFI4kCu+b6aga9Ho612TV6iWQmvMboTJRb8/HyCbQ6rAUnXHhFLbB7+Yl2zvS4i8Y44LLR3+nk7PB3ugR0W5CTuj4aWKqMd7LbXo2nsaZ8ApGYSjKl3dv7GgrvrUvfhrl+d4VUJkc6myu6RtJZ/dnotkAC95Y2OLqvflvX1VLHD/e1x2t4JcmrH9/clg811TIy2Lstb6SyRGKFrduCYf3uLm1o5BdPtGI2CSMXHn2IMMCvi+sYddOQwJXpiMa5ub6aCwMeXXu7tYqXHm/X6G6E14xSGBO4NR/n85moRnd+oIPXfIdprLVo9D3tdt45103bQ+tkdSPNpethQwIl74Lh8VlOHnFpLqPTPW5O97j5fVUlElNpc9bQYq8u6htXM4bxS96GsWSa1z+9zVIiVTDW1mDlxP6Gosm/vLnAFzeiBfqyCQD8NBfj/PtTBO4sl7SNqxn8V4K8NRoyXHxbEE9eDOzwyMnj5BEXvR35J9lhdx1Ws8LC2ibBaII70XU+m4mwGC+slh7KehMCTISWmQjlK6EIgc1iIrFp3GcjVPQqzklZUfItAvrH1O5DVYDpPSQwrQi5d39DIfErgSHvmJD4gEn+n3aowKSQ+AJD3rE/AUyxKr6nMpBvAAAAAElFTkSuQmCC';
-var hIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAG6SURBVFiF7Zc9SyNRGIWfO34lG1QSsmRRFDaF+IGmURAcC1cWDNpaWNjsH9jGImU6LWz8Adpa2CoGJDajoAhCXNROQRBWDMq6rI5f3C12EeaS3DjCeC083cucOefMnLnwjpBSMjizMSIFWSAFhAgWLlAQkqyTsXPCnnZGpGA1YNOSEJK09f/JjUAKshb/XrsppCyC71yHkGXQHIBq3cVwbRVjPQl6mhtY+XHG1tHls0T7k1FGuxPsnV6xvHfGzd3jywJM9DXzzW4FYKg9zuT8LsfFa6355/gHZse7nu6pr6tmYfOkLF9bwZeOuGf+2vlRa16Ko2r4ChCqqfLMYWUuBZWjavgK8Bp4D6A9BSr6k1FikXYtpy0RCS5ASyxMSyzsy6ASjFdgPICvCi7+3PHz162W86mxjlikNpgA+cMic/kjLef7cJLx3qZnaxqv4D3A2w7g3nsXiZv78otFOY6q4SvA+mHRM68dnFcMoHJUDRXaY7i4c8rv24enlazSNgRwXLxmamnfs5LpIAZmHFlRNUC8iY/QNejvWkDBYICCJaS5f0MhyVpOxs4JSRrY5nXqcIFtIUk7GTv3Fxs0fE2cEG1CAAAAAElFTkSuQmCC';
-var iIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEWSURBVFiF7ZehTgNBEIa/2TRp05xBNHWQnqitRLCQyt5rYBB9gZPn6ANgMH2NnkJwNSfPVUFA1WGa5tKkDAJSRQjZcCwk+7vZZGe++WfErqgq57PlRIUMGAEdmlUNVKJkRWpzsdfFRIVFw0U/lSiJ+ejci1TIDO+2+9LI0PzMv1LHeCwOQMv14ml8xNXFCQC390+UDy9OeZwdmI4HDPsRw37EdDxwTeMGELVbxL3uIY57XaK2m5nedyAABIAAEAACQAD4nwCvqt86awxgu9uzWm8O8Wq9YbvbOwE4P8lu7h65tMcAzJfPrmmQs1nh5t0P6U8sYe2xfm2AyiNAZUT9/Q1FyUyR2lyUBCj5nXHUQClKUqQ2fwPTbkdJ9TkBOgAAAABJRU5ErkJggg==';
-var jIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGySURBVFiF7Zc9S1tRGICfc5KY0MSqtcaILpqgDqJdLB0inUqSxbW/o4OQ8YKDDv4JoT9BMAgdyhUxm1kiRG2HUIIa0o9EuWk+jkMckijhXsP1IuTZDpz3vs993wPnPUIpxdr2YVwJNGAF8GEvBpARCk1PRlMiuqXHlWDf5qSPIhQJef/njqAEmqRVdqdYkdjf8174pIPJAXD3+wGvW7IRi/B+dpTDsxI7Bxc0lTId33cFPs6PE18K8sY/xPq7EB/mxizF9y2wPDPStX79vAJCdK0txjt+CAcCA4GBwEDg5QsEvJ0X6m2tYSne9HU8+/YVn1enObusoJ+XuPpXxeMSLIT8Hft+Fm/tEdDWFwhP+IFJvnwKk7usMOxzMzXSOVD9uL6xR6DZNWPMTwYe7DnJ/+XXb8OSgOkz8PU4T73boo1Ktc7mXg7zs1AL0xX4dlqk8KdKbCnIYihAJOjH65aUbmp8zxXZPcpTrPy3mN7iTJgtlMkWygC4pMDjEhi1puWkTxZop9FUNHq0xCyS1lvNKQwJZBwUyEihnHsbCoUm9WQ0JRQJIM3ztMMA0kKR0JPR1B0T3HquS95a4QAAAABJRU5ErkJggg==';
-var kIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAALUSURBVFiFxZffS1NhHMaf990PzzZn22ySMmdoSm6WlHe5ukpzeBEVtu6ioD/AIBhYMCzKwBh140V40U1QBBaMWoVgTIpdpbVarrLUZJkz0Ymd3Nl5u7CMM8c2N+eeu/fDw/f7nPfXOYcwxnCwZ7iNEbgANALgkF/xAEYJg8vntHmJ7ZqvjRE8yXPTpCIMdvr3yQsiRuCiWJ32QqmRIv9rnkocLWBzAIA8E9MRaxlOH6hElBfQN/QVI1MLSX1lJUW42F6HnaUqPBr5jv7hybS1084Ap6DobKmG2aCCtUKLc4eqkvoMGiVundqD/eZtMGiUONNsRrVRnXsAk16F4qL/E1W/o3idp4STw+2wwqSXbic5Tb/CaR0kcZwAVEoZejusqDFqJNzzZgahmaXcA6SSUk7Rc7welgqthPs+zqH36aeMamQdQEYJuo/uRlOVTsKHxiK49PADBJFlVCejU5AoSoCu9jrYdhkkfDAYQbdnDPEMm2cdoLOlBq0Wo4Q9ez+LK54QRJZ586wCKGQUx/aVS5g38ANXH4ewgQdfU8434W9BRP/wZFbNNyVAkZzC7WhAabFyawLE4iLuvJySMJOew01HA3RqRf4DAMBt3wQGXoclbOd2NdyOBmi5jW2rrJfA/fwzBoMRCast0+DGSSvUSln+A4gMuOwZg//LvIRbyrXo7bCCU2RWOqdNKIgMXQNBBKajEr7XVILrJyxQyjfhZZROfEzEhQfvMD67LOFNVTo47bW5B0g83skuuigv4Pz9AMILvIS3Wozr3pIbDjD18xeivLA2fju9mNQXWVpB570AIksra0xkAB+Lp6wvMx8+60pliIsM4QUe5ToOwXAUfUMTmF+OJfUu8gJehOZQqVdBEBnu+r/h1fh8Uu8/keYeX5aX6Oao4F/FFKv/aoUSTwGMFjDAKCWscP+GhMFFfU6blzDYAfixNcvBA/ATBrvPafP+AQlx3peMuHS7AAAAAElFTkSuQmCC';
-var lIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFnSURBVFiF7Zc9SwNBEIaf3QsxEjEiphANaSzUwkPRInhWiiallWV+hZDyKk1l5U/xI1gIciKkjHZKTKugooJ6ksS1iE1C0FuO85p7u1ledp7ZYZldoZRipXyeVwIbMIEEwcoFakJhOyWrIqxdJ68ExwEn7SuhKMifykOREtiSzrGHJVMSfM9/U0KGmByAmI55MG6wvTHFYjbF2fUjeyd1lE8ArRNYnR5jfTbNaDLO5vw4C9kRn+k1AeYmh7tisycOHEAI0bPgO78eQBCKACKACCACiAC0xnGvDCmIx7praLUVX8r7kPYFUMxlKOYyXWtvn20OLu/YP214eitotcBttv/0JAcMtpYmMDMpT3tqAVzUnzx7Xz6annxaLajePrNzdMPaTJqhAaOv59VtcXh1T+Ph3dOeYrns+H3W+VLo11DS+auFJVcCtRABalKo8P6GQmFLp2RVhKIAVPmfdrhAVSgKTsmqfAOEDViyh0tG6gAAAABJRU5ErkJggg==';
-var mIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAMjSURBVFiFxVdLTxNhFD3fUCgF09oij5RnCytRuzAQQusCoglElybEnXFL2LPsTv6CG1cmxqVGYxcaE0pCqyZQJNFIePWRQKEMLbSd6XT6uQCm81ZR6F3NPXMf57t3zmSGUEpxZ25hghIEAfgANOJijQMQIxTB8GwgRAJPwxOU4P0FN9U1QjHJnJ68JkYJggxOxl4r8zG4+J2bWSNTw+YAAMvvAqaGOnH/ZjsoKEKrabz8nDKNfzTciYkbbSAgePdtF6++mMebErh3vRUz4x7Jnx7z4Igr4+3Krm78g1vtmB6rxs+Me5AtCgitpg17mK7g4W23Bnvs7zGM17s3NdRp1sKcQF9LkwbrsFvhbdXi3tYmdNitGrzXZQNDyN8TaLNb0Wyt073n73f9EQYADRYG7qvGQjMk4LmmPeWZjQ5om+lhf1LLmIBq/IJIpetBtx0OW73kO2z1GHTbdWPPT0CV9OH7XjWJACNep+SPeJ1gZGv+KIv9bwTeLO+gVK5IfkA2cvm1IFbwenlHkdt3HgK9qhWspfNYSmQlf9jjhIUhsDAEw57qNJYTOayl88paJkrQJaBWQOa4BE4QEdlgJazZWgdftwO+bociNrLBghNEZI5LEmamBF0C6vEn2CIAYHGdVeD+ARf8qqc/ekryLMeopjkB1fgTByfFkmwRqUNOwkf7XRiV6X8nx2MrU1DknI+AKjjJVpvK19DlbESXszraiGxC8px/JiAf5+L6gW4hAIhuVgmoV2CkBF0CagUkZcWW4lmFHM9MECm+bh/q5gDGStAQUCuAAkjJxsmXK1iKZ9VpWElmUSyJkp9iOcjfh0ZK0BDocdkU/l6OB6868eKGUg0AEN08VPh8uYK9HG9aW5dA/KCIiox6RKfZ/M8MBLFKShApPv3Y18TJcysU2NwvaGLqeu4+CcqBPC+iUBLRbrcilszh+UIcR1xZkZQviUixHFquNCB9xOPZ/DZWkjlN8a1MAW2n3wgvIkndwxD/XJhq0Eu0mn8VMzj5V6uVcQyAWA0JxBhCa/dvSCiCTHg2ECIUkwCiuJx1cACihGIyPBsI/QKMxiyy/fdv4wAAAABJRU5ErkJggg==';
-var nIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJRSURBVFiFxZfLaxNRFIe/O41NLG2gliY+QhQjglRbxGXizpAWCyKuXGr/ggpCF10EXBh0oQiuu9Cli1IXTcXSRay0io8stEpjW23QEmMfYMK06eS6iASj5qadPOa3O3fOOfebe34Dc4WUkrORZ71SEAZ6AAf1lQ7EhSQcGwpEReBmrFcKxuu86X8lJH3a7ze3RFIQ1igcu1Xq0aj/zFVyaBZuDoCtUsIVv5f+bjfPP60yMr3MamZLmb/faWcw6OO4u5Wx+Aoj01+U+coT8LQ7GAh4cTvtXDx9gHuXT+LY06RseOnMQfzH9tHZ1sxAwIunXT1hJcCpQ86S+EhHC9dDPmXDbk9pzd89dgUghPhnLdTl4ny3u3zNDnrsGKCcrgV9HO1sMVNaGwC7TePGhRMV/VA3AIDDHXsr+qHmAGvZHDlDFuNQl4t+hR9qDvBtXef+1GLJ2mCVftj1CB69+srUx3QxrtYPpjwQGZ8nuaYX42r8YAogs2kwPDrH1na+uGbWD6a/gkQqw52nCyVrg0Efbqe9MQAAj+MrTLxLFWO7TaOjtblxAAC3JxIspbOm66sG0HN5hkc/oOcMawAAln5kuRVN1B7AyMvSWMoymfDk/XfG3q5U7LErgDfLG/xZ//rzhrLZ3ckF5lOZYpyXhR4qNXnPXQ2Xe5jZNPi5uY2rzc6LpTUezCTJbpWftZGXTM6lMaSkzWHj4UySl4vrSgDhj8TUZ1RnWf5XrFG4q1klXQPiFgLENSGtuxsKSViLDQWiQtIHzNKYcejArJD0xYYC0V/vVbxq8FCgnAAAAABJRU5ErkJggg==';
-var oIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAMzSURBVFiFxZdNTFNZFMd/97bloxStTktL/QBBYBwlagiaKCYu1MCC6AKNZibqxj2EDauZzmpcqImJs5mNW9HEhZpI1BiTuiFGBAIGAn4SpHw4M01HfFh410Vh4AF97xXE/nfv5txzfu+ce++5VyilOHTxaa0ShIHdQA5rKw3oEopwpKWmTdT8EalVgvtrHHRZCUWdnP3zjEgJwpJk2jOl3ZK1r7mZcuRqZm9wu/C6XasicKZj7Ml2cmJvkB2F+fwY9BBYlw3ASEyj90Oc3uE4d7ujaAndtk9x8GJE2TGs3LSOX+vLKVxvXrF3Hz8TvtPHwNgnWwC2SnDuwBb+/LnSMjhA0Q+5/HV2Dw1VoW8DcKB0IxcOFSGFMIxrCZ2O9zE63seWpNzlEDQeKWHv1vWWAKZrIMspaTxSYhhLzCguPxikrWeMaT1ZPacU1O4qoPnYdlyOedDmo6Wcv/7if7vlZJqBX/ZvJuSdT7uuoKm1h3vdowan07riXvcoTa09LIxV7HNzqnqTWQhzgLrKAsP3k/4JOodiKe07h2I86Z8wjB3fE1wZQG6Wg+CiRXfj2bCps+VsQt4cclyO9AG2+dwsXHa6goFR6601MPrJUAYBlPjc6QMsnjQenyIxY33AJGZ0xuNTRl/+FQCYLNy0ZeYrJcDrcWO6/fnZOKVIYT0vpxT487NNfdkCePtx0kAuBZQF8iwBygJ5LOTUVdJX2gBaQmckphnGzuzbbAmw2GYkppk2J9Nz4E5n1PB9uMJHdbE3pX11sZfDFT6jj65oCmsbAK3Phg3pkwIundxJQ1WI3Kz5vZ2b5aChKsSlkzsN6R/6+zM3Lc4Oy3ZcVeTl6uldS8Z1pRicbbnbC/KWNCuA5lu9tL/+xxTAshs+f/cvVx6+4su0sY5SCMoDHsoDniXBEzOKa4/fWAYHmzei2x0jdA7F+K2+glK/+U54OzHJ73f7bV9IbN+IAFwOydGf/Owo9FAR9FBWkIQZHJukLxqnL/ofj16OMzW9Bley5TR3MJn1e0sfK565ysBzkiTfapmSJoGuDAJ0SaEy9zYUirCMtNS0CUUd0M73KYcGtAtFXaSlpu0rdp4bBceT/3IAAAAASUVORK5CYII=';
-var pIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAImSURBVFiF1ZdNTxNRFIafO1RtoAGVFiQmmmpAYmy60OjCGuPChPY/uHHl3k3DqjvZGN24wJ+Aa6UxJMaMm8YYqaQYTCi1tbUNpB/0kwJzXWhIhmI7QKej7+6eeefcZ+45d+aOkFJyZ+bDlBSEAC9gx1w1gKiQhNSgLyx8T9QpKZg3edIDJSR+5c+TWyIpCCn8Xnar5FUwv+btZFcsnBwAm1Gj/9oIAc8ow46TuviuJkkXG6xt1FhMlYjEC4cCELdnVNnJNDZk59WjG4YSRtYKPF+Ik8rXDfkNleD6xSFDyQBuuc8w+8CLc99KHQvA1id048rWDsuZMsuZMvH1Wot/0G5jOjCBaLlyQG5DmPsUy5R5PBfbG192DfDQd4G7E8N7sZvu00yOOfj6s9I2V1d2wep6ladvV9Gkvp2unHN0vLdr2zBfbfI5WdLFxkd6CNCnCNzOfl2sUNvuHcC9SSdnB/Sdv5JtX384YhO6HKcIeEYBsJ9QuH/Vhef8oM5Tb+4Sy2yaA3DJ1c90YLyt59lCnHy1cwmOBNBOmoS5j2neLOUM+bsG0NzRWEpv8uJdgm+5zrU/FsBKtsJL9TsAUkqypS1+FBot7wHTAIr17UN/9f4my88D/weAprUfmw6wmNK/4z8li70FSObrzL5PkNio8fpLjnmDe9yIDB3JzNQ/0YQNC+dvKEDUQoCoIqR1/4ZCElLUoC8sJH4gQm/K0QAiQuJXg77wL5/euUCjJAuAAAAAAElFTkSuQmCC';
-var qIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAO1SURBVFiFxZdNbFRVFMd/981MpzP9YCjTdvpBPy1WsRZS0ARKArGadmFkAUTjt9GVxmA0piszCQtZiMaFGzZG1CiRsEAMjWxIhihNM9A2bQQphNpOP6ZtOmXa4bVv5l0XHSivM/NmSpn0v7vnnnvO/51z7jn3CSkl+45fbpcCL9AM5JJdqECfkHh9na1dovVLX7sUXMiy06QQkg4l/uUbAinwKiyHfaPQrJD9nJshV1nP6c1OGy6nbV0MrGtRzrdbObjTw1NlBTR68ikttAMwPqcyOBZmMBDm9/4JVE3P2KbYe9wnM1Fsqijki5e3UbbJPGPDM/fwnrvOzeBCRgQySsHbe7by3etNaZ0DVG9xcPKtHRxqKX88BPbUF/HBvmoUIQxyVdO5+t8c/uEQqhYz7NksgqNtdeys2pSWgGkN5FgVjrbVGWRaTHLizyG6BoJE9eXsWRTBS08X83l7AzbLCtFPX6znne+vPdBLBtMIvPF8JeWulbDrEj45PcD5/kmD0ZguuTAQ5LPfBnnYV43byZHdFWYuzAl0NJUY1pduTNM7MpdS3z8c4tKNaYPs4A7PoxFw5FjwrCq6X3sCpsYAfu4eNazLXLk4cyxrJ1DrdvJw2ekSbk6mv1pDwQV0uZIHAdSX5K2dQJ3baVhPhRfRYukbTEyXTN5dNMieKH4EAiaFmxa5NmPILYpIoWlC4PaUMdzFBXasJobuoygvh82r5kMgdC+lfso+cGcmgi7hvk9FQENpHv+Mzxv0SgvtfHSglsoiB6f+HiGyFEuwFZhVUxJIGQFV0xmfMx587bnKBL0ju8o50OimoSSPY6808uH+WsN+WI0m2MmIAMC53gnDev+TbnbXuAwyLWYslrpiY/Ge8Y8l6GRM4HRPgDszkRVlAV8d3s6hlnIc8bv905VRrk/MJz2vajHO+MfMXJjPgqgu+ebibb599ZkHMouyPGg+fqGWoeACYTWa8lEyeXcp7W1KOw39wyG+vniLpaixByhCsK00n5ZqF574w2Q1qrc4OPlms2GerJkAwNmr47x/qpdbU+k7YWzVJ28tcnDi8HZSXWBLVdt73kxIzEY0/ugPMhZSmZ5fQgIupw2LIghFNIaCEX7pCXDs/L/MRjR21bgQ8TdEvt3K2WsTLEYTO2nGT7JksCoCiyKSGm6qKOTdvVU8W1nAj1dG+eGvkaQ21kUgU5LpHiSpu8RjgJlzQFWAvmwSSIM+RciN+zcUEq/i62ztEpIOoJsspyMOFegWkg5fZ2vX/wQxQerp/TcyAAAAAElFTkSuQmCC';
-var rIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAK0SURBVFiFxZfPS1RRFMc/782PZkbNaRzFH2UqRoFDFrVS2wWNEC6tXRH9B0HoIpgg0EVQEUH7qCCoNtEoRFFjof2QLNRSUzEzUxxHx3LG53u3hTH1/DHzHGea7+rd7z33nO+7557DvZIQgiOtHV4h4QOqARvpRQTokQS+QFNdm1TXEvAKCX+ag64LSVAv//nzjEBI+GRWtj1TqJZJf87jwSZnMDgAZqOGDdWFHPMUsMNh0fGqJpgKR5kIRfg8uUB77xSKKlIroMRp47y3csP5crcj9n2qZhfXn47wYmDGkABDKThYmmvIGUBRro2LDfvYU5CVOgFmk6QbawIUVUNRNVRt7XZbTBIXju81JMDwGfgXb0ZnOXevd8WBLHG4zMnpmlI8JTkxm4p8B64sC8GfSlxfW66CZU3QOTzLjWcja+bK3YnTkLIy7P8eJqJoOs6VZdnAOg0Caitd2Cx6d8PTvxKuS+oM2C0mdufZAbCaZGorXTQcKNTZTM5HGZ1Jk4D9O7dz++yhDec1AZceDaxbISkREA/fQhFaHg/y/uucIfukBCiqwLKqN7wdDXGrc5wP43ObasVJHcLusRBP+qZ1XFVxDotL6qaCJy0AoMU/yKfJhdjYbjVxubGKinxHnFUpFBBd1mh+0MfMwlKM224zc6XRQ7HT+BVjS31gOrxE88N+FPVvA8rLtnLtpAd3tjX9AgD6JsK0+od0XFGujasnPGwzJ3ZvSICmxR+3905xp2tcx5W5HXg9BakRsLqm342F1tjcfD7Kqy9BHTc5H03o21R69IwvkdHc4jKKquHOtvJyKMjd1+NEl/XbIICOoSCKKnDaLdzvnsD/8QeJilKqbQ1srnBTjIzfimVW3mqZQkQGejIooEeWRObehpLAJwea6tokQT3Qxf9JRwTokgT1gaa6tt+GDulXpKHelAAAAABJRU5ErkJggg==';
-var sIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAMYSURBVFiFxZdJTNNBFMZ/8y+lBUtTRSwCWlxwCUoPxJhIPRg9iBoPJsR40Yg3TbzKsfEiF08eNOpBTpoYE01MJDEx0brEXQ5WUnABpAVqG+gitKUdD3WhoaVTFvvdZvKW7817896MkFKyu/PpfilwAnbAyNJiCugREqerw9EtHBdc+6XgwRI7zQohadV+R14USIFTI33sxYJdY+lzPheM2kK0K02lVFWULohBSaEKjTUVtDvWsnV1BWZjWj0Sm+aL/ydvBsa5+WqYyXhS2Z5o6XRJFUFNwLnWBg5styLmkBsJxTh29S2JZEqJgHIKTjlsHMzjHKDabKBl4wpVs2oENlebOL5rzaz9YDROIBLP2JPAJ19YmYBSDTTbLLMiP3fHzfP+IBKwmg001ZlpWLWMR70/GA3FFpfAlmpTxtrtDfOsP/h3PRqK8dDt56Hbr+z4D5RSYNRnijVYTexcv7xgZ9mgdAL9Y1F2bfhXWHqd4GJbI31jUVyeAI89AT77o/MioHQN6yvLuX7CjlGvyykzEJjk3gcfdz+MEJ9Wu4KgmIJvgZ+cv+8hGE3klLFVlnF273quHbdTt7xscQkAPPEEaLvymkuPvhKMxnPKbahaRueRreh1+TpGGrq1+9qdqiSSKclHb5g773z0jkRIJCVWswFDSWYclnI9E5PTuL35+0HBswAgPp3C1RfA1RdApwnamms4vWcd2oygt9WYuY03r60FTUNIn8qt18O8HRjP2K9fqVYHCyYAoAmBbUWmw7FQ7jqZCaUUbLKaOLOnngpjCe8HJ+j5HuKTL4w/HMdWWcZhezWrzIYMHdV5oETgZMsamm2Wv2SO7qgF0u8Ak2G2iWRK8nRGq54LSimIJbI3lmzOAS4//oZnNLJ4BG48H2IsnH/CJZIpul4McevVsJJzKOBFpNdpHGqysr3OTK3FSK3FiKVcTyKZYjA4Sa8vQteLIbzjU8rOCyKQDWWlOmKJFCk5bxPza0R/UMjjMxc00n+1YmFKA3qKSKBHE7J4f0MhcWquDke3kLQCL/k/6ZgCXgpJq6vD0f0LZ9EQWjX94dYAAAAASUVORK5CYII=';
-var tIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFfSURBVFiF7Ze/SwJRHMA/7yWl4iA1NCXV0OoWgdfUov9F+AdUo+NtOTaEY9DWf9BNOZxQjkKCEJQ4iNGoyaWer8GSfki9xOsK7gNvuMf3fb+fe98H904opdjOl9JKYAJJIIy3OEBFKEw7Z1jCOLTTSnDucdGJCEVGvry5LyiBKRltu18kJd73/CvC0sfiAIR0glaXouymVthYjmklvbl/5PSywe1DdzYCezvrbK7FtYoDJBYjxKMh9s+uv43VakEsPKdd/JXIvN4aLYFCsU612abvDsfjI313SG8wGtVmm0KxriUgUnlbaUW+IbYQwjrYejeXPrqi8zT4aSq9HfCSQCAQCAQCgUDgfwoM1efv16Q5zwS6PZdaqzN+rrU6dHvuVAJaN6JJHF/ckTUSAJyUGtOmme4+MEv+xCF0fKzvSKDio0BFCuXfv6FQmNLOGZZQZIAyv9MOBygLRcbOGdYzwLZvIGgXvpEAAAAASUVORK5CYII=';
-var uIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJJSURBVFiF7ZfPTxNBFMc/s7W1QhHbikBjFVdiqjFyEAXTGhMxhv4DnNDEgwcPxMRTj73BQU+cvBn/BhOaJnipMXLRVCQhmjakKWqtTaVCWSV1PFQStj92aU3ppd/b7Lx977Pv7cybEVJKrs+9mpSCMDAC2GmtNCAuJOFYKBARgdnYpBQstDhoTQlJUPn35W2RFIQVymlvl0YUWl9zI9mVNgYH4JDR5EmnnZmbKr4BB4ur35lfTCJNHApgZkJlwnec1a+bzL9Mks5rde0NMzA97sU/7MLtsDE16mFMdZqEhzHVydSoB7fDhn/YxfS419DeEODy6V7d+OoZc4BKm0ofDQEIIfRj0/DVNpU+GgI4CHUAOgAdAEMAKSs23iY2giofjQBkCr90Y0+veeP0Oo8Y+mgIYOXzT934/KADq6X+K102Cxc8Pbpn8XSheYAP63oAV7eNe/76zeXhLZWjdn2DXTYBMGzHb1M/+LKhMbgn9XeveTnRc5hnr1Os5zWEEKh9XTy4MVTVLddyRd6lNgwBhH8uZviXnOt38PTOpZqp13ZKgMBurZ7b/l3i/vM4a7miIYDpMvyY2eRJNFHzIGK3WmoGL/2RzC58Mg0OJiXY1Yv3GZLZIo9un8U34DC0XU4XeBxNkMhu7ce1eQn2ShEQvNjPlaFjqH3dnHKXl1wqt00iu8WbZJ7oyjfTY1vTAJWyWsq7zk6paRf7K0E9/U/gXSmU72rtkqYA8TYCxBUh23c3FJKwEgsFIkISBJY4mHJowJKQBGOhQOQvdrKpoh7rnjIAAAAASUVORK5CYII=';
-var vIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKbSURBVFiFxZdNT1pBFIafewWBEgTRWg0QU2M0sa2auGiT0hoTk0oT/0HX3btj1RA39Td03X+ARHcmpTEaNyIrNRoaNAGC4EdEQLzTBZVvL/JheXfnzLkzz8ycOXdGEkLwYeX3gpDwAFOAnqdVGghIAo/f7VyXnN/9C0Ji7YkHrSlJ4JL/zbwjEhIemfyyd0pTMk+/52rSyx0cHABNvYDFqUG+vLNzcXPLsveAk+SNary918C3xTHMBi0/t07wBiKq8aorYDVqWZofwWbRMzFkwu0arceL2zXKxJAJm0XP0vwIVqO2eQCzQUu3phgy7TDjsBoejHdYDUw7zAW7WyNjNrQAEIqnOD1Pl/k+v3nxYHxl2+l5mlA81TyAAFYr9vDTq+fIUo2OpHxbqVYDEYTq8HUAAHzBGHdKsZsBk46ZYUtV3MywhQGTrmDfKQJfMFav+/oAiessm0eJMp+rxjZU+jaPEiSus60DAHgD0TJ7dqwPo66rYBt1XcyO9al+0xLA1nGS2FWmYOs0MnPj/QV7brwfXclpiV1l2DpOtg9AEQLfXvmMSjO+Mvt9e1EUUS/9GgAodlq0J+092Cx6bBY9k/aeEliqYNVUtxTfK3KZYSeU5O3L3oKvVjLuhJJELjNV/pYBAFYD0TKAhdcDNWMaUUMA/sMzkqlbep/ly+tgj66sPZm6xX941hBAQ7/jnCJYCz48w7VglJzyuORrCgDAq5Jgam1tAwgnbtgNX1T5d8MXhBPqd4W2AEDtKvfYytcWgI39eFlljF1l2NiPNwXQ0Cm4VzansOw94OvHYQB+/PpDNqc0BSC9X/E3lrZtVsdvxTL5t1qnlJaBQAcBArIkOvc2lAQe2e92rksCF7DN/9mONLAtCVx+t3P9Lwrr4uWDfHT0AAAAAElFTkSuQmCC';
-var wIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANgSURBVFiFxZfPaxtHFMc/u5JXsrTGjtaoDmlkUalKe0pJaSCS3PTQQkyg59KjSf+A3gy56NZce20h0EuvhV7qSw+1KoHB0LohhNiOQbUdKw5WlEiyJVloe7Al78zOSobi6J32/dj3vvPed3ZmNdu2mXvw5x1bIwdcB4JcrDSBNc0ml1/MLmnZ7/J3bI3fLrioUjSbef105SMRWyOnc9L2Ucl1nYuf+SAJ6iMsDoBfNixkYnz50QwbLxp8//sWO6+OlC/eTll88+ksAD8ul/hj/UAZd3kyyLdfvEfqHZNf/y7zsPCv4Bc6cDUyzkI2xrRpcCtxiXvZmDJpJGxw/26KuBUiboW4fzdFJGwoY+/NxUgnIkybBgvZGFcj494AzIBPcM6lLHy6plx9yDiLDRk+bqcsV5xP1/js2rRgk2sIALZeHtLp2n094NeJWyFX4nQi4rJlk25b3AoR8J+V6HRttl4eegNodbo8LdeFgA9mTEEPjul8PDvpKnZjdpLgmLg6+d2n5TqtTtcbAMCjnTeCfk1KciM2heF3b54xn84n8amB78q5lQDWhgDIKFrdk3TikqDLHZBzKwE82hWDktGwQMRbjiIH9TYH9bYDQIRepE/XSETDA3MrAVQPj9munO19JxGT0TDRiUDfV3hWofCs0tct0+h3TCbgduWI6uHxcAAA/0it6rUyI7G/uFmhuFkRbOnTEcntl3MOBrCr5kHaMf92p8tqqcpqqUrbweweSJk7cs7BABREnAqN8eHlib5ttVSledyleXwCpCepGZNp0/h/HZDnlYyGySQjOD+KRcfsnc8aMPe+JRBQ5tVQACAyNuDX+frmu4K/uPlK+Qzw1c0rAgFV7B8KQN6zs9bZIbKx32C/1urr+7UWG/uNvn5lSrxiqPb/UABeMwMoSMz3sp0nlyeAdcV3uyfy1vOywcn5si6dL+cC0OnaPH5ec9krjTZP9tz2J3s1Ko22y/74eU04Yc8NAOCn4rbL9sNyCVU6+9R3nhxO8cU+X8h5OfdeNym/aWEG/Lw+6vDzyg6//FX2TLb+okG91WFi3M9utcnDwjbLHle1nmiZB3nv/rwFGfmtWOfkX21U0tSBtRECWNM1e3T/hppNTs8vZpc0m3lghbczjiawotnM5xezS/8BH6NCruPW2oAAAAAASUVORK5CYII=';
-var xIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAMWSURBVFiFxZc9TFNRFMd/91l8oG2RkJYvAySEKmBiCAmJEaIDEGoHJo2uLsZZB6I1lOBXYlxNYHOCRAcdUBxMhBoEAgOLClhTFMsAhaItlNL2OkiQx7PaQrFnu/9z7rm/+3Hue1dIKWm8/7ZVClzASSCb/bUwMCkkLnd7w4BouOdulYKX+zzoH01I7MrmzDNiUuBS+LXsmbKTCvu/53+zbCWDgwNgSCboUn0J5+uK8Yc2uNM/jde/+se48vxD3HTYyD+cxZMJH71j3/6Z+58rYDWrXD1bjtWsUlVk5OGFGoyqntuoGnh4oYaqIqOmz54BDIpAEWKrXWBWud5SoYu73lJBwbYBFSEwKEIXlzKALxDm9YdFjdZUbaG52rLVbq620LStDfD6wyK+QHjvAAAPXn1ifkWb7NrmjAvMKtd2rMj8SpgHrz4lkzo5gOB6lI7nU0TjckszqgacDhtOh01zJqJxScfzKYLr0fQBALyf/0H3oFej1ZbmUluaq9G6B728n/+RbNrkAQD6xr4x8nk5oX/k8zJ9SZTergEkcLt/Gn8wovP5gxFu908j9d3SBwAQWN1gzBvQ6WPeAIHVjVTTpQ7QWJmP/YRVp9tPWGmszN9fgEKzyo1zlQn9N85VUpjE7bcrAIMi6Gw7jilbW3LbS9OUbaCz7XhSN2DKAFfOlFNTbNJoPUOz9AzNarSaYhNXzpSnF+BURR4X60s02rg3QO/oHL2jc4zvOJQX60s4VZGXHgCL6SBOh43tixpY3aBrs+Qk0NU/rakAATgdNiymg3sHcDps5OZkabS7L2Y0d4E/GOHuixlNTG5OFk6HbW8AR/NyqCs7otGeTvgY9izpYoc9Szyd8Gm0urIjHM3L2T1AJBYnLn+fcs9CiEdvvAnjH73x4lkIbbXjUhKJxf8KcKC06bIrkTO0HmNlLYrVrPJlaY1bzz7yfS3xVy4Wl7zzLHOs0EgoEuPx8FfdAd1p4vR9d6rXd1ot43/FCr/eapmysAJMZhBgUhEyc29DIXEp7vaGASGxA6P8n+0IA6NCYne3Nwz8BPTJCovxt7FIAAAAAElFTkSuQmCC';
-var yIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJRSURBVFiF7Ze/S1tRFMc/9yVoLH2tSG1JIEFLEZqhQqiDNR1EKKZ1snSVFjo5dOkixSHgUB0K/gF26GKH0g4lkFAchOeSUrQRKVWiqNj4K0PSVHzFmNvBmvpIzO80Lfid3vnec8/9vnPvPYcrpJTcHp3plQIv0A5YqC50ICQkXm3IHRDu51qvFPirvGhWCIlH+f3nNYEUeBWO0l4rtCtUf89zwaLUcHEAzPkcLljMPL1zDaftPG8+RXg7u8lhSmb1NSmC+y4rD27a+BL5wYsPYb7ryfIE3LtxhZ7rlwB40nMV1WLm5cx6Vt+Ht+w86nIAYL1o4etWgtcfv+WMn3cLztWZDPZApx2nVc3wc1pVBjrtOeeWJMC/sIN+cJi2TYpguK+NevOfqfVmheG+NkyKSHP6wSH+hZ3yBURiOuNTKwbO0dTAYHdr2h7sbsXR1GDwGZ9aIRLTyxcA4JvfZnoxauD6XVY6WhrpaGmk32U1jE0vRvHNbxcSOv8hPMZYIIzTpnJZrQdAAM/utqW/j7GT+MlYIFxo2MIyAJDQk4z4ljh5A5vVOprVurSdkjDiWyKR5+qVJABgbj3OZHDj1PHJ4AZz6/FiQhYnAGBCW2N5dy+DX97dY0JbKzZc8QKSKclqdD+DX43ukzylQlZUQKVxJuBMwP8pYDOe2WSycVUT8D60ZSjJKXnElYKCm9FJRGI6j199TnfBd7ObBbXebBBdo1rx5auC+CcOYWm5qwx0BQjVUEBIEbJ2b0Mh8SrakDsgJB4gyN/ZDh0IColHG3IHfgGajLq/bon1YwAAAABJRU5ErkJggg==';
-var zIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKGSURBVFiFxZffS1NhGMc/71m66XC7sA3F7MIfE7bEbssVBPkrErrqMuwP6Ca8kCBdRShBdBvdRBfhZZCYgyCpZTBQwvTCLQtFJTUzXQs3neftwlgdUM/ZTut8757nPO/7fM77nOd9zyuklJwZeNsuBSGgCXBQWKWASSEJRXqCYRHsj7RLwUiBk+4rIelQfr+5JZKCkMLeslulJoXC1/wwORQLkwNwxEhQW8DLpZMVuEqKdGN3Vcn4/AbP3n9hYX3LPICnrJgbF+qxKcIIKwA1nlLqvU6uDU7pxuqWwCYEwnjurCrcdkNxuiuwnEjT/+Ij5/0eyuz7hzuKbNR4SjW+0Zm1fwMAMDK9ysj06oHPb170aQC+Jbd5Gl0yBGC6C1r8HtoC3qwtgTvDcTa3dgoPUOl20N1ap/ENRhcZn9swPEfeAIoQ9Hb6cNptWV9sOcmjN/O5zZMvQFdzNY1Vrqyd2tml73mMjCoLD9BY5aLrdLXG9+DlZxa/6288pgGcdhu9nT6UvzaHVzNrDE+t5Jw8L4Du1joq3X/Or5VEmnvh2byS5wzQFvDS4vdkbVVKbg3FSKYzhQeodDu43lKr8T15t8CHxUTeyQ0D2BRBX2eDpuWmlhI8HlswldwwwNXm45yoKsvayXSG20NxVJlby+0n3bPA67Jz5dQxjU8guH85cOCYnV2ViflNHr6eYzujmgM413BU03Kw14pOe8mh42o9TuIrScKHHGJgoASfvv7UCzlQP1L63aG7AhNzG9wdjnPWV065s9hQ4nRGZTS2xtjsum6saB6ImP+STMjyv2KFvbuaVUopwKSFAJOKkNbdDYUkpER6gmEh6QCi/J9ypICokHREeoLhX4w6vSLDhn7HAAAAAElFTkSuQmCC';
-var spaceIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABGUlEQVR42sWXUQ7CIAyGey3LBbyXD92tTLo9eCMfFbYx3YSuGApL/iwxI/0sbeEH8M/ldr864gcSP90wviw1x/CxQkzYghsHzWmGCDR5Wv/2woGX34h/hPO3/BHFb9f1EoSPDbm0L4tDgGlTUapXSTAhNsjBa6ackxCQTs1Y/I/1RagBsOyCWE8SAJoC7LMAGsrqIkUNtNqG5gDH4oZcC3YDsGzBlEBDWbsLHHUEcLo2nKq1WWoky0VoPgNYU4QdAZDiUTp1yoD1JFQBNBpCIkCrYdQUABPbmz2OrQB0NyLqvAX4fYslm4vIeRdUHEhYfCs+3Of/8Qb7NZw1KXDmB6M72g0SjeK5IjikxZgI1sxcwZp1N6e97fkbeOgBzEbamNYAAAAASUVORK5CYII=';
-var eAccentEguIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACW0lEQVR42sVXzS8DQRSff0t7ljiJo8RRIpFwdkdMTy4iIQ4EEZdefCUiPrKkFKW+Ul8pRRSNz6KWts+8bafdXbuz01bbl7xsM93Z95v38XvzCGFS07Vc56bKhosqCbdnFcqpmg1mC22SnPEyG7VTDQSisUfLnkxdHiWzRpU/6tLeVfJK+bvZ/SIQzDaxc3tmMxpYy6noY70L58b9WRWBQdtEbFx8gvnDB+CSTIODyxVLEMTaNauOJ06m0qCXxsFtySSUAeCgeuN48vq+Dfkq4PkkAiByPZ07zRk/vosXXoYmLxAZlGbtnjkprQSpRA6UlYx0B6w4AHNyE7sSrBoAmRL8TyUyKLnW9vpgcvMGoq9fuVLEMozFVZgKRqGh3y9VBW5aBIC2iX0Ixz7ASD95wfWz+3doGgoUREZSAPDkoWhcM/ShJmHu4B6aR3a1//C5GIrBN3MFgsDf4iR2ICIrDhhYuQD1JwWf3ynoXwpbfhhBYVQwPC2jQVEHlElC49rW5bMj8/XMnmreQe2cPikegIvyVpoPA8ZeVjAUw2uREjxgQUSVB+CxBoCh+E8SEgLQv7x/86oBuH5KSPf9kojIDGBs/Rp+WIoj6WC22+3p8B6BP/wM7YwzZEhI2I71AJBckGQ48yEn4B0QmQ85AtvzztWLFv+HN1UIQO5GZNEPnJiQC/JA6/heib1Af4ulRkYc9V1B5PETvhgxcVHZyXHNG7gVUzEtIAesCKn47C/0Vmy6z8vOBuYkzu9RbIcU4jQP8unIQCQyyvuKYELKDCaC0azsiqNZ1YfTao/nv0wmn+8xYF+xAAAAAElFTkSuQmCC';
-var speakerIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC4UlEQVR42sVXS08TURSev8WAG62J0RixuDM+ookrty5cYVx0mlhQi1ariYlLiYaYGJqICXSYlilV4wMobaUJoCCPSpDSobTl896ZPuh05s5M08pNTtpO753z3XO+8+I4srr6P5zq9kzIXZ6w0u2dRCdF1UF1EZ1cTXmHlZqCoSAoGrMNvEA+ifBeUXsmiE3Cq3vFugjVvZXzLBBEN2dmdu0wVSDVxMnt+IqwwFDdHFt5O00uGoIwBKCZXeqI3/UguP9NvBqfWADsmP7sgyj8oRSuBKedc0OwBCAyX+J+HMP0wiZKpTJey4sN/x0jUXAtGMOlgGz+DsEGB8wOuwYikJLrqK6RzysN/18lFlndzGEnX8DtV98s3eAIwLlHMiYSazi89ADO3I8gFF9GsVjG6lYeN19+0imX2Byg/unxhjEw/AXjcxsYn6/IzCrSi1nolx4AlRP3JvFsLIV9pYDsXwUuX8Q+AHr78/4oUsvNyoxWFcCN53HM/9zC03dzOO6TcHIwgthCFuWDA/jfp8nFjHll6AJ3YBqZjZwjAHeGv0PZ20dOKeLu24T6zDMyq7oiSizo8kn1CBM6AIDKrRdxFEsHSC5tqb8vkkhQ9ktI/tpGr3/KMBm1FQCVP9ld5HcL6vcLxJVKoYjM2g76ArFaSmaTkGygm1u3QJltAUG0JqG7BQD9lAPkthoH5iocmGnigCUA6p8+Eu+ZlW3HUZAiURAkUUDDsDEKftSjQLBRC3rIpkFdHpiY/Y00Ma3dPBAcS2t5YGdPzZ51C4utV8PeoSmEE+tMAKdJJhz9aJwJjUo8Z161JPNakN60WQu+Wl7KMQCtGsqIE//SavhGXmqqhtdJNbz8RDYu83YaEr7SCzL7gYdRDIWSjvoB3nZH1MGWzJYL+MNdrNBGhYIDDmhWaFcf6LQr1vXzrcwGjWdE0yGFs5oHq9NRQyKxI9XWizEhaYMJYzTruKij2VEPp0c9nv8DU8jk0GOOd9EAAAAASUVORK5CYII=';
-var trashIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACh0lEQVR42sVXz2sTQRTef6tbsB49CF486UlTL148CCJ4EApmQq96aOnBgJ7qwaLkUmrbnYQakTZo44/WUooWIdYWFWziZtPnfLM/kt3s7G62XXbgI2Hee/O+ffNm3jxNE2Ps/tKF8eJqfaxotMdLVcoS0gd8CZ+a5zxjp0oyIAE2KgWdiV8BvcTtOcaHoEtd3gdzdR37KBLCt6YKu20MBzUPo3yd7iCKDHxr0c7PMuQ8lEQoATvsii9mBl2Z41R4vE6F8oYN8f/qHJey2MiwJAQEzk0bdPHhMl16VPdhqvKW/lkmBUdHzEEW1McaWKu/NTyeAEJ/9/kafTv6Q/tHxz78Om6TakAW1McaWMuXGyyWAKcHlSad1cBawS2OzYFr5Sotb3+itZ3DUwFrYK3gB8YS6OcCp/PT1VSA7XB0a9E54B5B1/nix13a3P+dCrANkoglMHgE8RVfD/+m3nvYYo2oY6lIwmECVq9HOwcH9KXVot7JiZzb+/lDAgNzkEEHuioCepIkDCPQ7nbo3kKdbs2/oq7joLT4RgIDc5BBB7pREdDTEDCtHt151qSbT995IS5WtiTcARl0oKsmEHMRDR6RTAgwniQJcySgM7eU1nKKwECW5kcgoy0IK/Ga+kWT0RbkSSB4CUWW4yCBTtek2/MbdONJzbvppl42JNybEjLoQFdFINmLiIVFwKQXzQYtvF/3CCx9/iDhEoAMOqZlnrIWOK/YCVHJtlvfUxcj2E4MVkM2Qg7YT2mDZo0tEVJrZOewgS0eqvrIr2IfiRW6PLNC18t18QJu0GQCFMqvpY1eWnWOHlc2KVpcP+h2R76LJAncuhLRIdmNSURrljlka5Z3c5p3e/4fZad+oBOLvW4AAAAASUVORK5CYII=';
-//# sourceURL=pen.js
-    </script>
-
-
+</script>
 
 			</div>
 		</div>

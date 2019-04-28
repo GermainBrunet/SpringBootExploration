@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/layout}">
+<head>
+<title th:text="#{index.title}"></title>
+</head>
+<body>
+	<div layout:fragment="content" th:remove="tag">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+
+				<h1 th:text="#{index.title}"></h1>
+				<p th:text="#{index.text}"></p>
+				<ul>
+					<li><a href="/registration" th:text="#{index.registration}"></a></li>
+					<li><a href="/login" th:text="#{index.login}"></a></li>
+				</ul>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
