@@ -16,13 +16,13 @@ import ca.gb.sf.models.Student;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.util.PageWrapper;
-import ca.gb.sf.web.service.ExerciseService;
+import ca.gb.sf.web.service.ExerciseGroupService;
 
 @Controller
 public class EducatorController {
 
 	@Autowired
-    ExerciseService exerciseService;
+    ExerciseGroupService exerciseService;
 
 	@Autowired
     ExerciseRepository exerciseRepository;

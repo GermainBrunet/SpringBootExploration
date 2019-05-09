@@ -61,7 +61,7 @@ public class UserServiceTest extends SpringContextIntegrationTest {
 		exerciseIds.add("16");
 		exerciseIds.add("17");
 		
-		studentForm.setExerciseIds(exerciseIds);
+		studentForm.setExerciseGroupIds(exerciseIds);
 		
 		userService.saveStudent(studentForm);
 		

@@ -23,14 +23,16 @@ import ca.gb.sf.models.Assignment;
 import ca.gb.sf.models.AssignmentStatus;
 import ca.gb.sf.models.Educator;
 import ca.gb.sf.models.Exercise;
+import ca.gb.sf.models.ExerciseGroup;
 import ca.gb.sf.models.Role;
 import ca.gb.sf.models.Student;
 import ca.gb.sf.models.User;
 import ca.gb.sf.repositories.AssignmentRepository;
+import ca.gb.sf.repositories.ExerciseGroupRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.RoleRepository;
 import ca.gb.sf.repositories.UserRepository;
-import ca.gb.sf.web.form.ExerciseSelectionForm;
+import ca.gb.sf.web.form.ExerciseGroupSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
-	private ExerciseRepository exerciseRepository;
+	private ExerciseGroupRepository exerciseGroupRepository;
 
 	@Autowired
 	private AssignmentRepository assignmentRepository;
@@ -118,17 +120,18 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(student);
 
-		if (studentForm.getExerciseIds() != null && !studentForm.getExerciseIds().isEmpty()) {
+		// if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds(.isEmpty()) {
+		if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds().isEmpty()) {
+		
+			for (String exerciseGroupId : studentForm.getExerciseGroupIds()) {
 
-			for (String exerciseId : studentForm.getExerciseIds()) {
+				Optional<ExerciseGroup> optionalExerciseGroup = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
 
-				Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
-
-				Exercise exercise = optionalExercise.get();
+				ExerciseGroup exerciseGroup = optionalExerciseGroup.get();
 
 				Assignment assignment = new Assignment();
 
-				assignment.setExcercise(exercise);
+				assignment.setExerciseGroup(exerciseGroup);
 
 				assignment.setStudent(student);
 
@@ -144,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	public void saveSelectedExercises(ExerciseSelectionForm exerciseSelectionForm) {
+	public void saveSelectedExercises(ExerciseGroupSelectionForm exerciseSelectionForm) {
 
 		Optional<User> optionalStudent = userRepository
 				.findById(Long.valueOf(String.valueOf(exerciseSelectionForm.getStudentId())));
@@ -152,22 +155,22 @@ public class UserServiceImpl implements UserService {
 
 		System.out.println(exerciseSelectionForm);
 
-		for (String exerciseId : exerciseSelectionForm.getAllExercises()) {
+		for (String exerciseGroupId : exerciseSelectionForm.getAllGroupExercises()) {
 
-			Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
+			Optional<ExerciseGroup> optionalGroupExercise = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
 
-			Exercise exercise = optionalExercise.get();
+			ExerciseGroup exerciseGroup = optionalGroupExercise.get();
 
 			System.out.println("Student id = " + student.getId());
-			System.out.println("Exercise id= " + exercise.getId());
+			System.out.println("Exercise Group id= " + exerciseGroup.getId());
 
-			Assignment assignment = assignmentRepository.findByStudentAndExercise(student, exercise);
+			Assignment assignment = assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup);
 
 			System.out.println(assignment);
 
-			if (contains(exerciseId, exerciseSelectionForm.getSelectedExercises())) {
+			if (contains(exerciseGroupId, exerciseSelectionForm.getSelectedGroupExercises())) {
 
-				System.out.println("select : " + exerciseId);
+				System.out.println("select : " + exerciseGroupId);
 
 				// This exercise is selected.
 
@@ -175,7 +178,7 @@ public class UserServiceImpl implements UserService {
 
 					assignment = new Assignment();
 
-					assignment.setExcercise(exercise);
+					assignment.setExerciseGroup(exerciseGroup);
 
 					assignment.setStudent(student);
 

@@ -40,13 +40,13 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr th:each="exercise : ${page.content}">
-												<td><input type="checkbox" name="selectedExercises"
-													th:value="${exercise.id}"
-													th:checked="${#lists.contains(assignmentIds, '' + exercise.id)}" />
-													<input type="hidden" name="allExercises"
-													th:value="${exercise.id}" /></td>
-												<td th:text="${exercise.targetWord}"></td>
+											<tr th:each="exerciseGroup : ${page.content}">
+												<td><input type="checkbox" name="selectedGroupExercises"
+													th:value="${exerciseGroup.id}"
+													th:checked="${#lists.contains(assignmentIds, '' + exerciseGroup.id)}" />
+													<input type="hidden" name="allGroupExercises"
+													th:value="${exerciseGroup.id}" /></td>
+												<td th:text="${exerciseGroup.name}"></td>
 											</tr>
 										</tbody>
 									</table>

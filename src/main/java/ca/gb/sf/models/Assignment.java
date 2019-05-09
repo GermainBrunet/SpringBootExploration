@@ -5,6 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Object that represents an exercise that has been assigned to a student.  Requires that both a student and an exercise be present.
@@ -19,8 +20,8 @@ public class Assignment extends PersistentObject {
 	Student student;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "exercise_id", nullable = false)
-	Exercise exercise;
+    @JoinColumn(name = "exercise_group_id", nullable = false)
+    ExerciseGroup exerciseGroup;
     
     Long speedToComplete;
     
@@ -38,12 +39,12 @@ public class Assignment extends PersistentObject {
 		this.student = student;
 	}
 
-	public Exercise getExercise() {
-		return exercise;
+	public ExerciseGroup getExerciseGroup() {
+		return exerciseGroup;
 	}
 
-	public void setExcercise(Exercise exercise) {
-		this.exercise = exercise;
+	public void setExerciseGroup(ExerciseGroup exerciseGroup) {
+		this.exerciseGroup = exerciseGroup;
 	}
 
 	public Long getSpeedToComplete() {
@@ -84,8 +85,8 @@ public class Assignment extends PersistentObject {
 		builder.append("Assignment [");
 //		if (student != null)
 //			builder.append("student=").append(student).append(", ");
-		if (exercise != null)
-			builder.append("exercise=").append(exercise).append(", ");
+		if (exerciseGroup != null)
+			builder.append("exercise=").append(exerciseGroup).append(", ");
 		if (speedToComplete != null)
 			builder.append("speedToComplete=").append(speedToComplete).append(", ");
 		if (stepsToComplete != null)

@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import ca.gb.sf.models.Role;
 import ca.gb.sf.models.Student;
 import ca.gb.sf.models.User;
-import ca.gb.sf.web.form.ExerciseSelectionForm;
+import ca.gb.sf.web.form.ExerciseGroupSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
@@ -21,6 +21,6 @@ public interface UserService extends UserDetailsService {
     
     Student saveStudent(StudentForm studentForm);
     
-    void saveSelectedExercises(ExerciseSelectionForm exerciseSelectionForm);
+    void saveSelectedExercises(ExerciseGroupSelectionForm exerciseSelectionForm);
     
 }

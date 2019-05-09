@@ -22,7 +22,7 @@ public class StudentForm {
     @NotEmpty
     private String confirmPassword;
     
-    private Collection<String> exerciseIds;
+    private Collection<String> exerciseGroupIds;
 
 	public String getId() {
 		return id;
@@ -56,12 +56,12 @@ public class StudentForm {
         this.confirmPassword = confirmPassword;
     }
 
-	public Collection<String> getExerciseIds() {
-		return exerciseIds;
+	public Collection<String> getExerciseGroupIds() {
+		return exerciseGroupIds;
 	}
 
-	public void setExerciseIds(Collection<String> exerciseIds) {
-		this.exerciseIds = exerciseIds;
+	public void setExerciseGroupIds(Collection<String> exerciseGroupIds) {
+		this.exerciseGroupIds = exerciseGroupIds;
 	}
 
 	@Override
@@ -76,8 +76,8 @@ public class StudentForm {
 			builder.append("password=").append(password).append(", ");
 		if (confirmPassword != null)
 			builder.append("confirmPassword=").append(confirmPassword).append(", ");
-		if (exerciseIds != null)
-			builder.append("exerciseIds=").append(exerciseIds);
+		if (exerciseGroupIds != null)
+			builder.append("exerciseGroupIds=").append(exerciseGroupIds);
 		builder.append("]");
 		return builder.toString();
 	}

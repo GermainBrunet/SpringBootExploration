@@ -1,7 +1,11 @@
 package ca.gb.sf.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -22,15 +26,22 @@ public class Exercise extends PersistentObject {
 
 	@Column(nullable = false)
 	private String instructions;
+	
+	@Column(nullable = false)
+	private Integer exerciseOrder;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	private ExerciseGroup exerciseGroup;
+	
 	public Exercise() {
 	}
 
-	public Exercise(String initialWord, String targetWord, String instructions) {
+	public Exercise(String initialWord, String targetWord, String instructions, Integer exerciseOrder) {
 		super();
 		this.initialWord = initialWord;
 		this.targetWord = targetWord;
 		this.instructions = instructions;
+		this.exerciseOrder = exerciseOrder;
 	}
 
 	public String getInitialWord() {
@@ -57,18 +68,53 @@ public class Exercise extends PersistentObject {
 		this.instructions = instructions;
 	}
 
+	public Integer getExerciseOrder() {
+		return exerciseOrder;
+	}
+
+	public void setExerciseOrder(Integer exerciseOrder) {
+		this.exerciseOrder = exerciseOrder;
+	}
+
+	public ExerciseGroup getExerciseGroup() {
+		return exerciseGroup;
+	}
+
+	public void setExerciseGroup(ExerciseGroup exerciseGroup) {
+		this.exerciseGroup = exerciseGroup;
+	}
+
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Exercise [");
-		if (initialWord != null)
-			builder.append("initialWord=").append(initialWord).append(", ");
-		if (targetWord != null)
-			builder.append("targetWord=").append(targetWord).append(", ");
-		if (instructions != null)
-			builder.append("instructions=").append(instructions).append(", ");
-		builder.append("getId()=").append(getId()).append("]");
+		if (initialWord != null) {
+			builder.append("initialWord=");
+			builder.append(initialWord);
+			builder.append(", ");
+		}
+		if (targetWord != null) {
+			builder.append("targetWord=");
+			builder.append(targetWord);
+			builder.append(", ");
+		}
+		if (instructions != null) {
+			builder.append("instructions=");
+			builder.append(instructions);
+			builder.append(", ");
+		}
+		if (exerciseOrder != null) {
+			builder.append("exerciseOrder=");
+			builder.append(exerciseOrder);
+		}
+		if (exerciseGroup != null && exerciseGroup.getName() != null) {
+			builder.append("exerciseGroup=");
+			builder.append(exerciseGroup.getName());
+		}
+		builder.append("]");
 		return builder.toString();
 	}
+
 
 }

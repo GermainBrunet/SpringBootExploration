@@ -30,7 +30,7 @@ import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.SearchForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
-import ca.gb.sf.web.service.ExerciseService;
+import ca.gb.sf.web.service.ExerciseGroupService;
 import ca.gb.sf.web.service.UserService;
 
 @Controller

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import ca.gb.sf.models.Assignment;
 import ca.gb.sf.models.Exercise;
+import ca.gb.sf.models.ExerciseGroup;
 import ca.gb.sf.models.Student;
 
 @CrossOrigin
@@ -23,7 +24,7 @@ public interface AssignmentRepository extends CrudRepository<Assignment, Long> {
 	@Query("SELECT a FROM Assignment a WHERE a.student = :student")
 	List<Assignment> findListByStudent(Student student);
 	
-	@Query("SELECT a FROM Assignment a WHERE a.student = :student and a.exercise = :exercise")
-	Assignment findByStudentAndExercise(Student student, Exercise exercise);
+	@Query("SELECT a FROM Assignment a WHERE a.student = :student and a.exerciseGroup = :exerciseGroup")
+	Assignment findByStudentAndExerciseGroup(Student student, ExerciseGroup exerciseGroup);
 
 }
