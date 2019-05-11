@@ -53,7 +53,7 @@ public class ExerciseGroupService {
 
 		if (StringUtils.isEmpty(searchString)) {
 
-			exerciseGroups = exerciseGroupRepository.findByStudent(student, pageable);
+			exerciseGroups = exerciseGroupRepository.findByStudentId(student.getId(), pageable);
 
 		} else {
 
@@ -64,7 +64,7 @@ public class ExerciseGroupService {
 			sb.append(searchString.toLowerCase());
 			sb.append(PERCENTAGE);
 
-			exerciseGroups = exerciseGroupRepository.findByStudentAndName(student, pageable, sb.toString());
+			exerciseGroups = exerciseGroupRepository.findByStudentIdAndName(student.getId(), pageable, sb.toString());
 
 		}
 

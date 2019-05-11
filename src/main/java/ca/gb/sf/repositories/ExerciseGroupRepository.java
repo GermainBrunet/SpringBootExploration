@@ -15,6 +15,8 @@ import ca.gb.sf.models.Student;
 @RepositoryRestResource(collectionResourceRel = "exerciseGroup", path = "exerciseGroup")
 public interface ExerciseGroupRepository extends CrudRepository<ExerciseGroup, Long> {
 
+	ExerciseGroup findByName(String name);
+	
     Page<ExerciseGroup> findAll(Pageable pageable);
     
     @Query(value = "SELECT eg "
@@ -23,20 +25,18 @@ public interface ExerciseGroupRepository extends CrudRepository<ExerciseGroup, L
     		+ "       lower(eg.name) LIKE :searchString")
     Page<ExerciseGroup> searchByName(Pageable pageable, @Param("searchString") String searchString);
 
-    @Query(value = "SELECT eg "
-    		+ "     FROM ExerciseGroup eg "
-    		+ "     INNER JOIN eg.assignments a " // ON eg.id = a.exercise_group_id "
-    		+ "     WHERE "
-    		+ "       a.student = :student")
-    Page<ExerciseGroup> findByStudent(Student student, Pageable pageable);
-
-    /**
-    @Query(value = "SELECT eg "
-    		+ "     FROM ExerciseGroup eg "
+    @Query(value = "SELECT * "
+    		+ "     FROM exercise_groups eg "
     		+ "     INNER JOIN Assignments a ON eg.id = a.exercise_group_id "
     		+ "     WHERE "
-    		+ "       a.student = :student AND "
-    		+ "       lower(eg.name) LIKE :searchString")
-    Page<ExerciseGroup> findByStudentAndName(Student student, Pageable pageable, @Param("searchString") String searchString);
-    **/
+    		+ "       a.student_id = :studentId", nativeQuery = true)
+    Page<ExerciseGroup> findByStudentId(@Param("studentId") Long studentId, Pageable pageable);
+
+    @Query(value = "SELECT * "
+    		+ "     FROM exercise_groups eg "
+    		+ "     INNER JOIN Assignments a ON eg.id = a.exercise_group_id "
+    		+ "     WHERE "
+    		+ "       a.student_id = :studentId AND "
+    		+ "       lower(eg.name) LIKE :searchString", nativeQuery = true)
+    Page<ExerciseGroup> findByStudentIdAndName(@Param("studentId") Long studentId, Pageable pageable, @Param("searchString") String searchString);
 }

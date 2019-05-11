@@ -5,14 +5,16 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Object that represents an exercise that has been assigned to a student.  Requires that both a student and an exercise be present.
  */
 
 @Entity
-@Table(name = "assignments")
+@Table(name = "assignments", uniqueConstraints={
+	    @UniqueConstraint(columnNames = {"student_id", "exercise_group_id"})
+})
 public class Assignment extends PersistentObject {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

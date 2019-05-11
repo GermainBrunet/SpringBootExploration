@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+spring:
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    mode: HTML
+    prefix: classpath:/templates/
+    #prefix: /templates/
+    suffix: .html
+    # excluded-view-names:
+    # template-resolver-order:
+    # view-names:    
+
+  datasource:
+    # driverClassName: org.postgresql.Driver
+    driverClassName: org.h2.Driver
+    #url: jdbc:postgresql://localhost:5433/salefinder
+    url: jdbc:h2:mem:testdb
+    # username: salefinderadmin
+    username: sa
+    #password: admin
+    password:
+    
+  jpa:
+    # database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    # database: postgresql
+    properties:
+      hibernate:
+        jdbc:
+          lob: 
+            non_contextual_creation: true
+
+  h2:
+    console:
+      enable: true
+        
+#    spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+
+logging:
+  level:
+    # root: INFO
+    root: INFO
+    com.memorynotfound: DEBUG
+    # org.springframework.web: INFO
+    org.springframework.web: INFO
+    # org.springframework.security: INFO
+    org.springframework.security: INFO
