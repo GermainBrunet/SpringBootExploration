@@ -29,6 +29,12 @@ public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
     		+ "       lower(e.instructions) LIKE :searchString")
     Page<Exercise> searchByName(Pageable pageable, @Param("searchString") String searchString);
 
+    @Query(value = "SELECT e "
+    		+ "     FROM Exercise e "
+    		+ "     WHERE "
+    		+ "       e.exerciseGroup = :exerciseGroup")
+    List<Exercise> findByExerciseGroup(@Param("exerciseGroup") ExerciseGroup exerciseGroup);
+
     /**
     @Query(value = "SELECT e "
     		+ "     FROM Exercise e "

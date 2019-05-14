@@ -27,4 +27,7 @@ public interface AssignmentRepository extends CrudRepository<Assignment, Long> {
 	@Query("SELECT a FROM Assignment a WHERE a.student = :student and a.exerciseGroup = :exerciseGroup")
 	Assignment findByStudentAndExerciseGroup(@Param("student") Student student, @Param("exerciseGroup") ExerciseGroup exerciseGroup);
 
+	@Query("SELECT a FROM Assignment a WHERE a.student = :student and a.id = :assignmentId")
+	Assignment findByStudentAndAssignmentId(@Param("student") Student student, @Param("assignmentId") Long assignmentId);
+
 }

@@ -17,6 +17,7 @@ public class ExerciseGroup extends PersistentObject {
 	private String name;
 	
 	@OneToMany(mappedBy = "exerciseGroup", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	// @OneToMany(mappedBy = "exerciseGroup", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Exercise> excercises;
 
 	@OneToMany(mappedBy = "exerciseGroup", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

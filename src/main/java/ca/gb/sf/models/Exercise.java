@@ -36,12 +36,13 @@ public class Exercise extends PersistentObject {
 	public Exercise() {
 	}
 
-	public Exercise(String initialWord, String targetWord, String instructions, Integer exerciseOrder) {
+	public Exercise(String initialWord, String targetWord, String instructions, Integer exerciseOrder, ExerciseGroup exerciseGroup) {
 		super();
 		this.initialWord = initialWord;
 		this.targetWord = targetWord;
 		this.instructions = instructions;
 		this.exerciseOrder = exerciseOrder;
+		this.exerciseGroup = exerciseGroup;
 	}
 
 	public String getInitialWord() {
