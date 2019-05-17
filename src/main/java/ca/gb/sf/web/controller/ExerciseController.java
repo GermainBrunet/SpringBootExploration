@@ -23,6 +23,8 @@ import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.services.AssignmentService;
+import ca.gb.sf.services.ExerciseService;
 import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.SearchForm;
 import ca.gb.sf.web.service.ExerciseGroupWebService;
@@ -34,10 +36,10 @@ public class ExerciseController {
     ExerciseGroupWebService exerciseGroupService;
 
 	@Autowired
-    ExerciseRepository exerciseRepository;
+    ExerciseService exerciseService;
 	
 	@Autowired
-	AssignmentRepository assignmentRepository;
+	AssignmentService assignmentService;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -72,8 +74,10 @@ public class ExerciseController {
     	
     	System.out.println("1: " + student.getId());
     	
-    	AssignmentEntity assignment = assignmentRepository.findByStudentAndAssignmentId(student, new Long(assignmentId));
+    	AssignmentEntity assignment = assignmentService.findByStudentAndAssignmentId(student, new Long(assignmentId));
 
+    	ExerciseGroupEntity exerciseGroup = assignment.getExerciseGroup();
+    	
     	System.out.println("2");
 
     	if (assignment == null) {
@@ -84,25 +88,45 @@ public class ExerciseController {
 
     	System.out.println("3 " + assignment.getExerciseGroup().getId());
 
-    	// List<Exercise> exercises = assignment.getExerciseGroup().getExcercises();
-    	List<ExerciseEntity> exercises = exerciseRepository.findByExerciseGroup(assignment.getExerciseGroup());
-
-    	// Hibernate.initialize(exercises);
+    	// ExerciseEntity e1 = exerciseService.findFirst(exerciseGroup);
     	
-    	System.out.println("4 " + exercises.size() );
+    	List<ExerciseEntity> exercises = exerciseService.findByExerciseGroup(exerciseGroup);
     	
-    	if (exerciseId > exercises.size()) {
+    	System.out.println("size: " + exercises.size());
+    	
+    	ExerciseEntity exerciseEntity = null;
+    	Boolean lastExercise = false;
+    	int previousExercise = exerciseId - 1;
+    	int nextExercise = exerciseId + 1;
+    	
+    	if (previousExercise < 0) {
     		
-    		throw new IllegalArgumentException("Invalid exercise Id:" + exerciseId);
+    		previousExercise = 0;
     		
     	}
-
-    	System.out.println("5");
-
-        model.addAttribute("exercise", exercises.get(exerciseId));
     	
-    	// Exercise exercise = exerciseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
+    	if (exerciseId <= exercises.size()) {
+    		
+    		System.out.println("Setting exercise");
+    		
+    		exerciseEntity = exercises.get(exerciseId);
+    		
+    	}
     	
+    	if ((exerciseId + 1) == exercises.size()) {
+    		
+    		lastExercise = true;
+    		nextExercise = exercises.size() - 1;
+    		
+    	}
+    	
+    	model.addAttribute("exercise", exerciseEntity);
+        model.addAttribute("lastExercise", lastExercise);
+        model.addAttribute("currentExercise", exerciseId);
+        model.addAttribute("previousExercise", previousExercise);
+        model.addAttribute("nextExercise", nextExercise);
+        model.addAttribute("assignmentId", assignmentId);
+        
     	model.addAttribute("searchForm", new SearchForm()); 
     	
         return "exercisePage";

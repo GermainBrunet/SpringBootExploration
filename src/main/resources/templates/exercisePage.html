@@ -7,8 +7,7 @@
 <title>Product List</title>
 <script
 	src='//cdnjs.cloudflare.com/ajax/libs/phaser/2.2.1/phaser.min.js'></script>
-<script
-	src='/js/letters.js'></script>
+<script src='/js/letters.js'></script>
 </head>
 <body>
 	<div layout:fragment="content" th:remove="tag">
@@ -16,16 +15,32 @@
 		<div class="container my-5">
 			<h2 class="mb-5">Exercise Page</h2>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<div class="row">
 						<div class="form-group col-md-6">
 							<label for="name" class="col-form-label">Instructions</label>
 							<p th:text="${exercise.instructions}"></p>
 						</div>
+						<div class="form-group col-md-6">
+							<div class="pull-right">
+							<a th:case="" th:href="@{/exercisePage/{assignmentId}/{previousExercise}(assignmentId=${assignmentId},previousExercise=${previousExercise})}"
+												class="btn btn-primary"><i class="fas fa-arrow-left ml-2"></i></a>
+							<a th:href="@{/exercisePage/{assignmentId}/{nextExercise}(assignmentId=${assignmentId},nextExercise=${nextExercise})}"
+												class="btn btn-primary"><i class="fas fa-arrow-right ml-2"></i></a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		Allo! Next:
+		<p th:text="${nextExercise}"></p>
+		Previous:
+		<p th:text="${previousExercise}"></p>
+		Last:
+		<p th:text="${lastExercise}"></p>
+		<p th:text="${currentExercise}"></p>
 
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">

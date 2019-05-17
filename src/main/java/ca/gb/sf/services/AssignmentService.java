@@ -58,6 +58,12 @@ public class AssignmentService {
 		return assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup);
 		
 	}
+	
+	public AssignmentEntity findByStudentAndAssignmentId(StudentEntity student, Long assignmentId) {
+		
+		return assignmentRepository.findByStudentAndAssignmentId(student, assignmentId);
+		
+	}
 
 	
 }

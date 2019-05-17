@@ -70,11 +70,11 @@ public class SetupTest extends SpringContextIntegrationTest {
 		createExercise3();
 		createExercise4();
 		
-		createUsers();
+		// createUsers();
 		
-		createAssignments();
+		// createAssignments();
 		
-		loadExercise();
+		// loadExercise();
 	}
 	
 	@Test
