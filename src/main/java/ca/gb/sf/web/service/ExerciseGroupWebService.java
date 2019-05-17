@@ -6,8 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import ca.gb.sf.models.ExerciseGroup;
-import ca.gb.sf.models.Student;
+import ca.gb.sf.models.ExerciseGroupEntity;
+import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
 
 /**
@@ -15,16 +15,16 @@ import ca.gb.sf.repositories.ExerciseGroupRepository;
  * Supports the ability to search for a specific exercise group.
  */
 @Service
-public class ExerciseGroupService {
+public class ExerciseGroupWebService {
 
 	@Autowired
 	ExerciseGroupRepository exerciseGroupRepository;
 
 	private static final String PERCENTAGE = "%";
 
-	public Page<ExerciseGroup> findPaginated(Pageable pageable, String searchString) {
+	public Page<ExerciseGroupEntity> findPaginated(Pageable pageable, String searchString) {
 
-		Page<ExerciseGroup> exerciseGroups = null;
+		Page<ExerciseGroupEntity> exerciseGroups = null;
 
 		if (StringUtils.isEmpty(searchString)) {
 
@@ -47,9 +47,9 @@ public class ExerciseGroupService {
 
 	}
 	
-	public Page<ExerciseGroup> findPaginatedByStudent(Student student, Pageable pageable, String searchString) {
+	public Page<ExerciseGroupEntity> findPaginatedByStudent(StudentEntity student, Pageable pageable, String searchString) {
 
-		Page<ExerciseGroup> exerciseGroups = null;
+		Page<ExerciseGroupEntity> exerciseGroups = null;
 
 		if (StringUtils.isEmpty(searchString)) {
 

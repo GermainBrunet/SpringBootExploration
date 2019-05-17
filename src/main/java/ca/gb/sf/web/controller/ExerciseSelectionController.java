@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import ca.gb.sf.models.Assignment;
-import ca.gb.sf.models.Exercise;
-import ca.gb.sf.models.ExerciseGroup;
-import ca.gb.sf.models.Student;
+import ca.gb.sf.models.AssignmentEntity;
+import ca.gb.sf.models.ExerciseEntity;
+import ca.gb.sf.models.ExerciseGroupEntity;
+import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
@@ -48,7 +48,7 @@ public class ExerciseSelectionController {
 	@Autowired
 	private AssignmentRepository assignmentRepository;
 
-	@ModelAttribute("excercises")
+	@ModelAttribute("exercises")
 	public ExerciseGroupSelectionForm exerciseSelectionForm() {
 		return new ExerciseGroupSelectionForm();
 	}
@@ -57,7 +57,7 @@ public class ExerciseSelectionController {
 	public String studentExercise(@PathVariable("id") long id, @PageableDefault(size = 10) Pageable pageable,
 			@ModelAttribute("exerciseSelectionForm") ExerciseGroupSelectionForm exerciseSelectionForm, Model model) {
 
-		Student student = (Student) userRepository.findById(id)
+		StudentEntity student = (StudentEntity) userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
 
 		StudentForm studentForm = new StudentForm();
@@ -72,17 +72,17 @@ public class ExerciseSelectionController {
 		
 		exerciseSelectionForm.setStudentId(String.valueOf(student.getId()));
 
-		Page<ExerciseGroup> exerciseGroupPage = exerciseGroupRepository.findAll(pageable);
+		Page<ExerciseGroupEntity> exerciseGroupPage = exerciseGroupRepository.findAll(pageable);
 
-		PageWrapper<ExerciseGroup> exerciseGroups = new PageWrapper<ExerciseGroup>(exerciseGroupPage, "/studentExercise/" + student.getId());
+		PageWrapper<ExerciseGroupEntity> exerciseGroups = new PageWrapper<ExerciseGroupEntity>(exerciseGroupPage, "/studentExercise/" + student.getId());
 
 		model.addAttribute("page", exerciseGroups);
 
-		List<Assignment> assignments = assignmentRepository.findListByStudent(student);
+		List<AssignmentEntity> assignments = assignmentRepository.findListByStudent(student);
 
 		List<String> assignmentIds = new ArrayList<String>();
 		
-		for (Assignment assignment : assignments) {
+		for (AssignmentEntity assignment : assignments) {
 			assignmentIds.add(String.valueOf(assignment.getExerciseGroup().getId()));
 		}
 

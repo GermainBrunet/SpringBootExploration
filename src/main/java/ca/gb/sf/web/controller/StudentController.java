@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import ca.gb.sf.models.Assignment;
-import ca.gb.sf.models.Educator;
-import ca.gb.sf.models.Exercise;
-import ca.gb.sf.models.Student;
+import ca.gb.sf.models.AssignmentEntity;
+import ca.gb.sf.models.EducatorEntity;
+import ca.gb.sf.models.ExerciseEntity;
+import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
@@ -30,7 +30,7 @@ import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.SearchForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
-import ca.gb.sf.web.service.ExerciseGroupService;
+import ca.gb.sf.web.service.ExerciseGroupWebService;
 import ca.gb.sf.web.service.UserService;
 
 @Controller
@@ -63,7 +63,7 @@ public class StudentController {
     @GetMapping("/studentEdit/{id}")
     public String studentEdit(@PathVariable("id") long id, @PageableDefault(size = 10) Pageable pageable, Model model) {
     	
-    	Student student = (Student) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
+    	StudentEntity student = (StudentEntity) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
     	
     	StudentForm studentForm = new StudentForm();
     	
@@ -73,9 +73,9 @@ public class StudentController {
     	
     	model.addAttribute("student", studentForm);
     	
-    	Page<Assignment> assignmentPage = assignmentRepository.findByStudent(pageable, student);
+    	Page<AssignmentEntity> assignmentPage = assignmentRepository.findByStudent(pageable, student);
     	
-    	PageWrapper<Assignment> assignments = new PageWrapper<Assignment> (assignmentPage, "/assignmentPage");
+    	PageWrapper<AssignmentEntity> assignments = new PageWrapper<AssignmentEntity> (assignmentPage, "/assignmentPage");
     	
     	model.addAttribute("assignments", assignments);
 
@@ -96,7 +96,7 @@ public class StudentController {
     @GetMapping("/studentDelete/{id}")
     public String studentDelete(@PathVariable("id") long id, Model model) {
     	
-    	Student student = (Student) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
+    	StudentEntity student = (StudentEntity) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
     	
     	userRepository.delete(student);
     	
@@ -107,7 +107,7 @@ public class StudentController {
     @GetMapping("/studentAssign/{id}")
     public String studentAssign(@PathVariable("id") long id, @PageableDefault(size = 10) Pageable pageable, Model model) {
     	
-    	Student student = (Student) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
+    	StudentEntity student = (StudentEntity) userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid exercise Id:" + id));
     	
     	StudentForm studentForm = new StudentForm();
     	
@@ -117,9 +117,9 @@ public class StudentController {
     	
     	model.addAttribute("student", studentForm);
     	
-    	Page<Assignment> assignmentPage = assignmentRepository.findByStudent(pageable, student);
+    	Page<AssignmentEntity> assignmentPage = assignmentRepository.findByStudent(pageable, student);
     	
-    	PageWrapper<Assignment> assignments = new PageWrapper<Assignment> (assignmentPage, "/assignmentPage");
+    	PageWrapper<AssignmentEntity> assignments = new PageWrapper<AssignmentEntity> (assignmentPage, "/assignmentPage");
     	
     	model.addAttribute("page", assignments);
 

@@ -2,24 +2,24 @@ package ca.gb.sf.web.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import ca.gb.sf.models.Role;
-import ca.gb.sf.models.Student;
-import ca.gb.sf.models.User;
+import ca.gb.sf.models.RoleEntity;
+import ca.gb.sf.models.StudentEntity;
+import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.web.form.ExerciseGroupSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
 public interface UserService extends UserDetailsService {
 
-    User findByEmail(String email);
+    UserEntity findByEmail(String email);
 
-    User findByDisplayName(String displayName);
+    UserEntity findByDisplayName(String displayName);
 
-    User save(UserRegistrationForm registration);
+    UserEntity save(UserRegistrationForm registration);
     
-    Role findRoleByName(String name);
+    RoleEntity findRoleByName(String name);
     
-    Student saveStudent(StudentForm studentForm);
+    StudentEntity saveStudent(StudentForm studentForm);
     
     void saveSelectedExercises(ExerciseGroupSelectionForm exerciseSelectionForm);
     

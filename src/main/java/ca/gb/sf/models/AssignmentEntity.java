@@ -15,15 +15,15 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "assignments", uniqueConstraints={
 	    @UniqueConstraint(columnNames = {"student_id", "exercise_group_id"})
 })
-public class Assignment extends PersistentObject {
+public class AssignmentEntity extends PersistentObject {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
-	Student student;
+	StudentEntity student;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "exercise_group_id", nullable = false)
-    ExerciseGroup exerciseGroup;
+    ExerciseGroupEntity exerciseGroup;
     
     Long speedToComplete;
     
@@ -32,20 +32,29 @@ public class Assignment extends PersistentObject {
     Integer stars;
     
     AssignmentStatus assignmentStatus;
+    
+    public AssignmentEntity() {};
+    
+	public AssignmentEntity(StudentEntity student, ExerciseGroupEntity exerciseGroup) {
+		super();
+		this.assignmentStatus = AssignmentStatus.ASSIGNED;
+		this.student = student;
+		this.exerciseGroup = exerciseGroup;
+	}
 
-	public Student getStudent() {
+	public StudentEntity getStudent() {
 		return student;
 	}
 
-	public void setStudent(Student student) {
+	public void setStudent(StudentEntity student) {
 		this.student = student;
 	}
 
-	public ExerciseGroup getExerciseGroup() {
+	public ExerciseGroupEntity getExerciseGroup() {
 		return exerciseGroup;
 	}
 
-	public void setExerciseGroup(ExerciseGroup exerciseGroup) {
+	public void setExerciseGroup(ExerciseGroupEntity exerciseGroup) {
 		this.exerciseGroup = exerciseGroup;
 	}
 

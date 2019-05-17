@@ -6,18 +6,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import ca.gb.sf.models.Educator;
-import ca.gb.sf.models.Student;
-import ca.gb.sf.models.User;
+import ca.gb.sf.models.EducatorEntity;
+import ca.gb.sf.models.StudentEntity;
+import ca.gb.sf.models.UserEntity;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	
-	User findByEmail(String email);
+	UserEntity findByEmail(String email);
 	
-	User findByDisplayName(String displayName);
+	UserEntity findByDisplayName(String displayName);
 	
 	@Query("SELECT s FROM Student s WHERE s.educator = :educator")
-	Page<Student> findByEducator(Pageable pageable, Educator educator);
+	Page<StudentEntity> findByEducator(Pageable pageable, EducatorEntity educator);
 
 }

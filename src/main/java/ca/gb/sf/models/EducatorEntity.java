@@ -16,17 +16,17 @@ import javax.persistence.OneToMany;
 
 @Entity(name = "Educator")
 @DiscriminatorValue("Educator")
-public class Educator extends User {
+public class EducatorEntity extends UserEntity {
 
 	// Students associated to this Educator.
 	@OneToMany(mappedBy = "educator", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Student> students;
+	private List<StudentEntity> students;
 
 	// Constructor
-	public Educator() {};
+	public EducatorEntity() {};
 	
 	// Constructor
-	public Educator(String displayName, String email, String password) {
+	public EducatorEntity(String displayName, String email, String password) {
 		this.displayName = displayName;
 		this.email = email;
 		this.password = password;
@@ -37,7 +37,7 @@ public class Educator extends User {
 	 * 
 	 * @return
 	 */
-	public List<Student> getStudents() {
+	public List<StudentEntity> getStudents() {
 		return students;
 	}
 
@@ -46,7 +46,7 @@ public class Educator extends User {
 	 * 
 	 * @param students
 	 */
-	public void setStudents(List<Student> students) {
+	public void setStudents(List<StudentEntity> students) {
 		this.students = students;
 	}
 

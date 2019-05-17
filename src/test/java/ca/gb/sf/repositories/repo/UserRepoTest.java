@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 
 import ca.gb.sf.SpringContextIntegrationTest;
-import ca.gb.sf.models.Educator;
-import ca.gb.sf.models.Student;
-import ca.gb.sf.models.User;
+import ca.gb.sf.models.EducatorEntity;
+import ca.gb.sf.models.StudentEntity;
+import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.repositories.UserRepository;
 
 public class UserRepoTest extends SpringContextIntegrationTest {
@@ -24,7 +24,7 @@ public class UserRepoTest extends SpringContextIntegrationTest {
 		
 		long countBefore = userRepo.count();
 		
-		User user = new User("displayName1", "email1", "password");
+		UserEntity user = new UserEntity("displayName1", "email1", "password");
 		
 		userRepo.save(user);
 		
@@ -41,7 +41,7 @@ public class UserRepoTest extends SpringContextIntegrationTest {
 		
 		long countBefore = userRepo.count();
 		
-		Educator educator = new Educator("displayName2", "email2", "password");
+		EducatorEntity educator = new EducatorEntity("displayName2", "email2", "password");
 		
 		userRepo.save(educator);
 		
@@ -58,11 +58,11 @@ public class UserRepoTest extends SpringContextIntegrationTest {
 		
 		long countBefore = userRepo.count();
 		
-		Educator educator = new Educator("displayName3", "email3", "password");
+		EducatorEntity educator = new EducatorEntity("displayName3", "email3", "password");
 		
 		userRepo.save(educator);
 
-		Student student = new Student("displayName4", "email4", "password", educator);
+		StudentEntity student = new StudentEntity("displayName4", "email4", "password", educator);
 		
 		userRepo.save(student);
 		
@@ -79,19 +79,19 @@ public class UserRepoTest extends SpringContextIntegrationTest {
 		
 		long countBefore = userRepo.count();
 		
-		Educator educator = new Educator("displayName4", "email4", "password");
+		EducatorEntity educator = new EducatorEntity("displayName4", "email4", "password");
 		
 		userRepo.save(educator);
 
-		Student student1 = new Student("displayName41", "email41", "password", educator);
+		StudentEntity student1 = new StudentEntity("displayName41", "email41", "password", educator);
 		
 		userRepo.save(student1);
 
-		Student student2 = new Student("displayName42", "email42", "password", educator);
+		StudentEntity student2 = new StudentEntity("displayName42", "email42", "password", educator);
 		
 		userRepo.save(student2);
 
-		Student student3 = new Student("displayName43", "email43", "password", educator);
+		StudentEntity student3 = new StudentEntity("displayName43", "email43", "password", educator);
 		
 		userRepo.save(student3);
 

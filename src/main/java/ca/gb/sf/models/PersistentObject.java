@@ -20,14 +20,14 @@ public class PersistentObject {
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="create_user_id")
-    private User createUser;
+    private UserEntity createUser;
 
     @Column
     private Timestamp createTimestamp;
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="update_user_id")
-    private User updateUser;
+    private UserEntity updateUser;
 
     @Column
     private Timestamp updateTimestamp;
@@ -40,11 +40,11 @@ public class PersistentObject {
 		this.id = id;
 	}
 
-	public User getCreateUser() {
+	public UserEntity getCreateUser() {
 		return createUser;
 	}
 
-	public void setCreateUser(User createUser) {
+	public void setCreateUser(UserEntity createUser) {
 		this.createUser = createUser;
 	}
 
@@ -56,11 +56,11 @@ public class PersistentObject {
 		this.createTimestamp = createTimestamp;
 	}
 
-	public User getUpdateUser() {
+	public UserEntity getUpdateUser() {
 		return updateUser;
 	}
 
-	public void setUpdateUser(User updateUser) {
+	public void setUpdateUser(UserEntity updateUser) {
 		this.updateUser = updateUser;
 	}
 

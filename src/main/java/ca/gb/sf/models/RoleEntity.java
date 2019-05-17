@@ -6,14 +6,14 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "roles", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-public class Role extends PersistentObject implements Comparable<Role> {
+public class RoleEntity extends PersistentObject implements Comparable<RoleEntity> {
 
     private String name;
 
-    public Role() {
+    public RoleEntity() {
     }
 
-    public Role(String name) {
+    public RoleEntity(String name) {
         this.name = name;
     }
 
@@ -41,7 +41,7 @@ public class Role extends PersistentObject implements Comparable<Role> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Role other = (Role) obj;
+		RoleEntity other = (RoleEntity) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -59,7 +59,7 @@ public class Role extends PersistentObject implements Comparable<Role> {
     }
 
 	@Override
-	public int compareTo(Role arg0) {
+	public int compareTo(RoleEntity arg0) {
 		
 		return getName().compareTo(arg0.getName()); 
 		

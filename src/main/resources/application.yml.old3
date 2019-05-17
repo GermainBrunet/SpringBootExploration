@@ -18,33 +18,23 @@ spring:
     # view-names:    
 
   datasource:
-    # driverClassName: org.postgresql.Driver
-    driverClassName: org.h2.Driver
-    #url: jdbc:postgresql://localhost:5433/salefinder
-    url: jdbc:h2:mem:testdb
-    # username: salefinderadmin
-    username: sa
-    #password: admin
-    password:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/salefinder
+    username: salefinderadmin
+    password: admin
     
   jpa:
-    # database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     open-in-view: false
     hibernate:
       ddl-auto: update
     show-sql: true
-    # database: postgresql
+    database: postgresql
     properties:
       hibernate:
-        format_sql: true
         jdbc:
           lob: 
             non_contextual_creation: true
-
-  h2:
-    console:
-      enable: true
         
 #    spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 

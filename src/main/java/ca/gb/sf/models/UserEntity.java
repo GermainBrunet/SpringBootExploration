@@ -30,7 +30,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_type")
-public class User extends PersistentObject {
+public class UserEntity extends PersistentObject {
 
 	// Name that will be visually displayed representing this user.
 	protected String displayName;
@@ -48,21 +48,21 @@ public class User extends PersistentObject {
 			inverseJoinColumns = { @JoinColumn(name = "role_id") })
 		// joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
 		// inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Set<Role> roles = new HashSet<Role>();
+	private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 
 	// Constructor
-	public User() {
+	public UserEntity() {
 	}
 
 	// Constructor
-	public User(String displayName, String email, String password) {
+	public UserEntity(String displayName, String email, String password) {
 		this.displayName = displayName;
 		this.email = email;
 		this.password = password;
 	}
 
 	// Constructor
-	public User(String displayName, String email, String password, Set<Role> roles) {
+	public UserEntity(String displayName, String email, String password, Set<RoleEntity> roles) {
 		this.displayName = displayName;
 		this.email = email;
 		this.password = password;
@@ -128,7 +128,7 @@ public class User extends PersistentObject {
 	 * 
 	 * @return
 	 */
-	public Collection<Role> getRoles() {
+	public Collection<RoleEntity> getRoles() {
 		return roles;
 	}
 
@@ -137,7 +137,7 @@ public class User extends PersistentObject {
 	 * 
 	 * @param roles
 	 */
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
 	}
 

@@ -20,37 +20,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.gb.sf.SpringContextIntegrationTest;
 import ca.gb.sf.Start;
-import ca.gb.sf.models.Assignment;
-import ca.gb.sf.models.Educator;
-import ca.gb.sf.models.Exercise;
-import ca.gb.sf.models.ExerciseGroup;
-import ca.gb.sf.models.Student;
+import ca.gb.sf.models.AssignmentEntity;
+import ca.gb.sf.models.EducatorEntity;
+import ca.gb.sf.models.ExerciseEntity;
+import ca.gb.sf.models.ExerciseGroupEntity;
+import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.services.AssignmentService;
+import ca.gb.sf.services.ExerciseGroupService;
+import ca.gb.sf.services.ExerciseService;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 import ca.gb.sf.web.service.UserService;
 
 @SpringBootTest(classes = Start.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-//@TestPropertySource(locations="classpath:application.test.yml")
-@TestPropertySource(locations="classpath:application.yml")
+@TestPropertySource(locations="classpath:application.test.yml")
+// @TestPropertySource(locations="classpath:application.yml")
 //@Transactional
 public class SetupTest extends SpringContextIntegrationTest {
 
+	// @Autowired
+	// ExerciseRepository exerciseRepository;
+	
 	@Autowired
-	ExerciseRepository exerciseRepository;
+	ExerciseService exerciseService;
 
+	// @Autowired
+	// ExerciseGroupRepository exerciseGroupRepository;
 	@Autowired
-	ExerciseGroupRepository exerciseGroupRepository;
+	ExerciseGroupService exerciseGroupService;
 
 	@Autowired
 	UserRepository userRepository;
 	
 	@Autowired
-	AssignmentRepository assignmentRepository;
+	AssignmentService assignmentService;
 
 	@Before
 	public void setup() {
@@ -58,9 +66,9 @@ public class SetupTest extends SpringContextIntegrationTest {
 		deleteAllData();
 		
 		createExercise1();
-		// createExercise2();
-		// createExercise3();
-		// createExercise4();
+		createExercise2();
+		createExercise3();
+		createExercise4();
 		
 		createUsers();
 		
@@ -72,123 +80,101 @@ public class SetupTest extends SpringContextIntegrationTest {
 	@Test
 	public void count() {
 		
-		System.out.println(exerciseGroupRepository.count());
-		System.out.println(exerciseRepository.count());
+		System.out.println(exerciseGroupService.count());
+		System.out.println(exerciseService.count());
 		System.out.println(userRepository.count());
-		System.out.println(assignmentRepository.count());
+		System.out.println(assignmentService.count());
 		
 		
 	}
 	
 	public void deleteAllData() {
 		
-		exerciseRepository.deleteAll();
-		exerciseGroupRepository.deleteAll();
+		exerciseService.deleteAll();
+		exerciseGroupService.deleteAll();
 		// userRepository.deleteAll();
-		assignmentRepository.deleteAll();
+		assignmentService.deleteAll();
 		
 		
 	}
 	
 	public void createExercise1() {
 
-		ExerciseGroup exerciseGroup = new ExerciseGroup();
-		exerciseGroup.setName("ma 1.1");
-		ExerciseGroup savedExerciseGroup = exerciseGroupRepository.save(exerciseGroup);
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("ma 1.1");
 		
-		List<Exercise> exerciseList = new ArrayList<Exercise>();
-		
-		exerciseList.add(new Exercise("ma", "mi", "transforme le mot", 1, savedExerciseGroup));
-		exerciseList.add(new Exercise("mi", "mo", "transforme le mot", 2, savedExerciseGroup));
-		exerciseList.add(new Exercise("mo", "me", "transforme le mot", 3, savedExerciseGroup));
-		exerciseList.add(new Exercise("me", "mu", "transforme le mot", 4, savedExerciseGroup));
-		exerciseList.add(new Exercise("mu", "lu", "transforme le mot", 5, savedExerciseGroup));
-		exerciseList.add(new Exercise("lu", "li", "transforme le mot", 6, savedExerciseGroup));
-		exerciseList.add(new Exercise("li", "la", "transforme le mot", 7, savedExerciseGroup));
-		exerciseList.add(new Exercise("la", "lo", "transforme le mot", 8, savedExerciseGroup));
-		exerciseList.add(new Exercise("lo", "le", "transforme le mot", 9, savedExerciseGroup));
-		exerciseList.add(new Exercise("le", "me", "transforme le mot", 10, savedExerciseGroup));
+		exerciseService.create("ma", "mi", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("mi", "mo", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("mo", "me", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("me", "mu", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("mu", "lu", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("lu", "li", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("li", "la", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("la", "lo", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("lo", "le", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("le", "me", "transforme le mot", 10, exerciseGroup);
 
-		exerciseGroup.setExcercises(exerciseList);
-		exerciseGroupRepository.save(savedExerciseGroup);
-		
 	}
 	
 	public void createExercise2() {
 
-		ExerciseGroup exerciseGroup = new ExerciseGroup();
-		exerciseGroup.setName("la 1.2");
-		exerciseGroupRepository.save(exerciseGroup);
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("la 1.2");
 
-		List<Exercise> exerciseList = new ArrayList<Exercise>();
+		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
 		
-		exerciseList.add(new Exercise("la", "ma", "transforme le mot", 1, exerciseGroup));
-		exerciseList.add(new Exercise("ma", "fa", "transforme le mot", 2, exerciseGroup));
-		exerciseList.add(new Exercise("fa", "fi", "transforme le mot", 3, exerciseGroup));
-		exerciseList.add(new Exercise("fi", "mi", "transforme le mot", 4, exerciseGroup));
-		exerciseList.add(new Exercise("mi", "li", "transforme le mot", 5, exerciseGroup));
-		exerciseList.add(new Exercise("li", "lo", "transforme le mot", 6, exerciseGroup));
-		exerciseList.add(new Exercise("lo", "fo", "transforme le mot", 7, exerciseGroup));
-		exerciseList.add(new Exercise("fo", "mo", "transforme le mot", 8, exerciseGroup));
-		exerciseList.add(new Exercise("mo", "lo", "transforme le mot", 9, exerciseGroup));
-		exerciseList.add(new Exercise("lo", "li", "transforme le mot", 10, exerciseGroup));
+		exerciseService.create("la", "ma", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("ma", "fa", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("fa", "fi", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("fi", "mi", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("mi", "li", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("li", "lo", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("lo", "fo", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("fo", "mo", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("mo", "lo", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("lo", "li", "transforme le mot", 10, exerciseGroup);
 
-		exerciseGroup.setExcercises(exerciseList);
-		exerciseGroupRepository.save(exerciseGroup);
-		
 	}
 
 	public void createExercise3() {
 
-		ExerciseGroup exerciseGroup = new ExerciseGroup();
-		exerciseGroup.setName("lafo 1.3");
-		exerciseGroupRepository.save(exerciseGroup);
-
-		List<Exercise> exerciseList = new ArrayList<Exercise>();
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("lafo 1.3");
 		
-		exerciseList.add(new Exercise("lafo", "lafa", "transforme le mot", 1, exerciseGroup));
-		exerciseList.add(new Exercise("lafa", "lafi", "transforme le mot", 2, exerciseGroup));
-		exerciseList.add(new Exercise("lafi", "lami", "transforme le mot", 3, exerciseGroup));
-		exerciseList.add(new Exercise("lami", "lali", "transforme le mot", 4, exerciseGroup));
-		exerciseList.add(new Exercise("lali", "lalo", "transforme le mot", 5, exerciseGroup));
-		exerciseList.add(new Exercise("lalo", "lamo", "transforme le mot", 6, exerciseGroup));
-		exerciseList.add(new Exercise("lamo", "lamu", "transforme le mot", 7, exerciseGroup));
-		exerciseList.add(new Exercise("lamu", "amu", "transforme le mot", 8, exerciseGroup));
-		exerciseList.add(new Exercise("amu", "afu", "transforme le mot", 9, exerciseGroup));
-		exerciseList.add(new Exercise("afu", "afo", "transforme le mot", 10, exerciseGroup));
-
-		exerciseGroup.setExcercises(exerciseList);
-		exerciseGroupRepository.save(exerciseGroup);
+		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
 		
+		exerciseService.create("lafo", "lafa", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("lafa", "lafi", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("lafi", "lami", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("lami", "lali", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("lali", "lalo", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("lalo", "lamo", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("lamo", "lamu", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("lamu", "amu", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("amu", "afu", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("afu", "afo", "transforme le mot", 10, exerciseGroup);
+
 	}
 
 	public void createExercise4() {
 
-		ExerciseGroup exerciseGroup = new ExerciseGroup();
-		exerciseGroup.setName("malo 1.4");
-		exerciseGroupRepository.save(exerciseGroup);
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("malo 1.4");
 
-		List<Exercise> exerciseList = new ArrayList<Exercise>();
+		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
 		
-		exerciseList.add(new Exercise("malo", "malu", "transforme le mot", 1, exerciseGroup));
-		exerciseList.add(new Exercise("malu", "mala", "transforme le mot", 2, exerciseGroup));
-		exerciseList.add(new Exercise("mala", "mala", "transforme le mot", 3, exerciseGroup));
-		exerciseList.add(new Exercise("mala", "mafa", "transforme le mot", 4, exerciseGroup));
-		exerciseList.add(new Exercise("mafa", "mafi", "transforme le mot", 5, exerciseGroup));
-		exerciseList.add(new Exercise("mafi", "mafo", "transforme le mot", 6, exerciseGroup));
-		exerciseList.add(new Exercise("mafo", "mafu", "transforme le mot", 7, exerciseGroup));
-		exerciseList.add(new Exercise("mafu", "afu", "transforme le mot", 8, exerciseGroup));
-		exerciseList.add(new Exercise("afu", "afi", "transforme le mot", 9, exerciseGroup));
-		exerciseList.add(new Exercise("afi", "mafi", "transforme le mot", 10, exerciseGroup));
+		exerciseService.create("malo", "malu", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("malu", "mala", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("mala", "mala", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("mala", "mafa", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("mafa", "mafi", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("mafi", "mafo", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("mafo", "mafu", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("mafu", "afu", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("afu", "afi", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("afi", "mafi", "transforme le mot", 10, exerciseGroup);
 
-		exerciseGroup.setExcercises(exerciseList);
-		exerciseGroupRepository.save(exerciseGroup);
-		
 	}
 
 	public void createUsers() {
 		
-		Educator educator = new Educator();
+		EducatorEntity educator = new EducatorEntity();
 		educator.setDisplayName("educator1");
 		educator.setPassword("Password#1");
 		educator.setEmail("abc@abc123.com");
@@ -196,7 +182,7 @@ public class SetupTest extends SpringContextIntegrationTest {
 		
 		userRepository.save(educator);
 		
-		Student student = new Student();
+		StudentEntity student = new StudentEntity();
 		student.setDisplayName("student1");
 		student.setPassword("Password#1");
 		student.setEmail("abc2@abc123.com");
@@ -208,51 +194,78 @@ public class SetupTest extends SpringContextIntegrationTest {
 	
 	public void createAssignments() {
 	
-		Student student = (Student) userRepository.findByDisplayName("student1");
-		ExerciseGroup exerciseGroup1 = exerciseGroupRepository.findByName("la 1.2");
-		ExerciseGroup exerciseGroup2 = exerciseGroupRepository.findByName("lafo 1.3");
-		ExerciseGroup exerciseGroup3 = exerciseGroupRepository.findByName("malo 1.4");
+		StudentEntity student = (StudentEntity) userRepository.findByDisplayName("student1");
+		ExerciseGroupEntity exerciseGroup1 = exerciseGroupService.findByName("la 1.2");
+		ExerciseGroupEntity exerciseGroup2 = exerciseGroupService.findByName("lafo 1.3");
+		ExerciseGroupEntity exerciseGroup3 = exerciseGroupService.findByName("malo 1.4");
 		
-		Assignment assignment1 = new Assignment();
-		assignment1.setStudent(student);
-		assignment1.setExerciseGroup(exerciseGroup1);
+		AssignmentEntity assignment1 = assignmentService.create(student, exerciseGroup1);
+		AssignmentEntity assignment2 = assignmentService.create(student, exerciseGroup2);
 		
-		assignmentRepository.save(assignment1);
-
-		Assignment assignment2 = new Assignment();
-		assignment2.setStudent(student);
-		assignment2.setExerciseGroup(exerciseGroup2);
-		
-		assignmentRepository.save(assignment2);
-		
-		List<Assignment> assignments = assignmentRepository.findListByStudent(student);
+		List<AssignmentEntity> assignments = assignmentService.findListByStudent(student);
 		
 		assertTrue(assignments.size() == 2);
 
-		Assignment assignment = assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup3);
+		AssignmentEntity assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup3);
 		assertNull(assignment);
 
-		assignment = assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup1);
+		assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup1);
 		assertNotNull(assignment);
 		
-		ExerciseGroup exerciseGroup = assignment.getExerciseGroup();
+		ExerciseGroupEntity exerciseGroup = assignment.getExerciseGroup();
 		assertNotNull(exerciseGroup);
 		
-		Exercise exercise = exerciseGroup.getExcercises().get(0);
+		List<ExerciseEntity> exercises = exerciseService.findAll();
+		
+		assertTrue(exercises.size() == 40);
+		
+		for (ExerciseEntity exercise : exercises) {
+			
+			System.out.println(exercise);
+			
+		}
+		
+		System.out.println("HERE!!!");
+		
+		// ExerciseGroupEntity exerciseGroupInit = exerciseGroupService.initialize(exerciseGroup);
+		
+		List<ExerciseEntity> exercisesUsingGroup = exerciseService.findByExerciseGroup(exerciseGroup);
+		
+		System.out.println(exercisesUsingGroup.size());
+		
+		assertTrue(exercisesUsingGroup.size() == 10);
+		
+		System.out.println("HERE AFTER !!!");
+		
+		ExerciseEntity exercise = exercisesUsingGroup.get(0);
+		
+		System.out.println(exercise);
 		
 	}
 	
 	public void loadExercise() {
 		
-		Student student = (Student) userRepository.findByDisplayName("student1");
-		ExerciseGroup exerciseGroup1 = exerciseGroupRepository.findByName("la 1.2");
+		StudentEntity student = (StudentEntity) userRepository.findByDisplayName("student1");
+		ExerciseGroupEntity exerciseGroup1 = exerciseGroupService.findByName("la 1.2");
 
 		// List<Exercise> exercises = exerciseRepository.findExercisesByStudentAndExerciseGroup(student, exerciseGroup1);
-		Assignment assignment = assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup1);
-		ExerciseGroup exerciseGroup = assignment.getExerciseGroup();
-		List<Exercise> exercises = exerciseGroup.getExcercises();
+		AssignmentEntity assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup1);
 		
-		assertTrue(exercises.size() == 10);
+		List<ExerciseEntity> exercises = exerciseService.findByExerciseGroup(exerciseGroup1);
+		
+		
+		System.out.println("Loading Exercise");
+		
+		ExerciseEntity e1 = exerciseService.findFirst(exerciseGroup1);
+		System.out.println(e1);
+
+		for (int i = 0; i < 15; i++) {
+			e1 = exerciseService.findNext(exerciseGroup1, e1.getId());
+			System.out.println(e1);
+			if (e1 == null) {
+				break;
+			}
+		}
 		
 	}
 	

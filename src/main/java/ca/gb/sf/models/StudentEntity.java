@@ -17,22 +17,22 @@ import javax.persistence.OneToMany;
 
 @Entity(name = "Student")
 @DiscriminatorValue("Student")
-public class Student extends User {
+public class StudentEntity extends UserEntity {
 
 	// To whom belongs this student.
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "educator_id")
-	private Educator educator;
+	private EducatorEntity educator;
 
     @OneToMany(mappedBy="student", cascade = CascadeType.ALL)
-    private Collection<Assignment> assignment;
+    private Collection<AssignmentEntity> assignment;
 	
 	// Constructor
-	public Student() {
+	public StudentEntity() {
 	}
 
 	// Constructor
-	public Student(String displayName, String email, String password, Educator educator) {
+	public StudentEntity(String displayName, String email, String password, EducatorEntity educator) {
 		this.displayName = displayName;
 		this.email = email;
 		this.password = password;
@@ -44,7 +44,7 @@ public class Student extends User {
 	 * 
 	 * @return
 	 */
-	public Educator getEducator() {
+	public EducatorEntity getEducator() {
 		return educator;
 	}
 
@@ -53,7 +53,7 @@ public class Student extends User {
 	 * 
 	 * @param educator
 	 */
-	public void setEducator(Educator educator) {
+	public void setEducator(EducatorEntity educator) {
 		this.educator = educator;
 	}
 
@@ -62,7 +62,7 @@ public class Student extends User {
 	 * 
 	 * @return
 	 */
-	public Collection<Assignment> getAssignment() {
+	public Collection<AssignmentEntity> getAssignment() {
 		return assignment;
 	}
 
@@ -71,7 +71,7 @@ public class Student extends User {
 	 * 
 	 * @param assignment
 	 */
-	public void setAssignment(Collection<Assignment> assignment) {
+	public void setAssignment(Collection<AssignmentEntity> assignment) {
 		this.assignment = assignment;
 	}
 

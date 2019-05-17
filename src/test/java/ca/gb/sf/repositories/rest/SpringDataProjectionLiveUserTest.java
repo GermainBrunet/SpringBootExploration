@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import ca.gb.sf.Start;
-import ca.gb.sf.models.User;
+import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.repositories.UserRepository;
 
 @RunWith(SpringRunner.class)
@@ -32,11 +32,11 @@ public class SpringDataProjectionLiveUserTest {
     @Before
     public void setup() {
     	
-    	Optional<User> user1 = userRepo.findById(1L);
+    	Optional<UserEntity> user1 = userRepo.findById(1L);
     	
         // if (userRepo.findById(1L) == null) {
     	if (!user1.isPresent()) {
-            User user = new User();
+            UserEntity user = new UserEntity();
             user.setDisplayName("displayName");
             user.setEmail("abc@abc.abc");
             user = userRepo.save(user);

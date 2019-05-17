@@ -10,19 +10,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import ca.gb.sf.models.Educator;
-import ca.gb.sf.models.Exercise;
-import ca.gb.sf.models.Student;
+import ca.gb.sf.models.EducatorEntity;
+import ca.gb.sf.models.ExerciseEntity;
+import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.util.PageWrapper;
-import ca.gb.sf.web.service.ExerciseGroupService;
+import ca.gb.sf.web.service.ExerciseGroupWebService;
 
 @Controller
 public class EducatorController {
 
 	@Autowired
-    ExerciseGroupService exerciseService;
+    ExerciseGroupWebService exerciseService;
 
 	@Autowired
     ExerciseRepository exerciseRepository;
@@ -35,13 +35,13 @@ public class EducatorController {
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	
-    	Educator educator = (Educator) userRepository.findByEmail(auth.getName());
+    	EducatorEntity educator = (EducatorEntity) userRepository.findByEmail(auth.getName());
     	
     	model.addAttribute("educator", educator);
     	
-    	Page<Student> studentPage = userRepository.findByEducator(pageable, educator);
+    	Page<StudentEntity> studentPage = userRepository.findByEducator(pageable, educator);
     	
-    	PageWrapper<Student> students = new PageWrapper<Student> (studentPage, "/educatorPage");
+    	PageWrapper<StudentEntity> students = new PageWrapper<StudentEntity> (studentPage, "/educatorPage");
     	
     	model.addAttribute("page", students);
     	
@@ -54,7 +54,7 @@ public class EducatorController {
 
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	
-    	Educator educator = (Educator) userRepository.findByEmail(auth.getName());
+    	EducatorEntity educator = (EducatorEntity) userRepository.findByEmail(auth.getName());
 
     	model.addAttribute("educator", educator);
 

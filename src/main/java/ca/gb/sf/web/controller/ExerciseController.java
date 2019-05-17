@@ -15,23 +15,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import ca.gb.sf.models.Assignment;
-import ca.gb.sf.models.Educator;
-import ca.gb.sf.models.Exercise;
-import ca.gb.sf.models.ExerciseGroup;
-import ca.gb.sf.models.Student;
+import ca.gb.sf.models.AssignmentEntity;
+import ca.gb.sf.models.EducatorEntity;
+import ca.gb.sf.models.ExerciseEntity;
+import ca.gb.sf.models.ExerciseGroupEntity;
+import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.SearchForm;
-import ca.gb.sf.web.service.ExerciseGroupService;
+import ca.gb.sf.web.service.ExerciseGroupWebService;
 
 @Controller
 public class ExerciseController {
 
 	@Autowired
-    ExerciseGroupService exerciseGroupService;
+    ExerciseGroupWebService exerciseGroupService;
 
 	@Autowired
     ExerciseRepository exerciseRepository;
@@ -44,17 +44,17 @@ public class ExerciseController {
 
 	@Transactional
     @GetMapping("/exerciseList")
-    public String excerciseList(@PageableDefault(size = 5) Pageable pageable, SearchForm searchForm, Model model) {
+    public String exerciseList(@PageableDefault(size = 5) Pageable pageable, SearchForm searchForm, Model model) {
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	
-    	Student student = (Student) userRepository.findByEmail(auth.getName());
+    	StudentEntity student = (StudentEntity) userRepository.findByEmail(auth.getName());
     	
     	String searchString = searchForm.getSearch();
     	
-    	Page<ExerciseGroup> exerciseGroupPage = exerciseGroupService.findPaginatedByStudent(student, pageable, searchString);
+    	Page<ExerciseGroupEntity> exerciseGroupPage = exerciseGroupService.findPaginatedByStudent(student, pageable, searchString);
     	
-    	PageWrapper<ExerciseGroup> exercises = new PageWrapper<ExerciseGroup> (exerciseGroupPage, "/exerciseList");
+    	PageWrapper<ExerciseGroupEntity> exercises = new PageWrapper<ExerciseGroupEntity> (exerciseGroupPage, "/exerciseList");
     	
         model.addAttribute("page", exercises);
 
@@ -68,11 +68,11 @@ public class ExerciseController {
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	
-    	Student student = (Student) userRepository.findByEmail(auth.getName());
+    	StudentEntity student = (StudentEntity) userRepository.findByEmail(auth.getName());
     	
     	System.out.println("1: " + student.getId());
     	
-    	Assignment assignment = assignmentRepository.findByStudentAndAssignmentId(student, new Long(assignmentId));
+    	AssignmentEntity assignment = assignmentRepository.findByStudentAndAssignmentId(student, new Long(assignmentId));
 
     	System.out.println("2");
 
@@ -85,7 +85,7 @@ public class ExerciseController {
     	System.out.println("3 " + assignment.getExerciseGroup().getId());
 
     	// List<Exercise> exercises = assignment.getExerciseGroup().getExcercises();
-    	List<Exercise> exercises = exerciseRepository.findByExerciseGroup(assignment.getExerciseGroup());
+    	List<ExerciseEntity> exercises = exerciseRepository.findByExerciseGroup(assignment.getExerciseGroup());
 
     	// Hibernate.initialize(exercises);
     	

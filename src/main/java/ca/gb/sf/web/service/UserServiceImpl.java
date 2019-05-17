@@ -19,19 +19,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import ca.gb.sf.models.Assignment;
+import ca.gb.sf.models.AssignmentEntity;
 import ca.gb.sf.models.AssignmentStatus;
-import ca.gb.sf.models.Educator;
-import ca.gb.sf.models.Exercise;
-import ca.gb.sf.models.ExerciseGroup;
-import ca.gb.sf.models.Role;
-import ca.gb.sf.models.Student;
-import ca.gb.sf.models.User;
+import ca.gb.sf.models.EducatorEntity;
+import ca.gb.sf.models.ExerciseEntity;
+import ca.gb.sf.models.ExerciseGroupEntity;
+import ca.gb.sf.models.RoleEntity;
+import ca.gb.sf.models.StudentEntity;
+import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.RoleRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.services.AssignmentService;
 import ca.gb.sf.web.form.ExerciseGroupSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
@@ -56,34 +57,34 @@ public class UserServiceImpl implements UserService {
 	private ExerciseGroupRepository exerciseGroupRepository;
 
 	@Autowired
-	private AssignmentRepository assignmentRepository;
+	private AssignmentService assignmentService;
 
-	public User findByEmail(String email) {
+	public UserEntity findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
 
-	public User findByDisplayName(String displayName) {
+	public UserEntity findByDisplayName(String displayName) {
 		return userRepository.findByDisplayName(displayName);
 	}
 
-	public User save(UserRegistrationForm registration) {
+	public UserEntity save(UserRegistrationForm registration) {
 
 		System.out.println("user type : " + registration.getUserType());
 
-		User user = null;
+		UserEntity user = null;
 
-		Set<Role> roles = new TreeSet<Role>();
+		Set<RoleEntity> roles = new TreeSet<RoleEntity>();
 
 		roles.add(findRoleByName("ROLE_USER"));
 
 		if (registration.getUserType().equals("USER")) {
 
-			user = new User(registration.getDisplayName(), registration.getEmail(),
+			user = new UserEntity(registration.getDisplayName(), registration.getEmail(),
 					passwordEncoder.encode(registration.getPassword()));
 
 		} else if (registration.getUserType().equals("EDUCATOR")) {
 
-			user = new Educator(registration.getDisplayName(), registration.getEmail(),
+			user = new EducatorEntity(registration.getDisplayName(), registration.getEmail(),
 					passwordEncoder.encode(registration.getPassword()));
 			roles.add(findRoleByName("ROLE_EDUCATOR"));
 
@@ -94,20 +95,20 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(user);
 	}
 
-	public Student saveStudent(StudentForm studentForm) {
+	public StudentEntity saveStudent(StudentForm studentForm) {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		Educator educator = (Educator) userRepository.findByEmail(auth.getName());
+		EducatorEntity educator = (EducatorEntity) userRepository.findByEmail(auth.getName());
 
-		Student student = null;
+		StudentEntity student = null;
 
 		if (!StringUtils.isEmpty(studentForm.getId())) {
-			new Student();
-			Optional<User> optionalStudent = userRepository.findById(Long.valueOf(studentForm.getId()));
-			student = (Student) optionalStudent.get();
+			new StudentEntity();
+			Optional<UserEntity> optionalStudent = userRepository.findById(Long.valueOf(studentForm.getId()));
+			student = (StudentEntity) optionalStudent.get();
 		} else {
-			student = new Student();
+			student = new StudentEntity();
 		}
 
 		student.setDisplayName(studentForm.getDisplayName());
@@ -125,19 +126,19 @@ public class UserServiceImpl implements UserService {
 		
 			for (String exerciseGroupId : studentForm.getExerciseGroupIds()) {
 
-				Optional<ExerciseGroup> optionalExerciseGroup = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
+				Optional<ExerciseGroupEntity> optionalExerciseGroup = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
 
-				ExerciseGroup exerciseGroup = optionalExerciseGroup.get();
+				ExerciseGroupEntity exerciseGroup = optionalExerciseGroup.get();
 
-				Assignment assignment = new Assignment();
+				// Assignment assignment = new Assignment();
 
-				assignment.setExerciseGroup(exerciseGroup);
+				// assignment.setExerciseGroup(exerciseGroup);
 
-				assignment.setStudent(student);
+				// assignment.setStudent(student);
 
-				assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
+				// assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
 
-				assignmentRepository.save(assignment);
+				assignmentService.create(student, exerciseGroup);
 
 			}
 
@@ -149,22 +150,22 @@ public class UserServiceImpl implements UserService {
 
 	public void saveSelectedExercises(ExerciseGroupSelectionForm exerciseSelectionForm) {
 
-		Optional<User> optionalStudent = userRepository
+		Optional<UserEntity> optionalStudent = userRepository
 				.findById(Long.valueOf(String.valueOf(exerciseSelectionForm.getStudentId())));
-		Student student = (Student) optionalStudent.get();
+		StudentEntity student = (StudentEntity) optionalStudent.get();
 
 		System.out.println(exerciseSelectionForm);
 
 		for (String exerciseGroupId : exerciseSelectionForm.getAllGroupExercises()) {
 
-			Optional<ExerciseGroup> optionalGroupExercise = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
+			Optional<ExerciseGroupEntity> optionalGroupExercise = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
 
-			ExerciseGroup exerciseGroup = optionalGroupExercise.get();
+			ExerciseGroupEntity exerciseGroup = optionalGroupExercise.get();
 
 			System.out.println("Student id = " + student.getId());
 			System.out.println("Exercise Group id= " + exerciseGroup.getId());
 
-			Assignment assignment = assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup);
+			AssignmentEntity assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup);
 
 			System.out.println(assignment);
 
@@ -176,15 +177,7 @@ public class UserServiceImpl implements UserService {
 
 				if (assignment == null) {
 
-					assignment = new Assignment();
-
-					assignment.setExerciseGroup(exerciseGroup);
-
-					assignment.setStudent(student);
-
-					assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
-
-					assignmentRepository.save(assignment);
+					assignmentService.create(student, exerciseGroup);
 
 				}
 
@@ -194,7 +187,7 @@ public class UserServiceImpl implements UserService {
 
 				if (assignment != null) {
 
-					assignmentRepository.delete(assignment);
+					assignmentService.delete(assignment);
 
 				}
 
@@ -240,19 +233,19 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	public Role findRoleByName(String name) {
+	public RoleEntity findRoleByName(String name) {
 
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
 
-		Role role = roleRepository.findByName(name);
+		RoleEntity role = roleRepository.findByName(name);
 
 		if (role != null) {
 			return role;
 		}
 
-		Role savedRole = roleRepository.save(role);
+		RoleEntity savedRole = roleRepository.save(role);
 
 		return savedRole;
 
@@ -261,7 +254,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDetails loadUserByUsername(String displayName) throws UsernameNotFoundException {
 		// User user = userRepository.findByEmail(email);
-		User user = userRepository.findByDisplayName(displayName);
+		UserEntity user = userRepository.findByDisplayName(displayName);
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
@@ -271,7 +264,7 @@ public class UserServiceImpl implements UserService {
 		// 		mapRolesToAuthorities(user.getRoles()));
 	}
 
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<RoleEntity> roles) {
 		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 	}
 }
