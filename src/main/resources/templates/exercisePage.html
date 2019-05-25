@@ -19,14 +19,16 @@
 					<div class="row">
 						<div class="form-group col-md-6">
 							<label for="name" class="col-form-label">Instructions</label>
-							<p th:text="${exercise.instructions}"></p>
+							<p th:text="${exercise.writtenInstructions}"></p>
 						</div>
 						<div class="form-group col-md-6">
 							<div class="pull-right">
+							<!-- 
 							<a th:case="" th:href="@{/exercisePage/{assignmentId}/{previousExercise}(assignmentId=${assignmentId},previousExercise=${previousExercise})}"
 												class="btn btn-primary"><i class="fas fa-arrow-left ml-2"></i></a>
 							<a th:href="@{/exercisePage/{assignmentId}/{nextExercise}(assignmentId=${assignmentId},nextExercise=${nextExercise})}"
 												class="btn btn-primary"><i class="fas fa-arrow-right ml-2"></i></a>
+												 -->
 							</div>
 						</div>
 					</div>

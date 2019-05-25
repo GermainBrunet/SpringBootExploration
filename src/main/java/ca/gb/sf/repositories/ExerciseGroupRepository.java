@@ -114,16 +114,16 @@ public interface ExerciseGroupRepository extends CrudRepository<ExerciseGroupEnt
 				+ "     FROM exercise_groups eg "
 				+ "     INNER JOIN Assignments a ON eg.id = a.exercise_group_id " 
 				+ "     WHERE "
-				+ "       a.student_id = :studentId", nativeQuery = true)
-	Page<ExerciseGroupEntity> findByStudentId(@Param("studentId") Long studentId, Pageable pageable);
+				+ "       a.user_id = :userId", nativeQuery = true)
+	Page<ExerciseGroupEntity> findByStudentId(@Param("userId") Long userId, Pageable pageable);
 
 	@Query(value = "SELECT * " 
 				+ "     FROM exercise_groups eg "
 				+ "     INNER JOIN Assignments a ON eg.id = a.exercise_group_id " 
 				+ "     WHERE "
-				+ "       a.student_id = :studentId AND " 
+				+ "       a.user_id = :userId AND " 
 				+ "       lower(eg.name) LIKE :searchString", nativeQuery = true)
-	Page<ExerciseGroupEntity> findByStudentIdAndName(@Param("studentId") Long studentId, Pageable pageable,
+	Page<ExerciseGroupEntity> findByStudentIdAndName(@Param("userId") Long userId, Pageable pageable,
 			@Param("searchString") String searchString);
 
 
