@@ -10,10 +10,10 @@ import ca.gb.sf.Start;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Start.class)
-// @Transactional
 public class SpringContextIntegrationTest {
 
-    @Test
-    public void whenSpringContextIsBootstrapped_thenNoExceptions() {
-    }
+    //@Test
+    //public void whenSpringContextIsBootstrapped_thenNoExceptions() {
+    //}
+    
 }

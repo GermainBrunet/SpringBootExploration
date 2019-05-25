@@ -49,7 +49,7 @@ public class AssignmentService {
 	
 	public List<AssignmentEntity> findListByStudent(StudentEntity student) {
 		
-		return assignmentRepository.findListByStudent(student);
+		return assignmentRepository.findByStudent(student);
 		
 	}
 	

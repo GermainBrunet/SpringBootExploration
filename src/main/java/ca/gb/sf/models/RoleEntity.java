@@ -4,28 +4,33 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * Object that defines the roles associated to users, educators and students.
+ * Used for security purposes.
+ */
+
 @Entity
-@Table(name = "roles", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(name = "roles", uniqueConstraints = @UniqueConstraint(columnNames = "name") )
 public class RoleEntity extends PersistentObject implements Comparable<RoleEntity> {
 
-    private String name;
+	private String name;
 
-    public RoleEntity() {
-    }
+	public RoleEntity() {
+	}
 
-    public RoleEntity(String name) {
-        this.name = name;
-    }
+	public RoleEntity(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @Override
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -51,17 +56,14 @@ public class RoleEntity extends PersistentObject implements Comparable<RoleEntit
 	}
 
 	@Override
-    public String toString() {
-        return "Role{" +
-                "id=" + getId() +
-                ", name='" + name + '\'' +
-                '}';
-    }
+	public String toString() {
+		return "Role{" + "id=" + getId() + ", name='" + name + '\'' + '}';
+	}
 
 	@Override
 	public int compareTo(RoleEntity arg0) {
-		
-		return getName().compareTo(arg0.getName()); 
-		
+
+		return getName().compareTo(arg0.getName());
+
 	}
 }

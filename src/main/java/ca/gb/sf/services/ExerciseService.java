@@ -13,20 +13,22 @@ import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.repositories.ExerciseRepository;
 
 @Component
-public class ExerciseService {
+public class ExerciseService extends CommonService {
 
 	@Autowired
 	ExerciseRepository exerciseRepository;
 	
-	public ExerciseEntity create(String initialWord, String targetWord, String instructions, Integer exerciseOrder, ExerciseGroupEntity exerciseGroup) {
+	public ExerciseEntity create(String initialWord, String targetWord, String writtenInstructions, String readInstructions, Integer exerciseOrder, ExerciseGroupEntity exerciseGroup) {
 		
-		ExerciseEntity exercise = new ExerciseEntity(initialWord, targetWord, instructions, exerciseOrder, exerciseGroup);
+		ExerciseEntity exercise = new ExerciseEntity(initialWord, targetWord, writtenInstructions, readInstructions, exerciseOrder, exerciseGroup);
 
-		return create(exercise);
+		return save(exercise);
 		
 	}
 	
-	public ExerciseEntity create(ExerciseEntity exercise) {
+	public ExerciseEntity save(ExerciseEntity exercise) {
+		
+		setAuditingFields(exercise);
 		
 		return exerciseRepository.save(exercise);
 		
@@ -63,7 +65,7 @@ public class ExerciseService {
 	
 	public List<ExerciseEntity> findByExerciseGroup(ExerciseGroupEntity exerciseGroupEntity) {
 		
-		List<ExerciseEntity> exercises = exerciseRepository.findByExerciseGroup(exerciseGroupEntity);
+		List<ExerciseEntity> exercises = exerciseRepository.findAllByExerciseGroup(exerciseGroupEntity);
 		
 		return exercises;
 		
@@ -71,7 +73,7 @@ public class ExerciseService {
 	
 	public ExerciseEntity findFirst(ExerciseGroupEntity exerciseGroupEntity) {
 		
-		List<ExerciseEntity> exercises = exerciseRepository.findByExerciseGroup(exerciseGroupEntity);
+		List<ExerciseEntity> exercises = exerciseRepository.findAllByExerciseGroup(exerciseGroupEntity);
 		
 		return exercises.get(0);
 		
@@ -80,7 +82,7 @@ public class ExerciseService {
 	@Transactional
 	public ExerciseEntity findNext(ExerciseGroupEntity exerciseGroupEntity, long currentExerciseEntityId) {
 		
-		List<ExerciseEntity> exercises = exerciseRepository.findByExerciseGroup(exerciseGroupEntity);
+		List<ExerciseEntity> exercises = exerciseRepository.findAllByExerciseGroup(exerciseGroupEntity);
 			
 		int current = 0;
 		for (int i = 0; i < exercises.size(); i++) {
@@ -96,9 +98,6 @@ public class ExerciseService {
 			}
 			
 		}
-		
-		// System.out.println("max size: " + exercises.size());
-		// System.out.println("current size pllus 1: " + (current + 1));
 		
 		if ((current + 1) >= exercises.size()) {
 			

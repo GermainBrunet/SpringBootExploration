@@ -11,26 +11,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * Parent object from which all other objects are derived. Provides a common id
+ * for all objects. Provides Create and Update <code>timestamp</code> and
+ * <code>user</code> objects for tracking purposes.
+ */
+
 @MappedSuperclass
 public class PersistentObject {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="create_user_id")
-    private UserEntity createUser;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected long id;
 
-    @Column
-    private Timestamp createTimestamp;
-    
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="update_user_id")
-    private UserEntity updateUser;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "create_user_id")
+	protected UserEntity createUser;
 
-    @Column
-    private Timestamp updateTimestamp;
+	@Column
+	protected Timestamp createTimestamp;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "update_user_id")
+	protected UserEntity updateUser;
+
+	@Column
+	protected Timestamp updateTimestamp;
 
 	public long getId() {
 		return id;
@@ -87,5 +93,5 @@ public class PersistentObject {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

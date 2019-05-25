@@ -26,12 +26,12 @@ import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.services.UserService;
 import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.SearchForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 import ca.gb.sf.web.service.ExerciseGroupWebService;
-import ca.gb.sf.web.service.UserService;
 
 @Controller
 public class StudentController {

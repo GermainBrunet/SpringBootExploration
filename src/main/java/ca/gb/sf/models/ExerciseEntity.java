@@ -1,50 +1,76 @@
 package ca.gb.sf.models;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
 /**
- * Object that describes a exercise for a student. The student will be expected
+ * Object that describes an exercise for a student. The student will be expected
  * to start with the initial word and correct it to arrive at the target word.
- * Instructions are provided on an exercise basis.
+ * Written and audible instructions can be provided on an exercise per exercise
+ * basis. Multiple exercises will be grouped together as part of an exercise
+ * group. Once the student has finished modifying the initial word into the
+ * target word, the software will move the student to the next exercise. Once
+ * all the exercises in a group are completed, the assignment will be considered
+ * completed.
  */
 
 @Entity
 @Table(name = "exercises")
-public class ExerciseEntity extends PersistentObject implements Comparable<ExerciseEntity> {
+public class ExerciseEntity extends PersistentObject implements Comparable<ExerciseEntity>, Serializable {
 
-	@Column(nullable = false)
+	private static final long serialVersionUID = -418793221726443549L;
+
+	// Initial word displayed to the student. 
+	@Column(nullable = true)
 	private String initialWord;
 
+	// Target word the student must generate to complete this exercise.
 	@Column(nullable = false)
 	private String targetWord;
 
-	@Column(nullable = false)
-	private String instructions;
+	// Written instructions displayed on the page for the student.
+	@Column(nullable = true)
+	private String writtenInstructions;
 
+	// Audible instructions that the student will hear upon arriving on the page.
+	@Column(nullable = true)
+	private String readInstructions;
+
+	// Order of this exercise.
 	@Column(nullable = false)
 	private Integer exerciseOrder;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "exercise_group_id", nullable = false)
 	private ExerciseGroupEntity exerciseGroup;
 
 	public ExerciseEntity() {
 	}
 
-	public ExerciseEntity(String initialWord, String targetWord, String instructions, Integer exerciseOrder,
-			ExerciseGroupEntity exerciseGroup) {
+	public ExerciseEntity(String targetWord, Integer exerciseOrder) {
+		super();
+		this.targetWord = targetWord;
+		this.exerciseOrder = exerciseOrder;
+	}
+
+	public ExerciseEntity(String initialWord, String targetWord, String writtenInstructions, String readInstructions,
+			Integer exerciseOrder, ExerciseGroupEntity exerciseGroup) {
 		super();
 		this.initialWord = initialWord;
 		this.targetWord = targetWord;
-		this.instructions = instructions;
+		this.writtenInstructions = writtenInstructions;
+		this.readInstructions = readInstructions;
 		this.exerciseOrder = exerciseOrder;
 		this.exerciseGroup = exerciseGroup;
-		exerciseGroup.addExercise(this);
+		// exerciseGroup.addExercise(this);
 	}
 
 	public String getInitialWord() {
@@ -63,12 +89,20 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 		this.targetWord = targetWord;
 	}
 
-	public String getInstructions() {
-		return instructions;
+	public String getWrittenInstructions() {
+		return writtenInstructions;
 	}
 
-	public void setInstructions(String instructions) {
-		this.instructions = instructions;
+	public void setWrittenInstructions(String writtenInstructions) {
+		this.writtenInstructions = writtenInstructions;
+	}
+
+	public String getReadInstructions() {
+		return readInstructions;
+	}
+
+	public void setReadInstructions(String readInstructions) {
+		this.readInstructions = readInstructions;
 	}
 
 	public Integer getExerciseOrder() {
@@ -91,10 +125,10 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((exerciseGroup == null) ? 0 : exerciseGroup.hashCode());
 		result = prime * result + ((exerciseOrder == null) ? 0 : exerciseOrder.hashCode());
 		result = prime * result + ((initialWord == null) ? 0 : initialWord.hashCode());
-		result = prime * result + ((instructions == null) ? 0 : instructions.hashCode());
+		result = prime * result + ((writtenInstructions == null) ? 0 : writtenInstructions.hashCode());
+		result = prime * result + ((readInstructions == null) ? 0 : readInstructions.hashCode());
 		result = prime * result + ((targetWord == null) ? 0 : targetWord.hashCode());
 		return result;
 	}
@@ -108,11 +142,6 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 		if (getClass() != obj.getClass())
 			return false;
 		ExerciseEntity other = (ExerciseEntity) obj;
-		if (exerciseGroup == null) {
-			if (other.exerciseGroup != null)
-				return false;
-		} else if (!exerciseGroup.equals(other.exerciseGroup))
-			return false;
 		if (exerciseOrder == null) {
 			if (other.exerciseOrder != null)
 				return false;
@@ -123,10 +152,15 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 				return false;
 		} else if (!initialWord.equals(other.initialWord))
 			return false;
-		if (instructions == null) {
-			if (other.instructions != null)
+		if (writtenInstructions == null) {
+			if (other.writtenInstructions != null)
 				return false;
-		} else if (!instructions.equals(other.instructions))
+		} else if (!writtenInstructions.equals(other.writtenInstructions))
+			return false;
+		if (readInstructions == null) {
+			if (other.readInstructions != null)
+				return false;
+		} else if (!readInstructions.equals(other.readInstructions))
 			return false;
 		if (targetWord == null) {
 			if (other.targetWord != null)
@@ -140,27 +174,35 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Exercise [");
+		builder.append("id=");
+		builder.append(getId());
 		if (initialWord != null) {
+			builder.append(", ");
 			builder.append("initialWord=");
 			builder.append(initialWord);
-			builder.append(", ");
 		}
 		if (targetWord != null) {
+			builder.append(", ");
 			builder.append("targetWord=");
 			builder.append(targetWord);
-			builder.append(", ");
 		}
-		if (instructions != null) {
-			builder.append("instructions=");
-			builder.append(instructions);
+		if (writtenInstructions != null) {
 			builder.append(", ");
+			builder.append("writtenInstructions=");
+			builder.append(writtenInstructions);
+		}
+		if (readInstructions != null) {
+			builder.append(", ");
+			builder.append("readInstructions=");
+			builder.append(readInstructions);
 		}
 		if (exerciseOrder != null) {
+			builder.append(", ");
 			builder.append("exerciseOrder=");
 			builder.append(exerciseOrder);
-			builder.append(", ");
 		}
 		if (exerciseGroup != null) {
+			builder.append(", ");
 			builder.append("exerciseGroupId=");
 			builder.append(exerciseGroup.getId());
 		}
@@ -171,9 +213,7 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 	@Override
 	public int compareTo(ExerciseEntity o) {
 
-		return new CompareToBuilder()
-				.append(this.getId(), o.getId())
-				.append(this.getInitialWord(), o.getInitialWord())
+		return new CompareToBuilder().append(this.getId(), o.getId()).append(this.getInitialWord(), o.getInitialWord())
 				.toComparison();
 
 	}

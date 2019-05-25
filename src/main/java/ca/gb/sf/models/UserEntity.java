@@ -14,8 +14,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * User represents an individual using this system. Can be assigned different
@@ -41,7 +45,10 @@ public class UserEntity extends PersistentObject {
 	// Password to identify this user.
 	protected String password;
 
-	// @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+    private Collection<AssignmentEntity> assignment;
+	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "users_roles", 
 			joinColumns = { @JoinColumn(name = "user_id") }, 
@@ -142,6 +149,24 @@ public class UserEntity extends PersistentObject {
 	}
 
 	/**
+	 * Getter for assignments
+	 * 
+	 * @return
+	 */
+	public Collection<AssignmentEntity> getAssignment() {
+		return assignment;
+	}
+
+	/**
+	 * Setter for assignments
+	 * 
+	 * @param assignment
+	 */
+	public void setAssignment(Collection<AssignmentEntity> assignment) {
+		this.assignment = assignment;
+	}
+	
+	/**
 	 * String representation of this object. Includes the parent object toString.
 	 * Used for debugging purposes. 
 	 */
@@ -155,8 +180,8 @@ public class UserEntity extends PersistentObject {
 			builder.append("email=").append(email).append(", ");
 		if (password != null)
 			builder.append("password=").append(password).append(", ");
-		if (roles != null)
-			builder.append("roles=").append(roles).append(", ");
+		// if (roles != null)
+		// 	builder.append("roles=").append(roles).append(", ");
 		if (super.toString() != null)
 			builder.append("toString()=").append(super.toString());
 		builder.append("]");

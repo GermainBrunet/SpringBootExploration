@@ -8,13 +8,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import ca.gb.sf.H2IntegrationTest;
 import ca.gb.sf.SpringContextIntegrationTest;
+import ca.gb.sf.services.UserService;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
-import ca.gb.sf.web.service.UserService;
-import ca.gb.sf.web.service.UserServiceImpl;
 
-public class UserServiceTest extends SpringContextIntegrationTest {
+public class UserServiceTest extends CommonServiceTest {
 
 	@Autowired
 	UserService userService;
@@ -22,11 +22,7 @@ public class UserServiceTest extends SpringContextIntegrationTest {
 	@Test
 	public void createUser() {
 		
-		Random rand = new Random();
-		
-		int n = rand.nextInt(100000);
-		
-		UserRegistrationForm userRegistrationForm = buildUserRegistrationForm(String.valueOf(n), UserServiceImpl.USER_TYPE_USER);
+		UserRegistrationForm userRegistrationForm = buildUserRegistrationForm("createUser", UserService.USER_TYPE_USER);
 		
 		userService.save(userRegistrationForm);
 		
@@ -35,25 +31,16 @@ public class UserServiceTest extends SpringContextIntegrationTest {
 	@Test
 	public void createEducator() {
 		
-		Random rand = new Random();
-		
-		int n = rand.nextInt(100000);
-
-		UserRegistrationForm userRegistrationForm = buildUserRegistrationForm(String.valueOf(n), UserServiceImpl.USER_TYPE_EDUCATOR);
+		UserRegistrationForm userRegistrationForm = buildUserRegistrationForm("createEducator", UserService.USER_TYPE_EDUCATOR);
 		
 		userService.save(userRegistrationForm);
 		
 	}
 	
-	@WithMockUser("educator")
 	@Test
 	public void createStudent() {
 		
-		Random rand = new Random();
-		
-		int n = rand.nextInt(100000);
-		
-		StudentForm studentForm = buildStudentForm(String.valueOf(n));
+		StudentForm studentForm = buildStudentForm("createStudent");
 
 		List<String> exerciseIds = new ArrayList<String>();
 		

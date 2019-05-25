@@ -25,10 +25,10 @@ import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.services.UserService;
 import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.ExerciseGroupSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
-import ca.gb.sf.web.service.UserService;
 
 @Controller
 public class ExerciseSelectionController {
@@ -78,7 +78,7 @@ public class ExerciseSelectionController {
 
 		model.addAttribute("page", exerciseGroups);
 
-		List<AssignmentEntity> assignments = assignmentRepository.findListByStudent(student);
+		List<AssignmentEntity> assignments = assignmentRepository.findByStudent(student);
 
 		List<String> assignmentIds = new ArrayList<String>();
 		

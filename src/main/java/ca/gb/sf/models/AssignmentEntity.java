@@ -8,46 +8,47 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- * Object that represents an exercise that has been assigned to a student.  Requires that both a student and an exercise be present.
+ * Object that represents an exercise that has been assigned to a user.
+ * Requires that both a user and an exercise group be present.
  */
 
 @Entity
-@Table(name = "assignments", uniqueConstraints={
-	    @UniqueConstraint(columnNames = {"student_id", "exercise_group_id"})
-})
+@Table(name = "assignments", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "user_id", "exercise_group_id" }) })
 public class AssignmentEntity extends PersistentObject {
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "student_id", nullable = false)
-	StudentEntity student;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	UserEntity user;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "exercise_group_id", nullable = false)
-    ExerciseGroupEntity exerciseGroup;
-    
-    Long speedToComplete;
-    
-    Long stepsToComplete;
-    
-    Integer stars;
-    
-    AssignmentStatus assignmentStatus;
-    
-    public AssignmentEntity() {};
-    
-	public AssignmentEntity(StudentEntity student, ExerciseGroupEntity exerciseGroup) {
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "exercise_group_id", nullable = false)
+	ExerciseGroupEntity exerciseGroup;
+
+	Long speedToComplete;
+
+	Long stepsToComplete;
+
+	Integer stars;
+
+	AssignmentStatus assignmentStatus;
+
+	public AssignmentEntity() {
+	};
+
+	public AssignmentEntity(UserEntity user, ExerciseGroupEntity exerciseGroup) {
 		super();
 		this.assignmentStatus = AssignmentStatus.ASSIGNED;
-		this.student = student;
+		this.user = user;
 		this.exerciseGroup = exerciseGroup;
 	}
 
-	public StudentEntity getStudent() {
-		return student;
+	public UserEntity getUser() {
+		return user;
 	}
 
-	public void setStudent(StudentEntity student) {
-		this.student = student;
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
 	public ExerciseGroupEntity getExerciseGroup() {
@@ -94,8 +95,6 @@ public class AssignmentEntity extends PersistentObject {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Assignment [");
-//		if (student != null)
-//			builder.append("student=").append(student).append(", ");
 		if (exerciseGroup != null)
 			builder.append("exercise=").append(exerciseGroup).append(", ");
 		if (speedToComplete != null)
@@ -111,5 +110,5 @@ public class AssignmentEntity extends PersistentObject {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

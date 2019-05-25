@@ -12,22 +12,40 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import ca.gb.sf.models.AssignmentEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
-import ca.gb.sf.models.StudentEntity;
+import ca.gb.sf.models.UserEntity;
 
 @CrossOrigin
 @RepositoryRestResource(collectionResourceRel = "assignment", path = "assignment")
 public interface AssignmentRepository extends CrudRepository<AssignmentEntity, Long> {
     
-	@Query("SELECT a FROM AssignmentEntity a WHERE a.student = :student")
-	Page<AssignmentEntity> findByStudent(Pageable pageable, @Param("student") StudentEntity student);
-
-	@Query("SELECT a FROM AssignmentEntity a WHERE a.student = :student")
-	List<AssignmentEntity> findListByStudent(@Param("student") StudentEntity student);
+	@Query("SELECT a "
+			+ "FROM "
+			+ "  AssignmentEntity a "
+			+ "WHERE "
+			+ "  a.user = :userEntity")
+	List<AssignmentEntity> findByStudent(@Param("userEntity") UserEntity userEntity);
 	
-	@Query("SELECT a FROM AssignmentEntity a WHERE a.student = :student and a.exerciseGroup = :exerciseGroup")
-	AssignmentEntity findByStudentAndExerciseGroup(@Param("student") StudentEntity student, @Param("exerciseGroup") ExerciseGroupEntity exerciseGroup);
+	@Query("SELECT a "
+			+ "FROM "
+			+ "  AssignmentEntity a "
+			+ "WHERE "
+			+ "  a.user = :userEntity")
+	Page<AssignmentEntity> findByStudent(Pageable pageable, @Param("userEntity") UserEntity userEntity);
 
-	@Query("SELECT a FROM AssignmentEntity a WHERE a.student = :student and a.id = :assignmentId")
-	AssignmentEntity findByStudentAndAssignmentId(@Param("student") StudentEntity student, @Param("assignmentId") Long assignmentId);
+	@Query("SELECT a "
+			+ "FROM "
+			+ "  AssignmentEntity a "
+			+ "WHERE "
+			+ "  a.user = :userEntity AND "
+			+ "  a.exerciseGroup = :exerciseGroup")
+	AssignmentEntity findByStudentAndExerciseGroup(@Param("userEntity") UserEntity userEntity, @Param("exerciseGroup") ExerciseGroupEntity exerciseGroup);
+
+	@Query("SELECT a "
+			+ "FROM "
+			+ "  AssignmentEntity a "
+			+ "WHERE "
+			+ "  a.user = :userEntity AND "
+			+ "  a.id = :assignmentId")
+	AssignmentEntity findByStudentAndAssignmentId(@Param("userEntity") UserEntity userEntity, @Param("assignmentId") Long assignmentId);
 
 }

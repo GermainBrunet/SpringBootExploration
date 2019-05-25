@@ -1,35 +1,43 @@
 package ca.gb.sf.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
 
 @Component
-public class ExerciseGroupService {
+public class ExerciseGroupService extends CommonService {
 
 	@Autowired
 	ExerciseGroupRepository exerciseGroupRepository;
 
-	public ExerciseGroupEntity create(String name) {
+	/**
+	 * Function that will try to c
+	 * @param name
+	 * @return
+	 */
+	public ExerciseGroupEntity createUsingName(String name) {
+		
+		ExerciseGroupEntity exerciseGroupEntity = findByName(name);
+		
+		if (exerciseGroupEntity != null) {
+			
+			return exerciseGroupEntity;
+			
+		}
 		
 		ExerciseGroupEntity exerciseGroup = new ExerciseGroupEntity();
 		
 		exerciseGroup.setName(name);
 		
-		return create(exerciseGroup);
+		return save(exerciseGroup);
 		
 	}
 	
-	public ExerciseGroupEntity create(ExerciseGroupEntity exerciseGroup) {
+	public ExerciseGroupEntity save(ExerciseGroupEntity exerciseGroup) {
+		
+		setAuditingFields(exerciseGroup);
 		
 		return exerciseGroupRepository.save(exerciseGroup);
 		
@@ -40,6 +48,12 @@ public class ExerciseGroupService {
 		return exerciseGroupRepository.count();
 	}
 	
+	public void delete(ExerciseGroupEntity exerciseGroupEntity) {
+		
+		exerciseGroupRepository.delete(exerciseGroupEntity);
+		
+	}
+	
 	public void deleteAll() {
 		
 		exerciseGroupRepository.deleteAll();
@@ -48,38 +62,29 @@ public class ExerciseGroupService {
 	
 	public ExerciseGroupEntity findByName(String name) {
 		
-		return exerciseGroupRepository.findByName(name);
+		if (name == null) {
+			
+			return null;
+			
+		}
+		
+		return exerciseGroupRepository.findByName(name.toLowerCase());
 		
 	}
 	
-	// @Transactional
-//	public ExerciseGroupEntity initialize(ExerciseGroupEntity exerciseGroupEntity) {
+//	@Transactional
+//	public List<ExerciseEntity> fetchExerciseEntities(Long exerciseGroupEntityId) {
 //		
-//		ExerciseGroupEntity exerciseGroupEntityFull = exerciseGroupRepository.initialize2(exerciseGroupEntity.getId());
+//		Optional<ExerciseGroupEntity> exerciseGroupEntityOptional = exerciseGroupRepository.findById(exerciseGroupEntityId);
 //		
-//		for (ExerciseEntity exercise : exerciseGroupEntityFull.getExercises()) {
-//			
-//			exercise.getExerciseOrder();
-//		}
+//		ExerciseGroupEntity exerciseGroupEntity = exerciseGroupEntityOptional.get();
 //		
-//		return exerciseGroupEntityFull;
+//		Hibernate.initialize(exerciseGroupEntity.getExercises());
+//		
+//		List<ExerciseEntity> exercises = exerciseGroupEntity.getExercises();
+//		
+//		return exercises;
 //		
 //	}
-	
-	@Transactional
-	public List<ExerciseEntity> fetchExerciseEntities(Long exerciseGroupEntityId) {
-		
-		Optional<ExerciseGroupEntity> exerciseGroupEntityOptional = exerciseGroupRepository.findById(exerciseGroupEntityId);
-		
-		ExerciseGroupEntity exerciseGroupEntity = exerciseGroupEntityOptional.get();
-		
-		Hibernate.initialize(exerciseGroupEntity.getExercises());
-		
-		List<ExerciseEntity> exercises = exerciseGroupEntity.getExercises();
-		
-		return exercises;
-		
-	}
-	
 	
 }

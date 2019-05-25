@@ -9,12 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ca.gb.sf.models.EducatorEntity;
-import ca.gb.sf.models.ExerciseEntity;
-import ca.gb.sf.models.StudentEntity;
+import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
+import ca.gb.sf.services.EducatorService;
 import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.service.ExerciseGroupWebService;
 
@@ -29,19 +30,26 @@ public class EducatorController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	EducatorService educatorService;
 
+	private EducatorEntity educator;
+	
+	@ModelAttribute("educator") 
+	public EducatorEntity EducatorEntity() {
+		
+		educator = educatorService.getCurrentEducator(); 
+		
+		return educator;
+	}
+	
     @GetMapping("/educatorPage")
     public String educatorPage(@PageableDefault(size = 3) Pageable pageable, Model model) {
     	
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	Page<UserEntity> studentPage = educatorService.studentsByEducator(pageable);
     	
-    	EducatorEntity educator = (EducatorEntity) userRepository.findByEmail(auth.getName());
-    	
-    	model.addAttribute("educator", educator);
-    	
-    	Page<StudentEntity> studentPage = userRepository.findByEducator(pageable, educator);
-    	
-    	PageWrapper<StudentEntity> students = new PageWrapper<StudentEntity> (studentPage, "/educatorPage");
+    	PageWrapper<UserEntity> students = new PageWrapper<UserEntity> (studentPage, "/educatorPage");
     	
     	model.addAttribute("page", students);
     	
@@ -51,12 +59,6 @@ public class EducatorController {
     
     @GetMapping("/educatorEdit")
     public String educatorEdit(Model model) {
-
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	
-    	EducatorEntity educator = (EducatorEntity) userRepository.findByEmail(auth.getName());
-
-    	model.addAttribute("educator", educator);
 
         return "educatorEdit";
 

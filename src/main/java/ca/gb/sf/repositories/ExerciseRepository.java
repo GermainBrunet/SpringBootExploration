@@ -23,18 +23,19 @@ public interface ExerciseRepository extends CrudRepository<ExerciseEntity, Long>
     @Query(value = "SELECT e "
     		+ "     FROM ExerciseEntity e "
     		+ "     WHERE "
-    		+ "       lower(e.initialWord) LIKE :searchString OR "
-    		+ "       lower(e.targetWord) LIKE :searchString OR "
-    		+ "       lower(e.instructions) LIKE :searchString")
-    Page<ExerciseEntity> searchByName(Pageable pageable, @Param("searchString") String searchString);
+    		+ "       lower(e.initialWord) LIKE %:searchString% OR "
+    		+ "       lower(e.targetWord) LIKE %:searchString% OR "
+    		+ "       lower(e.writtenInstructions) LIKE %:searchString% OR "
+    		+ "       lower(e.readInstructions) LIKE %:searchString% ")
+    Page<ExerciseEntity> searchBySearchString(Pageable pageable, @Param("searchString") String searchString);
 
     @Query(value = "SELECT e "
-    		+ "     FROM ExerciseEntity e "
+    		+ "     FROM "
+    		+ "       ExerciseEntity e "
     		+ "     WHERE "
-    		+ "       e.exerciseGroup = :exerciseGroup "
-    		+ "     ORDER BY "
-    		+ "       e.exerciseOrder ")
-    List<ExerciseEntity> findByExerciseGroup(@Param("exerciseGroup") ExerciseGroupEntity exerciseGroup);
+    		+ "       e.exerciseGroup = :exerciseGroup"
+    		+ "     ORDER BY e.exerciseOrder ")
+    List<ExerciseEntity> findAllByExerciseGroup(@Param("exerciseGroup") ExerciseGroupEntity exerciseGroup);
 
     
 }

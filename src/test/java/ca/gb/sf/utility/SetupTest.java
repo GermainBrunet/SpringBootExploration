@@ -32,15 +32,13 @@ import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.AssignmentService;
 import ca.gb.sf.services.ExerciseGroupService;
 import ca.gb.sf.services.ExerciseService;
+import ca.gb.sf.services.UserService;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
-import ca.gb.sf.web.service.UserService;
 
 @SpringBootTest(classes = Start.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestPropertySource(locations="classpath:application.test.yml")
-// @TestPropertySource(locations="classpath:application.yml")
-//@Transactional
+@TestPropertySource(locations="classpath:application-test.yml")
 public class SetupTest extends SpringContextIntegrationTest {
 
 	// @Autowired
@@ -100,75 +98,75 @@ public class SetupTest extends SpringContextIntegrationTest {
 	
 	public void createExercise1() {
 
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("ma 1.1");
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("ma 1.1");
 		
-		exerciseService.create("ma", "mi", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("mi", "mo", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("mo", "me", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("me", "mu", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("mu", "lu", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("lu", "li", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("li", "la", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("la", "lo", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("lo", "le", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("le", "me", "transforme le mot", 10, exerciseGroup);
+		exerciseService.create("ma", "mi", "transforme le mot", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("mi", "mo", "transforme le mot", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("mo", "me", "transforme le mot", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("me", "mu", "transforme le mot", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("mu", "lu", "transforme le mot", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("lu", "li", "transforme le mot", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("li", "la", "transforme le mot", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("la", "lo", "transforme le mot", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("lo", "le", "transforme le mot", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("le", "me", "transforme le mot", "transforme le mot", 10, exerciseGroup);
 
 	}
 	
 	public void createExercise2() {
 
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("la 1.2");
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("la 1.2");
 
 		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
 		
-		exerciseService.create("la", "ma", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("ma", "fa", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("fa", "fi", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("fi", "mi", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("mi", "li", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("li", "lo", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("lo", "fo", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("fo", "mo", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("mo", "lo", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("lo", "li", "transforme le mot", 10, exerciseGroup);
+		exerciseService.create("la", "ma", "transforme le mot", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("ma", "fa", "transforme le mot", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("fa", "fi", "transforme le mot", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("fi", "mi", "transforme le mot", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("mi", "li", "transforme le mot", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("li", "lo", "transforme le mot", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("lo", "fo", "transforme le mot", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("fo", "mo", "transforme le mot", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("mo", "lo", "transforme le mot", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("lo", "li", "transforme le mot", "transforme le mot", 10, exerciseGroup);
 
 	}
 
 	public void createExercise3() {
 
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("lafo 1.3");
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("lafo 1.3");
 		
 		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
 		
-		exerciseService.create("lafo", "lafa", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("lafa", "lafi", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("lafi", "lami", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("lami", "lali", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("lali", "lalo", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("lalo", "lamo", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("lamo", "lamu", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("lamu", "amu", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("amu", "afu", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("afu", "afo", "transforme le mot", 10, exerciseGroup);
+		exerciseService.create("lafo", "lafa", "transforme le mot", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("lafa", "lafi", "transforme le mot", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("lafi", "lami", "transforme le mot", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("lami", "lali", "transforme le mot", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("lali", "lalo", "transforme le mot", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("lalo", "lamo", "transforme le mot", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("lamo", "lamu", "transforme le mot", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("lamu", "amu", "transforme le mot", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("amu", "afu", "transforme le mot", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("afu", "afo", "transforme le mot", "transforme le mot", 10, exerciseGroup);
 
 	}
 
 	public void createExercise4() {
 
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.create("malo 1.4");
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("malo 1.4");
 
 		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
 		
-		exerciseService.create("malo", "malu", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("malu", "mala", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("mala", "mala", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("mala", "mafa", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("mafa", "mafi", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("mafi", "mafo", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("mafo", "mafu", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("mafu", "afu", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("afu", "afi", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("afi", "mafi", "transforme le mot", 10, exerciseGroup);
+		exerciseService.create("malo", "malu", "transforme le mot", "transforme le mot", 1, exerciseGroup);
+		exerciseService.create("malu", "mala", "transforme le mot", "transforme le mot", 2, exerciseGroup);
+		exerciseService.create("mala", "mala", "transforme le mot", "transforme le mot", 3, exerciseGroup);
+		exerciseService.create("mala", "mafa", "transforme le mot", "transforme le mot", 4, exerciseGroup);
+		exerciseService.create("mafa", "mafi", "transforme le mot", "transforme le mot", 5, exerciseGroup);
+		exerciseService.create("mafi", "mafo", "transforme le mot", "transforme le mot", 6, exerciseGroup);
+		exerciseService.create("mafo", "mafu", "transforme le mot", "transforme le mot", 7, exerciseGroup);
+		exerciseService.create("mafu", "afu", "transforme le mot", "transforme le mot", 8, exerciseGroup);
+		exerciseService.create("afu", "afi", "transforme le mot", "transforme le mot", 9, exerciseGroup);
+		exerciseService.create("afi", "mafi", "transforme le mot", "transforme le mot", 10, exerciseGroup);
 
 	}
 

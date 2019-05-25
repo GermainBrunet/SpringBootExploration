@@ -1,4 +1,4 @@
-package ca.gb.sf.web.service;
+package ca.gb.sf.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -32,13 +34,13 @@ import ca.gb.sf.repositories.ExerciseGroupRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.RoleRepository;
 import ca.gb.sf.repositories.UserRepository;
-import ca.gb.sf.services.AssignmentService;
 import ca.gb.sf.web.form.ExerciseGroupSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
-@Service
-public class UserServiceImpl implements UserService {
+// @Service
+@Component
+public class UserService implements UserDetailsService {
 
 	public static String USER_TYPE_USER = "USER";
 
@@ -121,28 +123,28 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(student);
 
-		// if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds(.isEmpty()) {
-		if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds().isEmpty()) {
-		
-			for (String exerciseGroupId : studentForm.getExerciseGroupIds()) {
-
-				Optional<ExerciseGroupEntity> optionalExerciseGroup = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
-
-				ExerciseGroupEntity exerciseGroup = optionalExerciseGroup.get();
-
-				// Assignment assignment = new Assignment();
-
-				// assignment.setExerciseGroup(exerciseGroup);
-
-				// assignment.setStudent(student);
-
-				// assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
-
-				assignmentService.create(student, exerciseGroup);
-
-			}
-
-		}
+//		// if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds(.isEmpty()) {
+//		if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds().isEmpty()) {
+//		
+//			for (String exerciseGroupId : studentForm.getExerciseGroupIds()) {
+//
+//				Optional<ExerciseGroupEntity> optionalExerciseGroup = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
+//
+//				ExerciseGroupEntity exerciseGroup = optionalExerciseGroup.get();
+//
+//				// Assignment assignment = new Assignment();
+//
+//				// assignment.setExerciseGroup(exerciseGroup);
+//
+//				// assignment.setStudent(student);
+//
+//				// assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
+//
+//				assignmentService.create(student, exerciseGroup);
+//
+//			}
+//
+//		}
 
 		return student;
 
@@ -211,6 +213,20 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	public UserEntity save(UserEntity userEntity) {
+		
+		UserEntity currentUserEntity = findByDisplayName(userEntity.getDisplayName());
+		
+		if (currentUserEntity != null) {
+			
+			return currentUserEntity;
+			
+		}
+		
+		return userRepository.save(userEntity);
+		
+	}
+	
 	public boolean contains(String value, String[] arrayList) {
 
 		if (value == null || arrayList == null) {

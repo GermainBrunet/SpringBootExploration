@@ -58,8 +58,6 @@ public class EducatorEntity extends UserEntity {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Educator [");
-		if (students != null)
-			builder.append("students=").append(students).append(", ");
 		if (super.toString() != null)
 			builder.append("toString()=").append(super.toString());
 		builder.append("]");
