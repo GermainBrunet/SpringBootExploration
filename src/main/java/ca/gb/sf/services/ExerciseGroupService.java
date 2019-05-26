@@ -1,9 +1,15 @@
 package ca.gb.sf.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import ca.gb.sf.models.ExerciseGroupEntity;
+import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
 
 @Component
@@ -70,6 +76,67 @@ public class ExerciseGroupService extends CommonService {
 		
 		return exerciseGroupRepository.findByName(name.toLowerCase());
 		
+	}
+	
+	
+	public ExerciseGroupEntity findById(long exerciseGroupId) {
+		
+		Optional<ExerciseGroupEntity> optionalExerciseGroupEntity = exerciseGroupRepository.findById(exerciseGroupId);
+		
+		return optionalExerciseGroupEntity.get();
+		
+	}
+	
+	private static final String PERCENTAGE = "%";
+
+	public Page<ExerciseGroupEntity> findPaginated(Pageable pageable, String searchString) {
+
+		Page<ExerciseGroupEntity> exerciseGroups = null;
+
+		if (StringUtils.isEmpty(searchString)) {
+
+			exerciseGroups = exerciseGroupRepository.findAll(pageable);
+
+		} else {
+
+			// TODO - verify search string
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(PERCENTAGE);
+			sb.append(searchString.toLowerCase());
+			sb.append(PERCENTAGE);
+
+			exerciseGroups = exerciseGroupRepository.searchByName(pageable, sb.toString());
+
+		}
+
+		return exerciseGroups;
+
+	}
+	
+	public Page<ExerciseGroupEntity> findPaginatedByStudent(StudentEntity student, Pageable pageable, String searchString) {
+
+		Page<ExerciseGroupEntity> exerciseGroups = null;
+
+		if (StringUtils.isEmpty(searchString)) {
+
+			exerciseGroups = exerciseGroupRepository.findByStudentId(student.getId(), pageable);
+
+		} else {
+
+			// TODO - verify search string
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(PERCENTAGE);
+			sb.append(searchString.toLowerCase());
+			sb.append(PERCENTAGE);
+
+			exerciseGroups = exerciseGroupRepository.findByStudentIdAndName(student.getId(), pageable, sb.toString());
+
+		}
+
+		return exerciseGroups;
+
 	}
 	
 //	@Transactional

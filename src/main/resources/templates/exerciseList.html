@@ -25,10 +25,10 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="exercise : ${page.content}">
-											<td th:text="${exercise.name}"></td>
+										<tr th:each="exerciseGroup : ${page.content}">
+											<td th:text="${exerciseGroup.name}"></td>
 											<td><a
-												th:href="@{/exercisePage/{id}/0(id=${exercise.id})}"
+												th:href="@{/exercisePage/{id}/0(id=${exerciseGroup.id})}"
 												class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
 										</tr>
 									</tbody>

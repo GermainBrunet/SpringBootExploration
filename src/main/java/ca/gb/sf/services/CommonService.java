@@ -39,8 +39,6 @@ public abstract class CommonService {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
-		System.out.println("authentication name: " + auth.getName());
-
 		UserEntity userEntity = (UserEntity) userRepository.findByDisplayName(auth.getName());
 
 		return userEntity;

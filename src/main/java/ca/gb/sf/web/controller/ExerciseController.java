@@ -24,6 +24,7 @@ import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.AssignmentService;
+import ca.gb.sf.services.ExerciseGroupService;
 import ca.gb.sf.services.ExerciseService;
 import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.SearchForm;
@@ -33,7 +34,7 @@ import ca.gb.sf.web.service.ExerciseGroupWebService;
 public class ExerciseController {
 
 	@Autowired
-    ExerciseGroupWebService exerciseGroupService;
+    ExerciseGroupService exerciseGroupService;
 
 	@Autowired
     ExerciseService exerciseService;
@@ -56,17 +57,17 @@ public class ExerciseController {
     	
     	Page<ExerciseGroupEntity> exerciseGroupPage = exerciseGroupService.findPaginatedByStudent(student, pageable, searchString);
     	
-    	PageWrapper<ExerciseGroupEntity> exercises = new PageWrapper<ExerciseGroupEntity> (exerciseGroupPage, "/exerciseList");
+    	PageWrapper<ExerciseGroupEntity> exerciseGroups = new PageWrapper<ExerciseGroupEntity> (exerciseGroupPage, "/exerciseList");
     	
-        model.addAttribute("page", exercises);
+        model.addAttribute("page", exerciseGroups);
 
     	model.addAttribute("searchForm", new SearchForm());        
         
         return "exerciseList";
     }
     
-    @GetMapping("/exercisePage/{assignmentId}/{exerciseId}")
-    public String product(@PathVariable("assignmentId") long assignmentId, @PathVariable("exerciseId") int exerciseId, Model model) {
+    @GetMapping("/exercisePage/{exerciseGroupId}/{exerciseId}")
+    public String product(@PathVariable("exerciseGroupId") long exerciseGroupId, @PathVariable("exerciseId") int exerciseId, Model model) {
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	
@@ -74,19 +75,21 @@ public class ExerciseController {
     	
     	System.out.println("1: " + student.getId());
     	
-    	AssignmentEntity assignment = assignmentService.findByStudentAndAssignmentId(student, new Long(assignmentId));
+    	ExerciseGroupEntity exerciseGroup = exerciseGroupService.findById(exerciseGroupId);
+    	
+    	// AssignmentEntity assignment = assignmentService.findByStudentAndAssignmentId(student, new Long(assignmentId));
 
-    	ExerciseGroupEntity exerciseGroup = assignment.getExerciseGroup();
+    	// ExerciseGroupEntity exerciseGroup = assignment.getExerciseGroup();
     	
     	System.out.println("2");
 
-    	if (assignment == null) {
+    	// if (assignment == null) {
     		
-    		throw new IllegalArgumentException("Invalid assignment Id:" + assignmentId);
+    	//	throw new IllegalArgumentException("Invalid assignment Id:" + assignmentId);
     		
-    	}
+    	// }
 
-    	System.out.println("3 " + assignment.getExerciseGroup().getId());
+    	// System.out.println("3 " + assignment.getExerciseGroup().getId());
 
     	// ExerciseEntity e1 = exerciseService.findFirst(exerciseGroup);
     	
@@ -125,7 +128,10 @@ public class ExerciseController {
         model.addAttribute("currentExercise", exerciseId);
         model.addAttribute("previousExercise", previousExercise);
         model.addAttribute("nextExercise", nextExercise);
-        model.addAttribute("assignmentId", assignmentId);
+        model.addAttribute("exerciseGroupId", exerciseGroupId);
+        model.addAttribute("exerciseGroup", exerciseGroup);
+        
+        // model.addAttribute("assignmentId", assignmentId);
         
     	model.addAttribute("searchForm", new SearchForm()); 
     	

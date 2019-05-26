@@ -10,10 +10,15 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +43,8 @@ import ca.gb.sf.web.form.UserRegistrationForm;
 
 @SpringBootTest(classes = Start.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestPropertySource(locations="classpath:application-test.yml")
+@TestPropertySource(locations="classpath:application-prod.yml")
+@ActiveProfiles("prod")
 public class SetupTest extends SpringContextIntegrationTest {
 
 	// @Autowired
@@ -46,6 +52,9 @@ public class SetupTest extends SpringContextIntegrationTest {
 	
 	@Autowired
 	ExerciseService exerciseService;
+	
+	@Autowired
+	UserService userService;
 
 	// @Autowired
 	// ExerciseGroupRepository exerciseGroupRepository;
@@ -61,18 +70,31 @@ public class SetupTest extends SpringContextIntegrationTest {
 	@Before
 	public void setup() {
 		
+		// Mock login with an administrative user.
+		MockitoAnnotations.initMocks(this);
+		
+		String educatorName = "educator1";
+		
+		EducatorEntity educator = (EducatorEntity) userService.save(new EducatorEntity("educator1", "email0", "password"));
+		
+		Authentication authentication = Mockito.mock(Authentication.class);
+		Mockito.when(authentication.getName()).thenReturn("edu22");
+		
+		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+		Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+		
+		SecurityContextHolder.setContext(securityContext);
+		Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(educator);
+
+		// Update the data
 		deleteAllData();
 		
 		createExercise1();
 		createExercise2();
 		createExercise3();
 		createExercise4();
+
 		
-		// createUsers();
-		
-		// createAssignments();
-		
-		// loadExercise();
 	}
 	
 	@Test
@@ -90,9 +112,7 @@ public class SetupTest extends SpringContextIntegrationTest {
 		
 		exerciseService.deleteAll();
 		exerciseGroupService.deleteAll();
-		// userRepository.deleteAll();
 		assignmentService.deleteAll();
-		
 		
 	}
 	
@@ -100,16 +120,19 @@ public class SetupTest extends SpringContextIntegrationTest {
 
 		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("ma 1.1");
 		
-		exerciseService.create("ma", "mi", "transforme le mot", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("mi", "mo", "transforme le mot", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("mo", "me", "transforme le mot", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("me", "mu", "transforme le mot", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("mu", "lu", "transforme le mot", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("lu", "li", "transforme le mot", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("li", "la", "transforme le mot", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("la", "lo", "transforme le mot", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("lo", "le", "transforme le mot", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("le", "me", "transforme le mot", "transforme le mot", 10, exerciseGroup);
+		String writtenInstructions = "Transforme le mots";
+		String readTitle = "transforme le mots pour faire"; 
+		
+		exerciseService.create("ma", "mi", writtenInstructions, readTitle + " mi", 1, exerciseGroup);
+		exerciseService.create("mi", "mo", writtenInstructions, readTitle + " mo",  2, exerciseGroup);
+		exerciseService.create("mo", "me", writtenInstructions, readTitle + " me",  3, exerciseGroup);
+		exerciseService.create("me", "mu", writtenInstructions, readTitle + " mu",  4, exerciseGroup);
+		exerciseService.create("mu", "lu", writtenInstructions, readTitle + " lu",  5, exerciseGroup);
+		exerciseService.create("lu", "li", writtenInstructions, readTitle + " li",  6, exerciseGroup);
+		exerciseService.create("li", "la", writtenInstructions, readTitle + " la",  7, exerciseGroup);
+		exerciseService.create("la", "lo", writtenInstructions, readTitle + " lo",  8, exerciseGroup);
+		exerciseService.create("lo", "le", writtenInstructions, readTitle + " le",  9, exerciseGroup);
+		exerciseService.create("le", "me", writtenInstructions, readTitle + " me", 10, exerciseGroup);
 
 	}
 	
@@ -117,18 +140,19 @@ public class SetupTest extends SpringContextIntegrationTest {
 
 		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("la 1.2");
 
-		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
-		
-		exerciseService.create("la", "ma", "transforme le mot", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("ma", "fa", "transforme le mot", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("fa", "fi", "transforme le mot", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("fi", "mi", "transforme le mot", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("mi", "li", "transforme le mot", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("li", "lo", "transforme le mot", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("lo", "fo", "transforme le mot", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("fo", "mo", "transforme le mot", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("mo", "lo", "transforme le mot", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("lo", "li", "transforme le mot", "transforme le mot", 10, exerciseGroup);
+		String writtenInstructions = "Transforme le mots";
+		String readTitle = "transforme le mots pour faire"; 
+
+		exerciseService.create("la", "ma", writtenInstructions,readTitle + " ma", 1, exerciseGroup);
+		exerciseService.create("ma", "fa", writtenInstructions,readTitle + " fa", 2, exerciseGroup);
+		exerciseService.create("fa", "fi", writtenInstructions,readTitle + " fi", 3, exerciseGroup);
+		exerciseService.create("fi", "mi", writtenInstructions,readTitle + " mi", 4, exerciseGroup);
+		exerciseService.create("mi", "li", writtenInstructions,readTitle + " li", 5, exerciseGroup);
+		exerciseService.create("li", "lo", writtenInstructions,readTitle + " lo", 6, exerciseGroup);
+		exerciseService.create("lo", "fo", writtenInstructions,readTitle + " fo", 7, exerciseGroup);
+		exerciseService.create("fo", "mo", writtenInstructions,readTitle + " mo", 8, exerciseGroup);
+		exerciseService.create("mo", "lo", writtenInstructions,readTitle + " lo", 9, exerciseGroup);
+		exerciseService.create("lo", "li", writtenInstructions,readTitle + " li", 10, exerciseGroup);
 
 	}
 
@@ -136,18 +160,19 @@ public class SetupTest extends SpringContextIntegrationTest {
 
 		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("lafo 1.3");
 		
-		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
-		
-		exerciseService.create("lafo", "lafa", "transforme le mot", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("lafa", "lafi", "transforme le mot", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("lafi", "lami", "transforme le mot", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("lami", "lali", "transforme le mot", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("lali", "lalo", "transforme le mot", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("lalo", "lamo", "transforme le mot", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("lamo", "lamu", "transforme le mot", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("lamu", "amu", "transforme le mot", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("amu", "afu", "transforme le mot", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("afu", "afo", "transforme le mot", "transforme le mot", 10, exerciseGroup);
+		String writtenInstructions = "Transforme le mots";
+		String readTitle = "transforme le mots pour faire"; 
+
+		exerciseService.create("lafo", "lafa", writtenInstructions,readTitle + " lafa", 1, exerciseGroup);
+		exerciseService.create("lafa", "lafi", writtenInstructions,readTitle + " lafi", 2, exerciseGroup);
+		exerciseService.create("lafi", "lami", writtenInstructions,readTitle + " lami", 3, exerciseGroup);
+		exerciseService.create("lami", "lali", writtenInstructions,readTitle + " lali", 4, exerciseGroup);
+		exerciseService.create("lali", "lalo", writtenInstructions,readTitle + " lalo", 5, exerciseGroup);
+		exerciseService.create("lalo", "lamo", writtenInstructions,readTitle + " lamo", 6, exerciseGroup);
+		exerciseService.create("lamo", "lamu", writtenInstructions,readTitle + " lamu", 7, exerciseGroup);
+		exerciseService.create("lamu", "amu", writtenInstructions,readTitle + " amu", 8, exerciseGroup);
+		exerciseService.create("amu", "afu", writtenInstructions,readTitle + " afu", 9, exerciseGroup);
+		exerciseService.create("afu", "afo", writtenInstructions,readTitle + " afo", 10, exerciseGroup);
 
 	}
 
@@ -155,18 +180,19 @@ public class SetupTest extends SpringContextIntegrationTest {
 
 		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("malo 1.4");
 
-		List<ExerciseEntity> exerciseList = new ArrayList<ExerciseEntity>();
-		
-		exerciseService.create("malo", "malu", "transforme le mot", "transforme le mot", 1, exerciseGroup);
-		exerciseService.create("malu", "mala", "transforme le mot", "transforme le mot", 2, exerciseGroup);
-		exerciseService.create("mala", "mala", "transforme le mot", "transforme le mot", 3, exerciseGroup);
-		exerciseService.create("mala", "mafa", "transforme le mot", "transforme le mot", 4, exerciseGroup);
-		exerciseService.create("mafa", "mafi", "transforme le mot", "transforme le mot", 5, exerciseGroup);
-		exerciseService.create("mafi", "mafo", "transforme le mot", "transforme le mot", 6, exerciseGroup);
-		exerciseService.create("mafo", "mafu", "transforme le mot", "transforme le mot", 7, exerciseGroup);
-		exerciseService.create("mafu", "afu", "transforme le mot", "transforme le mot", 8, exerciseGroup);
-		exerciseService.create("afu", "afi", "transforme le mot", "transforme le mot", 9, exerciseGroup);
-		exerciseService.create("afi", "mafi", "transforme le mot", "transforme le mot", 10, exerciseGroup);
+		String writtenInstructions = "Transforme le mots";
+		String readTitle = "transforme le mots pour faire"; 
+
+		exerciseService.create("malo", "malu", writtenInstructions,readTitle + " malo", 1, exerciseGroup);
+		exerciseService.create("malu", "mala", writtenInstructions,readTitle + " malu", 2, exerciseGroup);
+		exerciseService.create("mala", "mala", writtenInstructions,readTitle + " mala", 3, exerciseGroup);
+		exerciseService.create("mala", "mafa", writtenInstructions,readTitle + " mafa", 4, exerciseGroup);
+		exerciseService.create("mafa", "mafi", writtenInstructions,readTitle + " mafi", 5, exerciseGroup);
+		exerciseService.create("mafi", "mafo", writtenInstructions,readTitle + " mafo", 6, exerciseGroup);
+		exerciseService.create("mafo", "mafu", writtenInstructions,readTitle + " mafu", 7, exerciseGroup);
+		exerciseService.create("mafu", "afu", writtenInstructions,readTitle + " afu", 8, exerciseGroup);
+		exerciseService.create("afu", "afi", writtenInstructions,readTitle + " afi", 9, exerciseGroup);
+		exerciseService.create("afi", "mafi", writtenInstructions,readTitle + " mafa", 10, exerciseGroup);
 
 	}
 
