@@ -28,7 +28,7 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 
 	private static final long serialVersionUID = -418793221726443549L;
 
-	// Initial word displayed to the student. 
+	// Initial word displayed to the student.
 	@Column(nullable = true)
 	private String initialWord;
 
@@ -40,7 +40,8 @@ public class ExerciseEntity extends PersistentObject implements Comparable<Exerc
 	@Column(nullable = true)
 	private String writtenInstructions;
 
-	// Audible instructions that the student will hear upon arriving on the page.
+	// Audible instructions that the student will hear upon arriving on the
+	// page.
 	@Column(nullable = true)
 	private String readInstructions;
 

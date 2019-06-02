@@ -1,5 +1,7 @@
 package ca.gb.sf.models;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,7 +18,9 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 @Entity
 @Table(name = "levels")
-public class LevelEntity extends PersistentObject implements Comparable<LevelEntity> {
+public class LevelEntity extends PersistentObject implements Comparable<LevelEntity>, Serializable {
+
+	private static final long serialVersionUID = 3057611543488750570L;
 
 	// Level used to describe an exercise group.
 	@Column(nullable = false)

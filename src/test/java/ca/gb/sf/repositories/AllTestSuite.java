@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 	ExerciseRepositoryTest.class,
 	KeywordRepositoryTest.class,
 	LevelRepositoryTest.class,
-	UserRepoTest.class
+	UserRepositoryTest.class
 })
 
 public class AllTestSuite {

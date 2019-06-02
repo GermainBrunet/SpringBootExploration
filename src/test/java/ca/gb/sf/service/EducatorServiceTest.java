@@ -13,14 +13,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import ca.gb.sf.models.EducatorEntity;
 import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.services.EducatorService;
+import ca.gb.sf.services.UserService;
 
 public class EducatorServiceTest extends CommonServiceTest {
 
 	@Autowired
 	public EducatorService educatorService;
-	
+
+	@Autowired
+	public UserService userService;
+
 	@Test
 	public void currentEducatorTest() {
 
@@ -34,10 +39,15 @@ public class EducatorServiceTest extends CommonServiceTest {
 	public void getStudentsTest() {
 		
 		Pageable pageable = PageRequest.of(0, 100, Sort.by("displayName"));
+
+		EducatorEntity educator = (EducatorEntity) userService.getCurrentUserEntity();
 		
-		Page<UserEntity> page = educatorService.studentsByEducator(pageable);
+		// Page<UserEntity> page = educatorService.studentsByEducator(pageable);
+		Page<UserEntity> page = userService.educatorStudentsPage(pageable, educator);
 		
 		List<UserEntity> students = page.getContent();
+		
+		System.out.println(students.size());
 		
 		assertTrue(students.size() == 3);
 		

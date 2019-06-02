@@ -1,11 +1,20 @@
 package ca.gb.sf.models;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.OnDeleteAction;
+// import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
 
 /**
  * Extends the User class and are associated with students. An educator can have
@@ -16,11 +25,19 @@ import javax.persistence.OneToMany;
 
 @Entity(name = "Educator")
 @DiscriminatorValue("Educator")
-public class EducatorEntity extends UserEntity {
+public class EducatorEntity extends UserEntity implements Serializable {
 
+	private static final long serialVersionUID = 6879403070239445214L;
+	
 	// Students associated to this Educator.
-	@OneToMany(mappedBy = "educator", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<StudentEntity> students;
+	// @OneToMany(mappedBy = "educator", cascade = CascadeType.ALL, orphanRemoval = true)
+	// @OneToMany(cascade = CascadeType.ALL)
+	// Do not implement the mappedBy because we have the JoinColumn.
+	// @OneToMany //(orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = "educator_id")
+	// @OnDelete(action = OnDeleteAction.CASCADE)
+	private Set<StudentEntity> students = new TreeSet<StudentEntity>();
 
 	// Constructor
 	public EducatorEntity() {};
@@ -37,7 +54,7 @@ public class EducatorEntity extends UserEntity {
 	 * 
 	 * @return
 	 */
-	public List<StudentEntity> getStudents() {
+	public Set<StudentEntity> getStudents() {
 		return students;
 	}
 
@@ -46,10 +63,32 @@ public class EducatorEntity extends UserEntity {
 	 * 
 	 * @param students
 	 */
-	public void setStudents(List<StudentEntity> students) {
+	public void setStudents(Set<StudentEntity> students) {
 		this.students = students;
 	}
 
+	/**
+	 * Function that allows the addition of a student.
+	 * 
+	 * @param studentEntity
+	 */
+	public void addStudent(StudentEntity studentEntity) {
+		
+		this.students.add(studentEntity);
+		
+	}
+	
+	/**
+	 * Function that allows the removal of a student.
+	 * 
+	 * @param studentEntity
+	 */
+	public void removeStudent(StudentEntity studentEntity) {
+		
+		this.students.remove(studentEntity);
+		
+	}
+	
 	/**
 	 * String representation of this object. Includes the parent object toString.
 	 * Used for debugging purposes.

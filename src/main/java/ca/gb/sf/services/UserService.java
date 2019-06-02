@@ -9,48 +9,39 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import ca.gb.sf.exceptions.ApplicationRuntimeException;
 import ca.gb.sf.models.AssignmentEntity;
-import ca.gb.sf.models.AssignmentStatus;
 import ca.gb.sf.models.EducatorEntity;
-import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.models.RoleEntity;
 import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.models.UserEntity;
-import ca.gb.sf.repositories.AssignmentRepository;
+import ca.gb.sf.models.UserRole;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
-import ca.gb.sf.repositories.ExerciseRepository;
-import ca.gb.sf.repositories.RoleRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.web.form.ExerciseGroupSelectionForm;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
-// @Service
 @Component
-public class UserService implements UserDetailsService {
-
-	public static String USER_TYPE_USER = "USER";
-
-	public static String USER_TYPE_EDUCATOR = "EDUCATOR";
+public class UserService extends CommonService implements CommonServiceInterface<UserEntity>, UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
-	private RoleRepository roleRepository;
+	private RoleService roleService;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -61,95 +52,210 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private AssignmentService assignmentService;
 
-	public UserEntity findByEmail(String email) {
-		return userRepository.findByEmail(email);
+	public UserEntity getAdminUser() {
+		
+		UserEntity userEntity = find("Admin");
+		
+		if (userEntity != null) {
+			
+			return userEntity;
+			
+		}
+		
+		userEntity = new UserEntity();
+		userEntity.setDisplayName("Admin");
+		userEntity.setEmail("admin@admin.admin");
+		userEntity.setPassword("TODO-ChangeMe-Password");
+		
+		RoleEntity adminRole = roleService.find(UserRole.Admin);
+		Set<RoleEntity> adminRoles = new TreeSet<RoleEntity>();
+		adminRoles.add(adminRole);
+		
+		userEntity.setRoles(adminRoles);
+		
+		return save(userEntity);
+		
+	}
+	
+	@Override
+	public long count() {
+
+		return userRepository.count();
+
 	}
 
-	public UserEntity findByDisplayName(String displayName) {
-		return userRepository.findByDisplayName(displayName);
+	@Override
+	public void deleteAll() {
+
+		userRepository.deleteAll();
+
+	}
+
+	@Override
+	public void deleteById(Long id) {
+
+		if (id == null) {
+
+			return;
+
+		}
+
+		userRepository.deleteById(id);
+
+	}
+
+	public List<UserEntity> findAll() {
+		
+		return userRepository.findAll();
+		
+	}
+	
+	public UserEntity findByEmail(String email) {
+
+		if (email == null) {
+
+			return null;
+
+		}
+
+		return userRepository.findByEmail(email);
+
+	}
+
+	@Override
+	public UserEntity findById(Long id) {
+
+		if (id == null) {
+
+			return null;
+
+		}
+
+		Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
+
+		if (optionalUserEntity == null) {
+
+			return null;
+
+		}
+
+		return optionalUserEntity.get();
+
+	}
+
+	@Override
+	public UserEntity find(String name) {
+
+		if (name == null) {
+
+			return null;
+
+		}
+
+		UserEntity userEntity = userRepository.findByDisplayName(name);
+		
+		if (userEntity == null) {
+			
+			return null;
+			
+		}
+		
+		// Initialize the collection of roles.
+		userEntity.getRoles();
+		
+		return userEntity;
+
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String displayName) throws UsernameNotFoundException {
+
+		UserEntity user = userRepository.findByDisplayName(displayName);
+
+		if (user == null) {
+
+			throw new UsernameNotFoundException("Invalid username or password.");
+
+		}
+
+		return new org.springframework.security.core.userdetails.User(user.getDisplayName(), user.getPassword(),
+				mapRolesToAuthorities(user.getRoles()));
+	}
+
+	@Override
+	public UserEntity save(String s) {
+
+		throw new ApplicationRuntimeException("Method not implemented.");
+
+	}
+
+	public UserEntity save(UserEntity userEntity) {
+
+		Collection<RoleEntity> roles = userEntity.getRoles();
+		
+		if (userEntity instanceof EducatorEntity) {
+			
+			RoleEntity educatorRole = roleService.find(UserRole.Educator.getSecurityRoleName());
+			
+			if (!roles.contains(educatorRole)) {
+				
+				roles.add(educatorRole);
+				
+			}
+			
+		}
+		
+		RoleEntity userRole = roleService.find(UserRole.User.getSecurityRoleName());
+			
+		if (!roles.contains(userRole)) {
+			
+			roles.add(userRole);
+			
+		}
+		
+		UserEntity currentUserEntity = find(userEntity.getDisplayName());
+
+		if (currentUserEntity != null && currentUserEntity.getId() != 0 && userEntity.getId() == 0) {
+
+			userEntity.setId(currentUserEntity.getId());
+
+		}
+
+		setAuditingFields(userEntity);
+
+		return userRepository.saveAndFlush(userEntity);
+
 	}
 
 	public UserEntity save(UserRegistrationForm registration) {
-
-		System.out.println("user type : " + registration.getUserType());
 
 		UserEntity user = null;
 
 		Set<RoleEntity> roles = new TreeSet<RoleEntity>();
 
-		roles.add(findRoleByName("ROLE_USER"));
+		roles.add(roleService.find(UserRole.User.getSecurityRoleName()));
 
-		if (registration.getUserType().equals("USER")) {
+		if (registration.getUserType().equals(UserRole.User.getFormName())) {
 
 			user = new UserEntity(registration.getDisplayName(), registration.getEmail(),
 					passwordEncoder.encode(registration.getPassword()));
 
-		} else if (registration.getUserType().equals("EDUCATOR")) {
+		} else if (registration.getUserType().equals(UserRole.Educator.getFormName())) {
 
 			user = new EducatorEntity(registration.getDisplayName(), registration.getEmail(),
 					passwordEncoder.encode(registration.getPassword()));
-			roles.add(findRoleByName("ROLE_EDUCATOR"));
+
+			roles.add(roleService.find(UserRole.Educator.getSecurityRoleName()));
 
 		}
 
 		user.setRoles(roles);
 
-		return userRepository.save(user);
+		return save(user);
 	}
 
-	public StudentEntity saveStudent(StudentForm studentForm) {
-
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		EducatorEntity educator = (EducatorEntity) userRepository.findByEmail(auth.getName());
-
-		StudentEntity student = null;
-
-		if (!StringUtils.isEmpty(studentForm.getId())) {
-			new StudentEntity();
-			Optional<UserEntity> optionalStudent = userRepository.findById(Long.valueOf(studentForm.getId()));
-			student = (StudentEntity) optionalStudent.get();
-		} else {
-			student = new StudentEntity();
-		}
-
-		student.setDisplayName(studentForm.getDisplayName());
-
-		student.setPassword(passwordEncoder.encode(studentForm.getPassword()));
-
-		student.setEducator(educator);
-		
-		student.setEmail(studentForm.getDisplayName());
-
-		userRepository.save(student);
-
-//		// if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds(.isEmpty()) {
-//		if (studentForm.getExerciseGroupIds() != null && !studentForm.getExerciseGroupIds().isEmpty()) {
-//		
-//			for (String exerciseGroupId : studentForm.getExerciseGroupIds()) {
-//
-//				Optional<ExerciseGroupEntity> optionalExerciseGroup = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
-//
-//				ExerciseGroupEntity exerciseGroup = optionalExerciseGroup.get();
-//
-//				// Assignment assignment = new Assignment();
-//
-//				// assignment.setExerciseGroup(exerciseGroup);
-//
-//				// assignment.setStudent(student);
-//
-//				// assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
-//
-//				assignmentService.create(student, exerciseGroup);
-//
-//			}
-//
-//		}
-
-		return student;
-
-	}
-
+	
+	
 	public void saveSelectedExercises(ExerciseGroupSelectionForm exerciseSelectionForm) {
 
 		Optional<UserEntity> optionalStudent = userRepository
@@ -160,7 +266,8 @@ public class UserService implements UserDetailsService {
 
 		for (String exerciseGroupId : exerciseSelectionForm.getAllGroupExercises()) {
 
-			Optional<ExerciseGroupEntity> optionalGroupExercise = exerciseGroupRepository.findById(Long.valueOf(exerciseGroupId));
+			Optional<ExerciseGroupEntity> optionalGroupExercise = exerciseGroupRepository
+					.findById(Long.valueOf(exerciseGroupId));
 
 			ExerciseGroupEntity exerciseGroup = optionalGroupExercise.get();
 
@@ -194,45 +301,79 @@ public class UserService implements UserDetailsService {
 				}
 
 			}
-//			
-//			Optional<Exercise> optionalExercise = exerciseRepository.findById(Long.valueOf(exerciseId));
-//
-//			Exercise exercise = optionalExercise.get();
-//
-//			Assignment assignment = new Assignment();
-//
-//			assignment.setExcercise(exercise);
-//
-//			assignment.setStudent(student);
-//
-//			assignment.setAssignmentStatus(AssignmentStatus.ASSIGNED);
-//
-//			assignmentRepository.save(assignment);
 
 		}
 
 	}
 
-	public UserEntity save(UserEntity userEntity) {
+	public Page<UserEntity> educatorStudentsPage(Pageable pageable, EducatorEntity educator) {
 		
-		UserEntity currentUserEntity = findByDisplayName(userEntity.getDisplayName());
+		Page<UserEntity> page = userRepository.findByEducator(pageable, educator);
 		
-		if (currentUserEntity != null) {
-			
-			return currentUserEntity;
-			
-		}
-		
-		return userRepository.save(userEntity);
+		return page;
 		
 	}
 	
-	public boolean contains(String value, String[] arrayList) {
+	public List<StudentEntity> educatorStudentsList(Pageable pageable, EducatorEntity educator) {
+		
+		List<StudentEntity> students = new ArrayList<StudentEntity>();
+		
+		for (UserEntity userEntity : educatorStudentsPage(pageable, educator)) {
+			
+			StudentEntity studentEntity = (StudentEntity) userEntity;
+			
+			students.add(studentEntity);
+			
+		}
+		
+		return students;
+		
+	}
+	
+	
+	
+	public StudentEntity saveStudentForm(StudentForm studentForm) {
+
+		String currentUserName = getCurrentUserName();
+
+		EducatorEntity educator = (EducatorEntity) userRepository.findByDisplayName(currentUserName);
+
+		StudentEntity student = null;
+
+		if (!StringUtils.isEmpty(studentForm.getId())) {
+
+			new StudentEntity();
+
+			Optional<UserEntity> optionalStudent = userRepository.findById(Long.valueOf(studentForm.getId()));
+
+			student = (StudentEntity) optionalStudent.get();
+
+		} else {
+
+			student = new StudentEntity();
+
+		}
+
+		student.setDisplayName(studentForm.getDisplayName());
+
+		student.setPassword(passwordEncoder.encode(studentForm.getPassword()));
+
+		student.setEducator(educator);
+
+		student.setEmail(studentForm.getDisplayName());
+
+		userRepository.save(student);
+
+		return student;
+
+	}
+
+	private boolean contains(String value, String[] arrayList) {
 
 		if (value == null || arrayList == null) {
 
 			return false;
-			
+
 		}
 
 		for (String arrayListValue : arrayList) {
@@ -249,38 +390,8 @@ public class UserService implements UserDetailsService {
 
 	}
 
-	public RoleEntity findRoleByName(String name) {
-
-		if (StringUtils.isEmpty(name)) {
-			return null;
-		}
-
-		RoleEntity role = roleRepository.findByName(name);
-
-		if (role != null) {
-			return role;
-		}
-
-		RoleEntity savedRole = roleRepository.save(role);
-
-		return savedRole;
-
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String displayName) throws UsernameNotFoundException {
-		// User user = userRepository.findByEmail(email);
-		UserEntity user = userRepository.findByDisplayName(displayName);
-		if (user == null) {
-			throw new UsernameNotFoundException("Invalid username or password.");
-		}
-		// return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-		// 		mapRolesToAuthorities(user.getRoles()));
-		return new org.springframework.security.core.userdetails.User(user.getDisplayName(), user.getPassword(),
-		 		mapRolesToAuthorities(user.getRoles()));
-	}
-
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<RoleEntity> roles) {
 		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 	}
+
 }

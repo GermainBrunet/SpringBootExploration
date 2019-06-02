@@ -1,5 +1,7 @@
 package ca.gb.sf.models;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -15,7 +17,9 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "assignments", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "user_id", "exercise_group_id" }) })
-public class AssignmentEntity extends PersistentObject {
+public class AssignmentEntity extends PersistentObject implements Serializable {
+
+	private static final long serialVersionUID = 8766191881287121581L;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)

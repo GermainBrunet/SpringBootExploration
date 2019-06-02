@@ -1,5 +1,6 @@
 package ca.gb.sf.models;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -19,7 +20,9 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 @Entity
 @Table(name = "keywords")
-public class KeywordEntity extends PersistentObject implements Comparable<KeywordEntity> {
+public class KeywordEntity extends PersistentObject implements Comparable<KeywordEntity>, Serializable {
+
+	private static final long serialVersionUID = -2968061857536732L;
 
 	// Keyword used to describe an exercise group.
 	@Column(nullable = false)

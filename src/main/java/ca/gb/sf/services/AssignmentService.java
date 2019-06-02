@@ -10,60 +10,66 @@ import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 
+/**
+ * Class that provides services for the Assignment Entity.
+ */
+
 @Component
-public class AssignmentService {
+public class AssignmentService extends CommonService {
 
 	@Autowired
 	AssignmentRepository assignmentRepository;
-	
-	public AssignmentEntity create(StudentEntity student, ExerciseGroupEntity exerciseGroup) {
-		
-		AssignmentEntity assignment = new AssignmentEntity(student, exerciseGroup);
-		
-		return create(assignment);
-		
-	}
-	
-	public AssignmentEntity create(AssignmentEntity assignment) {
-		
-		return assignmentRepository.save(assignment);
-		
-	}
-	
-	public long count() {
-		
-		return assignmentRepository.count();
-	}
-	
-	public void deleteAll() {
-		
-		assignmentRepository.deleteAll();
-		
-	}
-	
-	public void delete(AssignmentEntity assignment) {
-		
-		assignmentRepository.delete(assignment);
-		
-	}
-	
-	public List<AssignmentEntity> findListByStudent(StudentEntity student) {
-		
-		return assignmentRepository.findByStudent(student);
-		
-	}
-	
-	public AssignmentEntity findByStudentAndExerciseGroup(StudentEntity student, ExerciseGroupEntity exerciseGroup) {
-		
-		return assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup);
-		
-	}
-	
-	public AssignmentEntity findByStudentAndAssignmentId(StudentEntity student, Long assignmentId) {
-		
-		return assignmentRepository.findByStudentAndAssignmentId(student, assignmentId);
-		
-	}
 
 	
+	public AssignmentEntity create(StudentEntity student, ExerciseGroupEntity exerciseGroup) {
+
+		AssignmentEntity assignment = new AssignmentEntity(student, exerciseGroup);
+
+		return save(assignment);
+
+	}
+
+	public AssignmentEntity save(AssignmentEntity assignment) {
+
+		setAuditingFields(assignment);
+		
+		return assignmentRepository.save(assignment);
+
+	}
+
+	public long count() {
+
+		return assignmentRepository.count();
+	}
+
+	public void deleteAll() {
+
+		assignmentRepository.deleteAll();
+
+	}
+
+	public void delete(AssignmentEntity assignment) {
+
+		assignmentRepository.delete(assignment);
+
+	}
+
+	public List<AssignmentEntity> findListByStudent(StudentEntity student) {
+
+		return assignmentRepository.findByStudent(student);
+
+	}
+
+	public AssignmentEntity findByStudentAndExerciseGroup(StudentEntity student, ExerciseGroupEntity exerciseGroup) {
+
+		return assignmentRepository.findByStudentAndExerciseGroup(student, exerciseGroup);
+
+	}
+
+	public AssignmentEntity findByStudentAndAssignmentId(StudentEntity student, Long assignmentId) {
+
+		return assignmentRepository.findByStudentAndAssignmentId(student, assignmentId);
+
+	}
+
 }

@@ -143,6 +143,8 @@ public class AssignmentRepositoryTest extends H2IntegrationTest {
 		UserEntity userEntity = new UserEntity();
 
 		userEntity.setDisplayName(userName);
+		userEntity.setEmail(userName);
+		userEntity.setPassword(userName);
 
 		return userRepository.save(userEntity);
 

@@ -34,7 +34,7 @@ public class ExerciseRepositoryTest extends H2IntegrationTest {
 		
 		ExerciseGroupEntity exerciseGroupEntity = new ExerciseGroupEntity();
 		exerciseGroupEntity.setName("test exercise group name");
-		ExerciseGroupEntity savedExerciseGroupEntity = exerciseGroupRepository.save(exerciseGroupEntity);
+		exerciseGroupRepository.save(exerciseGroupEntity);
 		
 		// Setup CREATE
 		long countBefore = exerciseRepository.count();
@@ -148,7 +148,7 @@ public class ExerciseRepositoryTest extends H2IntegrationTest {
 	
 		ExerciseGroupEntity exerciseGroupEntity = new ExerciseGroupEntity();
 		exerciseGroupEntity.setName(groupName);
-		ExerciseGroupEntity exerciseGroup = exerciseGroupRepository.save(exerciseGroupEntity);
+		exerciseGroupRepository.save(exerciseGroupEntity);
 		
 		for (int i = 0; i < count; i++) {
 			

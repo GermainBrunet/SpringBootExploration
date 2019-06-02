@@ -1,5 +1,7 @@
 package ca.gb.sf.models;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -11,8 +13,10 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "roles", uniqueConstraints = @UniqueConstraint(columnNames = "name") )
-public class RoleEntity extends PersistentObject implements Comparable<RoleEntity> {
+public class RoleEntity extends PersistentObject implements Comparable<RoleEntity>, Serializable {
 
+	private static final long serialVersionUID = 7902839318120060900L;
+	
 	private String name;
 
 	public RoleEntity() {

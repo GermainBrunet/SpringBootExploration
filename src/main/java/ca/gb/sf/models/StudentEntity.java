@@ -1,5 +1,8 @@
 package ca.gb.sf.models;
 
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,10 +16,13 @@ import javax.persistence.ManyToOne;
 
 @Entity(name = "Student")
 @DiscriminatorValue("Student")
-public class StudentEntity extends UserEntity {
+public class StudentEntity extends UserEntity implements Serializable {
 
+	private static final long serialVersionUID = -8482710214219617164L;
+	
 	// To whom belongs this student.
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY) // , cascade = CascadeType.ALL)
+	// Must allow for null column.  Do not implement with "nullable=false" 
 	@JoinColumn(name = "educator_id")
 	private EducatorEntity educator;
 
@@ -30,6 +36,7 @@ public class StudentEntity extends UserEntity {
 		this.email = email;
 		this.password = password;
 		this.educator = educator;
+		// educator.addStudent(this);
 	}
 
 	/**
@@ -50,6 +57,8 @@ public class StudentEntity extends UserEntity {
 		this.educator = educator;
 	}
 
+	
+	
 	/**
 	 * String representation of this object. Includes the parent object toString.
 	 * Used for debugging purposes.  Present the educator's display name only
@@ -60,7 +69,7 @@ public class StudentEntity extends UserEntity {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Student [");
 		if (educator != null)
-			builder.append("educator=").append(educator).append(", ");
+			builder.append("educator=").append(educator.getId()).append(", ");
 		if (super.toString() != null)
 			builder.append("toString()=").append(super.toString());
 		builder.append("]");

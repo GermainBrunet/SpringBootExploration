@@ -83,11 +83,11 @@ public class PersistentObject {
 		StringBuilder builder = new StringBuilder();
 		builder.append("PersistentObject [id=").append(id).append(", ");
 		if (createUser != null)
-			builder.append("createUser=").append(createUser).append(", ");
+			builder.append("createUser=").append(createUser.getId()).append(", ");
 		if (createTimestamp != null)
 			builder.append("createTimestamp=").append(createTimestamp).append(", ");
 		if (updateUser != null)
-			builder.append("updateUser=").append(updateUser).append(", ");
+			builder.append("updateUser=").append(updateUser.getId()).append(", ");
 		if (updateTimestamp != null)
 			builder.append("updateTimestamp=").append(updateTimestamp);
 		builder.append("]");

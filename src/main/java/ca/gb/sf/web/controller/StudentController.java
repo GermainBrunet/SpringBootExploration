@@ -87,7 +87,7 @@ public class StudentController {
     public String educatorSave(@ModelAttribute("student") @Valid StudentForm studentForm,
             BindingResult result) {
 
-    	userService.saveStudent(studentForm);
+    	userService.saveStudentForm(studentForm);
 
         return "redirect:/educatorPage";
 
