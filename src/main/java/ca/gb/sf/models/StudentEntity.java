@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.DiscriminatorOptions;
+
 /**
  * Students extend the User class and are associated with an Educator. Educators
  * will normally create the students and assign exercises.
@@ -16,6 +18,7 @@ import javax.persistence.ManyToOne;
 
 @Entity(name = "Student")
 @DiscriminatorValue("Student")
+@DiscriminatorOptions(force=true)
 public class StudentEntity extends UserEntity implements Serializable {
 
 	private static final long serialVersionUID = -8482710214219617164L;

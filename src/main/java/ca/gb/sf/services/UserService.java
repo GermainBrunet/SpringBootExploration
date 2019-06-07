@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import ca.gb.sf.exceptions.ApplicationRuntimeException;
@@ -53,30 +54,33 @@ public class UserService extends CommonService implements CommonServiceInterface
 	private AssignmentService assignmentService;
 
 	public UserEntity getAdminUser() {
-		
+
 		UserEntity userEntity = find("Admin");
-		
+
 		if (userEntity != null) {
-			
+
 			return userEntity;
-			
+
 		}
-		
+
 		userEntity = new UserEntity();
 		userEntity.setDisplayName("Admin");
 		userEntity.setEmail("admin@admin.admin");
 		userEntity.setPassword("TODO-ChangeMe-Password");
-		
-		RoleEntity adminRole = roleService.find(UserRole.Admin);
-		Set<RoleEntity> adminRoles = new TreeSet<RoleEntity>();
-		adminRoles.add(adminRole);
-		
-		userEntity.setRoles(adminRoles);
-		
-		return save(userEntity);
-		
+		userEntity.setCreateUser(userEntity);
+		userEntity.setCreateTimestamp(now());
+
+		// RoleEntity adminRole = roleService.find(UserRole.Admin);
+		// Set<RoleEntity> adminRoles = new TreeSet<RoleEntity>();
+		// adminRoles.add(adminRole);
+		// userEntity.setRoles(adminRoles);
+
+		// Save the first user using the repository to avoid the automatic setting of
+		// fields.
+		return userRepository.save(userEntity);
+
 	}
-	
+
 	@Override
 	public long count() {
 
@@ -84,10 +88,38 @@ public class UserService extends CommonService implements CommonServiceInterface
 
 	}
 
+	public void deleteByUserType(String userType) {
+		
+		List<UserEntity> studentEntities = userRepository.findByUserType(userType);
+		
+		for (UserEntity userEntity : studentEntities) {
+			
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userEntity.getId());
+			
+			if (optionalUserEntity != null) {
+			
+				UserEntity foundUserEntity = optionalUserEntity.get();
+
+				if (foundUserEntity != null) {
+					
+					deleteById(foundUserEntity.getId());
+					
+				}
+			
+			}
+			
+		}
+
+		userRepository.flush();
+		
+	}
+	
 	@Override
 	public void deleteAll() {
-
-		userRepository.deleteAll();
+		
+		deleteByUserType("Student");
+		deleteByUserType("Educator");
+		deleteByUserType("UserEntity");
 
 	}
 
@@ -105,11 +137,11 @@ public class UserService extends CommonService implements CommonServiceInterface
 	}
 
 	public List<UserEntity> findAll() {
-		
+
 		return userRepository.findAll();
-		
+
 	}
-	
+
 	public UserEntity findByEmail(String email) {
 
 		if (email == null) {
@@ -153,16 +185,16 @@ public class UserService extends CommonService implements CommonServiceInterface
 		}
 
 		UserEntity userEntity = userRepository.findByDisplayName(name);
-		
+
 		if (userEntity == null) {
-			
+
 			return null;
-			
+
 		}
-		
+
 		// Initialize the collection of roles.
 		userEntity.getRoles();
-		
+
 		return userEntity;
 
 	}
@@ -192,27 +224,27 @@ public class UserService extends CommonService implements CommonServiceInterface
 	public UserEntity save(UserEntity userEntity) {
 
 		Collection<RoleEntity> roles = userEntity.getRoles();
-		
+
 		if (userEntity instanceof EducatorEntity) {
-			
+
 			RoleEntity educatorRole = roleService.find(UserRole.Educator.getSecurityRoleName());
-			
+
 			if (!roles.contains(educatorRole)) {
-				
+
 				roles.add(educatorRole);
-				
+
 			}
-			
+
 		}
-		
+
 		RoleEntity userRole = roleService.find(UserRole.User.getSecurityRoleName());
-			
+
 		if (!roles.contains(userRole)) {
-			
+
 			roles.add(userRole);
-			
+
 		}
-		
+
 		UserEntity currentUserEntity = find(userEntity.getDisplayName());
 
 		if (currentUserEntity != null && currentUserEntity.getId() != 0 && userEntity.getId() == 0) {
@@ -254,8 +286,6 @@ public class UserService extends CommonService implements CommonServiceInterface
 		return save(user);
 	}
 
-	
-	
 	public void saveSelectedExercises(ExerciseGroupSelectionForm exerciseSelectionForm) {
 
 		Optional<UserEntity> optionalStudent = userRepository
@@ -307,31 +337,29 @@ public class UserService extends CommonService implements CommonServiceInterface
 	}
 
 	public Page<UserEntity> educatorStudentsPage(Pageable pageable, EducatorEntity educator) {
-		
+
 		Page<UserEntity> page = userRepository.findByEducator(pageable, educator);
-		
+
 		return page;
-		
+
 	}
-	
+
 	public List<StudentEntity> educatorStudentsList(Pageable pageable, EducatorEntity educator) {
-		
+
 		List<StudentEntity> students = new ArrayList<StudentEntity>();
-		
+
 		for (UserEntity userEntity : educatorStudentsPage(pageable, educator)) {
-			
+
 			StudentEntity studentEntity = (StudentEntity) userEntity;
-			
+
 			students.add(studentEntity);
-			
+
 		}
-		
+
 		return students;
-		
+
 	}
-	
-	
-	
+
 	public StudentEntity saveStudentForm(StudentForm studentForm) {
 
 		String currentUserName = getCurrentUserName();

@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.DiscriminatorOptions;
 // import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 
@@ -25,6 +26,7 @@ import org.hibernate.annotations.OnDelete;
 
 @Entity(name = "Educator")
 @DiscriminatorValue("Educator")
+@DiscriminatorOptions(force=true)
 public class EducatorEntity extends UserEntity implements Serializable {
 
 	private static final long serialVersionUID = 6879403070239445214L;
