@@ -45,7 +45,7 @@ public class EducatorController {
 	}
 	
     @GetMapping("/educatorPage")
-    public String educatorPage(@PageableDefault(size = 3) Pageable pageable, Model model) {
+    public String educatorPage(@PageableDefault(size = 10) Pageable pageable, Model model) {
     	
     	Page<UserEntity> studentPage = educatorService.studentsByEducator(pageable);
     	

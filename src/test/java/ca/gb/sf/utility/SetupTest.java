@@ -46,6 +46,7 @@ import ca.gb.sf.services.ExerciseGroupService;
 import ca.gb.sf.services.ExerciseService;
 import ca.gb.sf.services.RoleService;
 import ca.gb.sf.services.UserService;
+import ca.gb.sf.util.SetupExercises;
 import ca.gb.sf.web.form.StudentForm;
 import ca.gb.sf.web.form.UserRegistrationForm;
 
@@ -73,6 +74,9 @@ public class SetupTest extends SpringContextIntegrationTest {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	SetupExercises setupExercises;
 	
 	@Before
 	public void setup() {
@@ -114,12 +118,9 @@ public class SetupTest extends SpringContextIntegrationTest {
 		SecurityContextHolder.setContext(securityContext);
 		Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(educator);
 
+		setupExercises.deleteAllExercises();
+		setupExercises.createAllExercises();
 		
-		createExercise1();
-		createExercise2();
-		createExercise3();
-		createExercise4();
-
 		createStudents(educator);
 		
 		System.out.println(exerciseGroupService.count());
@@ -165,86 +166,6 @@ public class SetupTest extends SpringContextIntegrationTest {
 		
 	}
 	
-	public void createExercise1() {
-
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("ma 1.1");
-		
-		String writtenInstructions = "Transforme le mots";
-		String readTitle = "transforme le mots pour faire"; 
-		
-		exerciseService.create("ma", "mi", writtenInstructions, readTitle + " mi", 1, exerciseGroup);
-		exerciseService.create("mi", "mo", writtenInstructions, readTitle + " mo",  2, exerciseGroup);
-		exerciseService.create("mo", "me", writtenInstructions, readTitle + " me",  3, exerciseGroup);
-		exerciseService.create("me", "mu", writtenInstructions, readTitle + " mu",  4, exerciseGroup);
-		exerciseService.create("mu", "lu", writtenInstructions, readTitle + " lu",  5, exerciseGroup);
-		exerciseService.create("lu", "li", writtenInstructions, readTitle + " li",  6, exerciseGroup);
-		exerciseService.create("li", "la", writtenInstructions, readTitle + " la",  7, exerciseGroup);
-		exerciseService.create("la", "lo", writtenInstructions, readTitle + " lo",  8, exerciseGroup);
-		exerciseService.create("lo", "le", writtenInstructions, readTitle + " le",  9, exerciseGroup);
-		exerciseService.create("le", "me", writtenInstructions, readTitle + " me", 10, exerciseGroup);
-
-	}
-	
-	public void createExercise2() {
-
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("la 1.2");
-
-		String writtenInstructions = "Transforme le mots";
-		String readTitle = "transforme le mots pour faire"; 
-
-		exerciseService.create("la", "ma", writtenInstructions,readTitle + " ma", 1, exerciseGroup);
-		exerciseService.create("ma", "fa", writtenInstructions,readTitle + " fa", 2, exerciseGroup);
-		exerciseService.create("fa", "fi", writtenInstructions,readTitle + " fi", 3, exerciseGroup);
-		exerciseService.create("fi", "mi", writtenInstructions,readTitle + " mi", 4, exerciseGroup);
-		exerciseService.create("mi", "li", writtenInstructions,readTitle + " li", 5, exerciseGroup);
-		exerciseService.create("li", "lo", writtenInstructions,readTitle + " lo", 6, exerciseGroup);
-		exerciseService.create("lo", "fo", writtenInstructions,readTitle + " fo", 7, exerciseGroup);
-		exerciseService.create("fo", "mo", writtenInstructions,readTitle + " mo", 8, exerciseGroup);
-		exerciseService.create("mo", "lo", writtenInstructions,readTitle + " lo", 9, exerciseGroup);
-		exerciseService.create("lo", "li", writtenInstructions,readTitle + " li", 10, exerciseGroup);
-
-	}
-
-	public void createExercise3() {
-
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("lafo 1.3");
-		
-		String writtenInstructions = "Transforme le mots";
-		String readTitle = "transforme le mots pour faire"; 
-
-		exerciseService.create("lafo", "lafa", writtenInstructions,readTitle + " lafa", 1, exerciseGroup);
-		exerciseService.create("lafa", "lafi", writtenInstructions,readTitle + " lafi", 2, exerciseGroup);
-		exerciseService.create("lafi", "lami", writtenInstructions,readTitle + " lami", 3, exerciseGroup);
-		exerciseService.create("lami", "lali", writtenInstructions,readTitle + " lali", 4, exerciseGroup);
-		exerciseService.create("lali", "lalo", writtenInstructions,readTitle + " lalo", 5, exerciseGroup);
-		exerciseService.create("lalo", "lamo", writtenInstructions,readTitle + " lamo", 6, exerciseGroup);
-		exerciseService.create("lamo", "lamu", writtenInstructions,readTitle + " lamu", 7, exerciseGroup);
-		exerciseService.create("lamu", "amu", writtenInstructions,readTitle + " amu", 8, exerciseGroup);
-		exerciseService.create("amu", "afu", writtenInstructions,readTitle + " afu", 9, exerciseGroup);
-		exerciseService.create("afu", "afo", writtenInstructions,readTitle + " afo", 10, exerciseGroup);
-
-	}
-
-	public void createExercise4() {
-
-		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("malo 1.4");
-
-		String writtenInstructions = "Transforme le mots";
-		String readTitle = "transforme le mots pour faire"; 
-
-		exerciseService.create("malo", "malu", writtenInstructions,readTitle + " malo", 1, exerciseGroup);
-		exerciseService.create("malu", "mala", writtenInstructions,readTitle + " malu", 2, exerciseGroup);
-		exerciseService.create("mala", "mala", writtenInstructions,readTitle + " mala", 3, exerciseGroup);
-		exerciseService.create("mala", "mafa", writtenInstructions,readTitle + " mafa", 4, exerciseGroup);
-		exerciseService.create("mafa", "mafi", writtenInstructions,readTitle + " mafi", 5, exerciseGroup);
-		exerciseService.create("mafi", "mafo", writtenInstructions,readTitle + " mafo", 6, exerciseGroup);
-		exerciseService.create("mafo", "mafu", writtenInstructions,readTitle + " mafu", 7, exerciseGroup);
-		exerciseService.create("mafu", "afu", writtenInstructions,readTitle + " afu", 8, exerciseGroup);
-		exerciseService.create("afu", "afi", writtenInstructions,readTitle + " afi", 9, exerciseGroup);
-		exerciseService.create("afi", "mafi", writtenInstructions,readTitle + " mafa", 10, exerciseGroup);
-
-	}
-
 	public void createUsers() {
 		
 		EducatorEntity educator = new EducatorEntity();

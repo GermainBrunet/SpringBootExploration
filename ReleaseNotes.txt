@@ -1,3 +1,12 @@
+2019-06-07
+- installation on another development pc
+- testing of the automatic configuration scripts
+- add level information
+- add keyword information
+- auto configuration scripts (need to make the repeatable)
+- fixed pagination bar on educator page
+- fixed top logout (need French translation)
+
 2019-06-06
 - webjars: upgrade bootstrap from version 3.3.7 to 4.3.1
 - webjars: jquery upgrade from 3.2.1 to 3.4.1
