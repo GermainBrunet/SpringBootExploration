@@ -26,7 +26,7 @@ public class PageWrapper<T> {
         this.page = page;
         this.url = url;
         items = new ArrayList<PageItem>();
- 
+        
         currentNumber = page.getNumber() + 1; //start from 1 to match page.page
  
         int start, size;
@@ -60,7 +60,9 @@ public class PageWrapper<T> {
     }
  
     public List<T> getContent(){
+    	
         return page.getContent();
+        
     }
  
     public int getSize(){

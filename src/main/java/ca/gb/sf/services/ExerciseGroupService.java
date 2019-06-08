@@ -117,7 +117,13 @@ public class ExerciseGroupService extends CommonService {
 	public Page<ExerciseGroupEntity> findPaginatedByStudent(StudentEntity student, Pageable pageable, String searchString) {
 
 		Page<ExerciseGroupEntity> exerciseGroups = null;
+		
+		if (student == null) {
+			
+			return exerciseGroups;
 
+		}
+		
 		if (StringUtils.isEmpty(searchString)) {
 
 			exerciseGroups = exerciseGroupRepository.findByStudentId(student.getId(), pageable);

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/layout}">
+<head>
+<title>Product List</title>
+</head>
+<body>
+	<th:block th:fragment="pagination">			
+		<!-- Pagination Bar -->
+		<ul class="pagination justify-content-center font-weight-medium">
+			<li class="page-item">
+				<span style="font-size: 20px; vertical-align: bottom;" class="page-link svg-icon fa fa-angle-double-left" th:if="${page.firstPage}"></span>
+				<a style="font-size: 20px; vertical-align: bottom;" class="page-link svg-icon fa fa-angle-double-left" th:if="${not page.firstPage}" th:href="@{${page.url}(page=1,size=${page.size})}"></a>
+			</li>
+			<li class="page-item">
+				<span style="font-size: 20px; vertical-align: bottom;" class="page-link svg-icon fa fa-angle-left" th:if='${not page.hasPreviousPage}'></span> 
+				<a style="font-size: 20px; vertical-align: bottom;" class="page-link fa fa-angle-left" th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}' title='Go to previous page'></a>
+			</li>
+			<li th:each='item : ${page.items}' th:class="'page-item ' + ${item.current}? 'active' : ''">
+				<span class="page-link font-weight-bold" th:if='${item.current}' th:text='${item.number}'></span>
+				<a class="page-link" th:if='${not item.current}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'>
+					<span th:text='${item.number}'></span>
+				</a>
+			</li>
+			<li class="page-item">
+				<span style="font-size: 20px; vertical-align: bottom;" class="page-link fa fa-angle-right" th:if='${not page.hasNextPage}'></span>
+				<a style="font-size: 20px; vertical-align: bottom;" class="page-link svg-icon fa fa-angle-right" th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}' title='Go to next page'></a>
+			</li>
+			<li class="page-item">
+				<span style="font-size: 20px; vertical-align: bottom;" class="page-link fa fa-angle-double-right" th:if='${page.lastPage}'></span>
+				<a style="font-size: 20px; vertical-align: bottom;" class="page-link svg-icon fa fa-angle-double-right" th:if='${not page.lastPage}' th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'></a>
+			</li>
+		</ul>
+	</th:block>
+</body>
+</html>

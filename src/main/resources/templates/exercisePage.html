@@ -12,47 +12,30 @@
 <body>
 	<div layout:fragment="content" th:remove="tag">
 
-		<div class="container my-5">
-			<h2 class="mb-5">Exercise Page</h2>
-			<div class="row">
+		<div class="container my-2">
 				<div class="col-md-12">
 					<div class="row">
-						<div class="form-group col-md-6">
-							<label for="name" class="col-form-label">Instructions</label>
+					
+						<div class="form-group col-md-4">
+							<h2 class="mb-5">Exercise Page</h2>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="name" class="col-form-label">Instructions:</label>
 							<p th:text="${exercise.writtenInstructions}"></p>
 						</div>
-						<div class="form-group col-md-6">
-							<div class="pull-right">
+						<div class="form-group col-md-4 align-right">
 							<a th:href="@{/exercisePage/{exerciseGroupId}/{previousExercise}(exerciseGroupId=${exerciseGroupId},previousExercise=${previousExercise})}"
 												class="btn btn-primary"><i class="fas fa-arrow-left ml-2"></i></a>
 							<a th:href="@{/exercisePage/{exerciseGroupId}/{currentExercise}(exerciseGroupId=${exerciseGroupId},currentExercise=${currentExercise})}"
 												class="btn btn-primary"><i class="fas fa-redo-alt ml-2"></i></a>
 							<a th:href="@{/exercisePage/{exerciseGroupId}/{nextExercise}(exerciseGroupId=${exerciseGroupId},nextExercise=${nextExercise})}"
 												class="btn btn-primary"><i class="fas fa-arrow-right ml-2"></i></a>
-							</div>
 						</div>
 					</div>
-				</div>
 			</div>
 		</div>
 
-		<!-- 
-		Allo! Next:
-		<p th:text="${nextExercise}"></p>
-		Previous:
-		<p th:text="${previousExercise}"></p>
-		Last:
-		<p th:text="${lastExercise}"></p>
-		<p th:text="${currentExercise}"></p>
-		 -->
-
-
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-
-				<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
-				<!-- <input onclick="responsiveVoice.speak('Hello World', 'French Female');" type="button" value="Play" /> -->
-
+<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 <script th:inline="javascript" id="rendered-js">
 	
 	// Setup size of the game window.
@@ -947,8 +930,6 @@ function speakerSuccess() {
 
 </script>
 
-			</div>
-		</div>
 	</div>
 </body>
 </html>

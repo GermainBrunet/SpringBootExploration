@@ -51,7 +51,7 @@ public class ExerciseController {
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	
-    	StudentEntity student = (StudentEntity) userRepository.findByEmail(auth.getName());
+    	StudentEntity student = (StudentEntity) userRepository.findByDisplayName(auth.getName());
     	
     	String searchString = searchForm.getSearch();
     	
@@ -71,27 +71,13 @@ public class ExerciseController {
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	
-    	StudentEntity student = (StudentEntity) userRepository.findByEmail(auth.getName());
+    	StudentEntity student = (StudentEntity) userRepository.findByDisplayName(auth.getName());
     	
     	System.out.println("1: " + student.getId());
     	
     	ExerciseGroupEntity exerciseGroup = exerciseGroupService.findById(exerciseGroupId);
     	
-    	// AssignmentEntity assignment = assignmentService.findByStudentAndAssignmentId(student, new Long(assignmentId));
-
-    	// ExerciseGroupEntity exerciseGroup = assignment.getExerciseGroup();
-    	
     	System.out.println("2");
-
-    	// if (assignment == null) {
-    		
-    	//	throw new IllegalArgumentException("Invalid assignment Id:" + assignmentId);
-    		
-    	// }
-
-    	// System.out.println("3 " + assignment.getExerciseGroup().getId());
-
-    	// ExerciseEntity e1 = exerciseService.findFirst(exerciseGroup);
     	
     	List<ExerciseEntity> exercises = exerciseService.findByExerciseGroup(exerciseGroup);
     	

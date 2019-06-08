@@ -63,46 +63,10 @@
 							</div>
 						</div>
 						
-						
-					<!-- Pagination Bar -->
-					<ul class="pagination justify-content-center font-weight-medium">
-						<li th:class="'page-item ' + ${page.firstPage}? 'disabled' : ''">
-							<span th:if="${page.firstPage}">&#171;</span> <a
-							class="page-link svg-icon" th:if="${not page.firstPage}"
-							th:href="@{${page.url}(page=1,size=${page.size})}">&#171;</a>
-						</li>
-						<li
-							th:class="'page-item ' + ${page.hasPreviousPage}? '' : 'disabled'">
-							<span th:if='${not page.hasPreviousPage}'>&#60;</span> <a
-							class="page-link" th:if='${page.hasPreviousPage}'
-							th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'
-							title='Go to previous page'>&#60;</a>
-						</li>
-						<li th:each='item : ${page.items}'
-							th:class="'page-item ' + ${item.current}? 'active' : ''"><span
-							class="page-link" th:if='${item.current}'
-							th:text='${item.number}'></span> <a class="page-link"
-							th:if='${not item.current}'
-							th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span
-								th:text='${item.number}'></span></a></li>
-						<li th:class="'page-item ' + ${page.hasNextPage}? '' : 'disabled'"><span
-							th:if='${not page.hasNextPage}'>&#62;</span> <a class="page-link"
-							th:if='${page.hasNextPage}'
-							th:href='@{${page.url}(page=${page.number},size=${page.size})}'
-							title='Go to next page'>&#62;</a></li>
-						<li th:class="'page-item ' + ${page.lastPage}? 'disabled' : ''">
-							<span th:if='${page.lastPage}'>&#187;</span> <a
-							class="page-link svg-icon" th:if='${not page.lastPage}'
-							th:href='@{${page.url}(page=${page.totalPages},size=${page.size})}'>&#187;</a>
-						</li>
-					</ul>
-						
-						
+						<!-- Pagination Bar -->
+						<th:block th:replace="fragments/pagination :: pagination"/>
+					
 					</div>
-
-
-
-
 				</div>
 			</div>
 		</div>
