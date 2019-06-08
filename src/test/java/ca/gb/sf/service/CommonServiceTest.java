@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,6 +26,7 @@ import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.services.RoleService;
 import ca.gb.sf.services.UserService;
+import ca.gb.sf.util.SetupExercises;
 
 /**
  * Provides common service functionality for testing the application.
@@ -39,6 +39,9 @@ public class CommonServiceTest extends H2IntegrationTest {
 
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private SetupExercises setupExercises;
 
 	private static final String adminName = "Admin";
 	private static final String userName = "user1";
@@ -57,6 +60,9 @@ public class CommonServiceTest extends H2IntegrationTest {
 		MockitoAnnotations.initMocks(this);
 
 		simulateLogin(adminName);
+
+		setupExercises.deleteAllExercises();
+		setupExercises.createAllExercises();
 
 		// Create a basic user.
 		if (userService.find(userName) == null) {
@@ -84,7 +90,7 @@ public class CommonServiceTest extends H2IntegrationTest {
 		roleService.save("ROLE_USER");
 		roleService.save("ROLE_EDUCATOR");
 		roleService.save("ROLE_ADMIN");
-
+		
 		simulateLogin(educatorName);
 
 	}

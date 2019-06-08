@@ -14,6 +14,7 @@ import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.services.ExerciseGroupService;
 import ca.gb.sf.services.ExerciseService;
+import ca.gb.sf.util.SetupExercises;
 
 public class ExerciseServiceTest extends CommonServiceTest {
 

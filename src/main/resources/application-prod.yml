@@ -19,8 +19,8 @@ spring:
 
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/salefinder
-    username: salefinderadmin
+    url: jdbc:postgresql://localhost:5432/eduproject
+    username: eduuser
     password: admin
     
   jpa:
