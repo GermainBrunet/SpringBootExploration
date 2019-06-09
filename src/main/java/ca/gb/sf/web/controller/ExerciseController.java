@@ -92,7 +92,7 @@ public class ExerciseController {
     		
     		previousExercise = 0;
     		
-    	}stu
+    	}
     	
     	if (exerciseId <= exercises.size()) {
     		
