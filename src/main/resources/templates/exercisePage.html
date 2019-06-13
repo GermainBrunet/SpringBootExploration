@@ -12,39 +12,61 @@
 <body>
 	<div layout:fragment="content" th:remove="tag">
 
-		<div class="container my-2">
-				<div class="col-md-12">
-					<div class="row">
-					
-						<div class="form-group col-md-4">
-							<h2 class="mb-5">Exercise Page</h2>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="name" class="col-form-label">Instructions:</label>
-							<p th:text="${exercise.writtenInstructions}"></p>
-						</div>
-						<div class="form-group col-md-4 align-right">
-							<a th:href="@{/exercisePage/{exerciseGroupId}/{previousExercise}(exerciseGroupId=${exerciseGroupId},previousExercise=${previousExercise})}"
-												class="btn btn-primary"><i class="fas fa-arrow-left ml-2"></i></a>
-							<a th:href="@{/exercisePage/{exerciseGroupId}/{currentExercise}(exerciseGroupId=${exerciseGroupId},currentExercise=${currentExercise})}"
-												class="btn btn-primary"><i class="fas fa-redo-alt ml-2"></i></a>
-							<a th:href="@{/exercisePage/{exerciseGroupId}/{nextExercise}(exerciseGroupId=${exerciseGroupId},nextExercise=${nextExercise})}"
-												class="btn btn-primary"><i class="fas fa-arrow-right ml-2"></i></a>
-						</div>
+		<div id="header" class="container-fluid">
+			<div class="row">
+				<div class="col-sm-4">
+					<h2>Exercise Page2</h2>
+				</div>
+				<div class="col-sm-4">
+					<label for="name" class="col-form-label">Instructions:</label>
+					<p th:text="${exercise.writtenInstructions}"></p>
+				</div>
+				<div class="col-sm-4">
+					<div class="float-right">
+					<a th:href="@{/exercisePage/{exerciseGroupId}/{previousExercise}(exerciseGroupId=${exerciseGroupId},previousExercise=${previousExercise})}"
+						class="btn btn-primary"><i class="fas fa-arrow-left ml-2"></i></a>
+					<a th:href="@{/exercisePage/{exerciseGroupId}/{currentExercise}(exerciseGroupId=${exerciseGroupId},currentExercise=${currentExercise})}"				
+						class="btn btn-primary"><i class="fas fa-redo-alt ml-2"></i></a>
+					<a th:href="@{/exercisePage/{exerciseGroupId}/{nextExercise}(exerciseGroupId=${exerciseGroupId},nextExercise=${nextExercise})}"
+						class="btn btn-primary"><i class="fas fa-arrow-right ml-2"></i></a>
 					</div>
+				</div>
 			</div>
 		</div>
 
+<div id="consolewindow">
+
 <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 <script th:inline="javascript" id="rendered-js">
+
+	// Rotates the window when the orientation changes.
+	// Ref: https://stackoverflow.com/questions/17708869/how-to-reload-the-webpage-when-orientation-changes
+	window.onorientationchange = function() { 
+		var orientation = window.orientation; 
+    	switch(orientation) { 
+			case 0:
+			case 90:
+			case -90: window.location.reload(); 
+			break; 
+		} 
+	};
+
+	// Determins the header size using jquery.
+	// Ref: http://api.jquery.com/innerHeight/
+	var p = $("#header");
+	var titleHeight = p.innerHeight();
+
 	
 	// Setup size of the game window.
 	var gameWindowWidth = window.innerWidth;
-	var gameWindowHeight = window.innerHeight - 260;
+	// Found that 110 was the correct height for the footer and headers.
+	var gameWindowHeight = window.innerHeight - 110 - titleHeight;
 	var letterSize = calculateLetterSize(gameWindowWidth);
 	var spaceSize = Math.floor(letterSize / 10);
-	console.log('window size: ' + gameWindowWidth + ' x ' + gameWindowHeight);
-		
+	console.log('window size2 : ' + gameWindowWidth + ' x ' + gameWindowHeight);
+	
+	
+	
 	// Keyboard Settings.
 	var sideSpace = Math.floor(gameWindowWidth / 2) - ((letterSize + spaceSize) * 8);
 	var line1 = gameWindowHeight - letterSize * 3 - spaceSize * 3;
@@ -854,6 +876,8 @@ function DisplayCharacter(letter, position, x, y) {
 		
 		// console.log("ASCII = " + this.letter.charCodeAt(0));
 		
+		
+		
 		if (this.letter === ' ') {
 			this.icon = game.add.sprite(20, 20, 'spaceIcon');
 		} else if (this.letter === '-') {
@@ -883,7 +907,11 @@ function DisplayCharacter(letter, position, x, y) {
 		} else if (this.letter === String.fromCharCode(135)) {
 			this.icon = game.add.sprite(20, 20, 'cCedilleIcon');
 		} else {
-			this.icon = game.add.sprite(20, 20, this.letter + 'Icon');
+			// Only allow letters.
+			var reg = /^[a-z]+$/i
+			if (this.letter.match(reg) != null) {
+				this.icon = game.add.sprite(20, 20, this.letter + 'Icon');
+			}
 		}
 		this.icon.x = this.x;
 		this.icon.y = this.y;
@@ -929,6 +957,8 @@ function speakerSuccess() {
 };
 
 </script>
+
+</div>
 
 	</div>
 </body>

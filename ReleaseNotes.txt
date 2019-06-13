@@ -1,3 +1,11 @@
+TODO: resize keyboard when letter mode.
+
+2019-06-12
+- added jquery library
+- correct phaser height using header size
+- added automatic rotation page reloading
+- prevent invalid characters from creating ikons: control, enter, shift, etc.
+
 2019-06-07
 - installation on another development pc
 - testing of the automatic configuration scripts
