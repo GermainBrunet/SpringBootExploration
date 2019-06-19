@@ -295,4 +295,32 @@ public class SetupExercises {
 		exerciseService.create("la balle rouge", "la balle est rouge", writtenInstructions, readTitle + "la balle est rouge", 1, exerciseGroup);
 
 	}
+	
+	public void createExercise8() {
+
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.createUsingName("Marco 1.0");
+
+		List<KeywordEntity> keywords = new ArrayList<KeywordEntity>();
+		keywords.add(keywordService.findByKeyword(KEYWORD_CORRECTION));
+		exerciseGroup.setKeywords(keywords);
+		
+		LevelEntity levelEntity = levelService.find(LEVEL_2);
+		exerciseGroup.setLevel(levelEntity);
+		
+		String writtenInstructions = "Corrige le mot";
+		String readTitle = "Corrige, "; 
+
+		exerciseService.create("mopem", "pomme", writtenInstructions, readTitle + "pomme", 1, exerciseGroup);
+		exerciseService.create("nabaen", "banane", writtenInstructions, readTitle + "banane", 2, exerciseGroup);
+		exerciseService.create("saanna", "ananas", writtenInstructions, readTitle + "ananas", 3, exerciseGroup);
+		exerciseService.create("raison", "raisin", writtenInstructions, readTitle + "raisin", 4, exerciseGroup);
+		exerciseService.create("gueman", "mangue", writtenInstructions, readTitle + "mangue", 5, exerciseGroup);
+		exerciseService.create("serize", "cerise", writtenInstructions, readTitle + "cerise", 6, exerciseGroup);
+		exerciseService.create("franboize", "framboise", writtenInstructions, readTitle + "framboise", 7, exerciseGroup);
+		exerciseService.create("frèse", "fraise", writtenInstructions, readTitle + "fraise", 8, exerciseGroup);
+		exerciseService.create("eniradnem", "mendarine", writtenInstructions, readTitle + "mendarine", 9, exerciseGroup);
+		exerciseService.create("wicki", "kiwi", writtenInstructions, readTitle + "kiwi", 10, exerciseGroup);
+
+	}
+	
 }
