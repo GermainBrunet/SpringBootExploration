@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -39,7 +42,7 @@ import org.hibernate.annotations.OnDeleteAction;
 // @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_type")
-public class UserEntity extends PersistentObject implements Comparable<UserEntity>, Serializable {
+public class UserEntity extends AuditedObject implements Comparable<UserEntity>, Serializable {
 
 	private static final long serialVersionUID = 6030006060053082867L;
 
@@ -61,11 +64,31 @@ public class UserEntity extends PersistentObject implements Comparable<UserEntit
 	@OnDelete(action = OnDeleteAction.CASCADE)
     private Collection<AssignmentEntity> assignment;
 	
-	// @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@ManyToMany(fetch = FetchType.EAGER)
+	// @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	// @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+//	@ManyToMany(fetch = FetchType.EAGER,
+//	        cascade =
+//	        {
+//	                CascadeType.DETACH,
+//	                CascadeType.MERGE,
+//	                CascadeType.REFRESH,
+//	                CascadeType.PERSIST
+//	        },
+//	        targetEntity = RoleEntity.class)
 	@JoinTable(name = "users_roles", 
 			joinColumns = { @JoinColumn(name = "user_id") }, 
 			inverseJoinColumns = { @JoinColumn(name = "role_id") })
+//	@JoinTable(name = "users_roles",
+//    inverseJoinColumns = @JoinColumn(name = "role_id",
+//            nullable = false,
+//            updatable = false),
+//    joinColumns = @JoinColumn(name = "user_id",
+//            nullable = false,
+//            updatable = false),
+//    foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+//    inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+	// @OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 
 	// Constructor

@@ -30,7 +30,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "exercise_groups", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
-public class ExerciseGroupEntity extends PersistentObject implements Comparable<ExerciseGroupEntity>, Serializable {
+public class ExerciseGroupEntity extends AuditedObject implements Comparable<ExerciseGroupEntity>, Serializable {
 
 	private static final long serialVersionUID = -7909842360957380488L;
 

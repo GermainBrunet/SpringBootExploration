@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.gb.sf.SpringContextIntegrationTest;
 import ca.gb.sf.Start;
+import ca.gb.sf.exceptions.LoggingAccessDeniedHandler;
 import ca.gb.sf.models.AssignmentEntity;
 import ca.gb.sf.models.AssignmentStatusEntity;
 import ca.gb.sf.models.EducatorEntity;
@@ -46,6 +49,8 @@ import ca.gb.sf.services.AssignmentService;
 import ca.gb.sf.services.AssignmentStatusService;
 import ca.gb.sf.services.ExerciseGroupService;
 import ca.gb.sf.services.ExerciseService;
+import ca.gb.sf.services.KeywordService;
+import ca.gb.sf.services.LevelService;
 import ca.gb.sf.services.RoleService;
 import ca.gb.sf.services.UserService;
 import ca.gb.sf.util.SetupExercises;
@@ -59,6 +64,8 @@ import ca.gb.sf.web.form.UserRegistrationForm;
 // @Transactional
 public class SetupTest extends SpringContextIntegrationTest {
 
+	private static Logger log = LoggerFactory.getLogger(SetupTest.class);
+	
 	@Autowired
 	ExerciseService exerciseService;
 	
@@ -83,7 +90,11 @@ public class SetupTest extends SpringContextIntegrationTest {
 	@Autowired
 	SetupExercises setupExercises;
 	
+	@Autowired
+	KeywordService keywordService;
 	
+	@Autowired
+	LevelService levelService;
 	
 	@Before
 	public void setup() {
@@ -93,14 +104,18 @@ public class SetupTest extends SpringContextIntegrationTest {
 	@Test
 	@Commit
 	@Rollback(false)
-	public void count() {
+	public void setupEnvironments() {
+		
+		log.info("Initializing Mockito");
 		
 		MockitoAnnotations.initMocks(this);
 
 		// Update the data
+		log.info("Deleting all data");
 		deleteAllData();
 
 		// Load the admin user and make sure he exists.
+		log.info("Assume Admin User");
 		UserEntity adminUser = userService.getAdminUser();
 		assertNotNull(adminUser);
 
@@ -108,6 +123,7 @@ public class SetupTest extends SpringContextIntegrationTest {
 		simulateLogin(adminUser.getDisplayName());
 
 		// Setup Roles
+		log.info("Setup Roles");
 		roleService.save("ROLE_USER");
 		roleService.save("ROLE_EDUCATOR");
 		roleService.save("ROLE_ADMIN");
@@ -115,11 +131,13 @@ public class SetupTest extends SpringContextIntegrationTest {
 		assignmentStatusService.save(AssignmentStatusEntity.ASSIGNED, "FR-Assigned", "Assigned");
 		assignmentStatusService.save(AssignmentStatusEntity.WORK_IN_PROGRESS, "FR-Work In Progress", "Work In Progress");
 		assignmentStatusService.save(AssignmentStatusEntity.COMPLETED, "FR-Completed", "Completed");
-		
+
+		// Setup educator
+		log.info("Setup Educator");
 		String educatorName = "edu22";
-		
 		EducatorEntity educator = (EducatorEntity) userService.save(new EducatorEntity(educatorName, "email0", passwordEncoder.encode("Password#1")));
 		
+		log.info("Assume Educator");
 		Authentication authentication = Mockito.mock(Authentication.class);
 		Mockito.when(authentication.getName()).thenReturn(educatorName);
 		
@@ -129,11 +147,14 @@ public class SetupTest extends SpringContextIntegrationTest {
 		SecurityContextHolder.setContext(securityContext);
 		Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(educator);
 
+		log.info("Setup Exercises");
 		setupExercises.deleteAllExercises();
 		setupExercises.createAllExercises();
-		
+
+		log.info("Setup Students");
 		createStudents(educator);
 		
+		log.info("Display table counts");
 		System.out.println(exerciseGroupService.count());
 		System.out.println(exerciseService.count());
 		System.out.println(userService.count());
@@ -144,10 +165,16 @@ public class SetupTest extends SpringContextIntegrationTest {
 	
 	public void deleteAllData() {
 		
+		assignmentService.deleteAll();
+		assignmentStatusService.deleteAll();
 		exerciseService.deleteAll();
 		exerciseGroupService.deleteAll();
-		assignmentService.deleteAll();
+		keywordService.deleteAll();
+		levelService.deleteAll();
+		// assignmentService.deleteAll();
 		userService.deleteAll();
+		roleService.deleteAll();
+		
 		
 	}
 

@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 @Entity
 @Table(name = "levels")
-public class LevelEntity extends PersistentObject implements Comparable<LevelEntity>, Serializable {
+public class LevelEntity extends AuditedObject implements Comparable<LevelEntity>, Serializable {
 
 	private static final long serialVersionUID = 3057611543488750570L;
 

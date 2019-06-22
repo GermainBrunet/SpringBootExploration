@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import ca.gb.sf.models.PersistentObject;
+import ca.gb.sf.models.AuditedObject;
 import ca.gb.sf.models.UserEntity;
 import ca.gb.sf.repositories.UserRepository;
 
@@ -69,7 +69,7 @@ public abstract class CommonService {
 	 * 
 	 * @param persistentObject
 	 */
-	public void setAuditingFields(PersistentObject persistentObject) {
+	public void setAuditingFields(AuditedObject persistentObject) {
 
 		if (persistentObject.getCreateUser() == null) {
 

@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "assignments", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "user_id", "exercise_group_id" }) })
-public class AssignmentEntity extends PersistentObject implements Serializable {
+public class AssignmentEntity extends AuditedObject implements Serializable {
 
 	private static final long serialVersionUID = 8766191881287121581L;
 

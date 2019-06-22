@@ -20,7 +20,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 @Entity
 @Table(name = "keywords")
-public class KeywordEntity extends PersistentObject implements Comparable<KeywordEntity>, Serializable {
+public class KeywordEntity extends AuditedObject implements Comparable<KeywordEntity>, Serializable {
 
 	private static final long serialVersionUID = -2968061857536732L;
 

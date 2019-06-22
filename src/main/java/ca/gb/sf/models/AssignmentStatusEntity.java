@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "assignment_status", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "code" }) })
-public class AssignmentStatusEntity extends PersistentObject implements Serializable {
+public class AssignmentStatusEntity extends AuditedObject implements Serializable {
 
 	public final static String ASSIGNED = "ASSIGNED";
 	

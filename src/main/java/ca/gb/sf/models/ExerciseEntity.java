@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 @Entity
 @Table(name = "exercises")
-public class ExerciseEntity extends PersistentObject implements Comparable<ExerciseEntity>, Serializable {
+public class ExerciseEntity extends AuditedObject implements Comparable<ExerciseEntity>, Serializable {
 
 	private static final long serialVersionUID = -418793221726443549L;
 

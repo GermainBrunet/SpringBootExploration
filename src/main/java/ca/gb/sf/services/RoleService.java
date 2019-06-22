@@ -74,7 +74,7 @@ public class RoleService extends CommonService implements CommonServiceInterface
 	@Override
 	public RoleEntity save(RoleEntity t) {
 
-		setAuditingFields(t);
+		// setAuditingFields(t);
 
 		RoleEntity savedRoleEntity = roleRepository.save(t);
 
