@@ -2,7 +2,6 @@ package ca.gb.sf.web.controller;
 
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,20 +14,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import ca.gb.sf.models.AssignmentEntity;
-import ca.gb.sf.models.EducatorEntity;
 import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.models.StudentEntity;
-import ca.gb.sf.repositories.AssignmentRepository;
-import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.AssignmentService;
 import ca.gb.sf.services.ExerciseGroupService;
 import ca.gb.sf.services.ExerciseService;
 import ca.gb.sf.util.PageWrapper;
 import ca.gb.sf.web.form.SearchForm;
-import ca.gb.sf.web.service.ExerciseGroupWebService;
 
 @Controller
 public class ExerciseController {

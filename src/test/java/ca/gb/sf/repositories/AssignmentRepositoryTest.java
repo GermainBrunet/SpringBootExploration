@@ -10,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.gb.sf.H2IntegrationTest;
 import ca.gb.sf.models.AssignmentEntity;
-import ca.gb.sf.models.AssignmentStatus;
+import ca.gb.sf.models.AssignmentStatusEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.models.UserEntity;
 
 public class AssignmentRepositoryTest extends H2IntegrationTest {
 
+	@Autowired
+	AssignmentStatusRepository assignmentStatusRepository;
+	
 	@Autowired
 	AssignmentRepository assignmentRepository;
 
@@ -39,7 +42,9 @@ public class AssignmentRepositoryTest extends H2IntegrationTest {
 		// Setup CREATE
 		long countBefore = assignmentRepository.count();
 
-		AssignmentEntity entity = new AssignmentEntity(userEntity, exerciseGroupEntity);
+		AssignmentStatusEntity status = assignmentStatusRepository.findByCode(AssignmentStatusEntity.ASSIGNED);
+		
+		AssignmentEntity entity = new AssignmentEntity(userEntity, exerciseGroupEntity, status);
 
 		AssignmentEntity savedEntity = assignmentRepository.save(entity);
 
@@ -58,10 +63,12 @@ public class AssignmentRepositoryTest extends H2IntegrationTest {
 		// Verify READ
 		assertEquals(userEntity.getId(), readEntity.getUser().getId());
 		assertEquals(exerciseGroupEntity.getId(), readEntity.getExerciseGroup().getId());
-		assertEquals(AssignmentStatus.ASSIGNED, readEntity.getAssignmentStatus());
+		assertEquals("ASSIGNED", readEntity.getAssignmentStatus().getCode());
 
 		// Setup UPDATE
-		readEntity.setAssignmentStatus(AssignmentStatus.COMPLETED);
+		AssignmentStatusEntity statusCompleted = assignmentStatusRepository.findByCode(AssignmentStatusEntity.COMPLETED);
+		
+		readEntity.setAssignmentStatus(statusCompleted);
 
 		assignmentRepository.save(readEntity);
 
@@ -70,7 +77,7 @@ public class AssignmentRepositoryTest extends H2IntegrationTest {
 		AssignmentEntity updatedEntity = optionalUpdatedEntity.get();
 
 		// Verify UPDATE
-		assertEquals(AssignmentStatus.COMPLETED, readEntity.getAssignmentStatus());
+		assertEquals("COMPLETED", readEntity.getAssignmentStatus().getCode());
 
 		// Setup DELETE
 		assignmentRepository.delete(updatedEntity);
@@ -92,8 +99,10 @@ public class AssignmentRepositoryTest extends H2IntegrationTest {
 		UserEntity userEntity = createUserEntity(userName);
 
 		ExerciseGroupEntity exerciseGroupEntity = createExerciseGroupEntity(exerciseGroupName);
+		
+		AssignmentStatusEntity status = assignmentStatusRepository.findByCode(AssignmentStatusEntity.ASSIGNED);
 
-		AssignmentEntity entity = new AssignmentEntity(userEntity, exerciseGroupEntity);
+		AssignmentEntity entity = new AssignmentEntity(userEntity, exerciseGroupEntity, status);
 
 		long countBefore = assignmentRepository.count();
 		
@@ -121,7 +130,9 @@ public class AssignmentRepositoryTest extends H2IntegrationTest {
 
 		ExerciseGroupEntity exerciseGroupEntity = createExerciseGroupEntity(exerciseGroupName);
 
-		AssignmentEntity entity = new AssignmentEntity(userEntity, exerciseGroupEntity);
+		AssignmentStatusEntity status = assignmentStatusRepository.findByCode(AssignmentStatusEntity.ASSIGNED);
+		
+		AssignmentEntity entity = new AssignmentEntity(userEntity, exerciseGroupEntity, status);
 
 		long countBefore = assignmentRepository.count();
 		

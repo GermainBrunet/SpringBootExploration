@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.gb.sf.SpringContextIntegrationTest;
 import ca.gb.sf.Start;
 import ca.gb.sf.models.AssignmentEntity;
+import ca.gb.sf.models.AssignmentStatusEntity;
 import ca.gb.sf.models.EducatorEntity;
 import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
@@ -42,6 +43,7 @@ import ca.gb.sf.repositories.ExerciseGroupRepository;
 import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.AssignmentService;
+import ca.gb.sf.services.AssignmentStatusService;
 import ca.gb.sf.services.ExerciseGroupService;
 import ca.gb.sf.services.ExerciseService;
 import ca.gb.sf.services.RoleService;
@@ -73,10 +75,15 @@ public class SetupTest extends SpringContextIntegrationTest {
 	AssignmentService assignmentService;
 
 	@Autowired
+	AssignmentStatusService assignmentStatusService;
+	
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	SetupExercises setupExercises;
+	
+	
 	
 	@Before
 	public void setup() {
@@ -104,6 +111,10 @@ public class SetupTest extends SpringContextIntegrationTest {
 		roleService.save("ROLE_USER");
 		roleService.save("ROLE_EDUCATOR");
 		roleService.save("ROLE_ADMIN");
+		
+		assignmentStatusService.save(AssignmentStatusEntity.ASSIGNED, "FR-Assigned", "Assigned");
+		assignmentStatusService.save(AssignmentStatusEntity.WORK_IN_PROGRESS, "FR-Work In Progress", "Work In Progress");
+		assignmentStatusService.save(AssignmentStatusEntity.COMPLETED, "FR-Completed", "Completed");
 		
 		String educatorName = "edu22";
 		
@@ -202,10 +213,10 @@ public class SetupTest extends SpringContextIntegrationTest {
 		
 		assertTrue(assignments.size() == 2);
 
-		AssignmentEntity assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup3);
+		AssignmentEntity assignment = assignmentService.findByUserAndExerciseGroup(student, exerciseGroup3);
 		assertNull(assignment);
 
-		assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup1);
+		assignment = assignmentService.findByUserAndExerciseGroup(student, exerciseGroup1);
 		assertNotNull(assignment);
 		
 		ExerciseGroupEntity exerciseGroup = assignment.getExerciseGroup();
@@ -245,7 +256,7 @@ public class SetupTest extends SpringContextIntegrationTest {
 		ExerciseGroupEntity exerciseGroup1 = exerciseGroupService.findByName("la 1.2");
 
 		// List<Exercise> exercises = exerciseRepository.findExercisesByStudentAndExerciseGroup(student, exerciseGroup1);
-		AssignmentEntity assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup1);
+		AssignmentEntity assignment = assignmentService.findByUserAndExerciseGroup(student, exerciseGroup1);
 		
 		List<ExerciseEntity> exercises = exerciseService.findByExerciseGroup(exerciseGroup1);
 		

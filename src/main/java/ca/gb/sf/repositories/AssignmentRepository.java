@@ -38,7 +38,7 @@ public interface AssignmentRepository extends CrudRepository<AssignmentEntity, L
 			+ "WHERE "
 			+ "  a.user = :userEntity AND "
 			+ "  a.exerciseGroup = :exerciseGroup")
-	AssignmentEntity findByStudentAndExerciseGroup(@Param("userEntity") UserEntity userEntity, @Param("exerciseGroup") ExerciseGroupEntity exerciseGroup);
+	AssignmentEntity findByUserAndExerciseGroup(@Param("userEntity") UserEntity userEntity, @Param("exerciseGroup") ExerciseGroupEntity exerciseGroup);
 
 	@Query("SELECT a "
 			+ "FROM "
@@ -46,6 +46,6 @@ public interface AssignmentRepository extends CrudRepository<AssignmentEntity, L
 			+ "WHERE "
 			+ "  a.user = :userEntity AND "
 			+ "  a.id = :assignmentId")
-	AssignmentEntity findByStudentAndAssignmentId(@Param("userEntity") UserEntity userEntity, @Param("assignmentId") Long assignmentId);
+	AssignmentEntity findByUserAndAssignmentId(@Param("userEntity") UserEntity userEntity, @Param("assignmentId") Long assignmentId);
 
 }

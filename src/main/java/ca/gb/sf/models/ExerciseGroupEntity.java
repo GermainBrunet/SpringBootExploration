@@ -65,6 +65,11 @@ public class ExerciseGroupEntity extends PersistentObject implements Comparable<
 	public ExerciseGroupEntity() {
 	}
 	
+	public ExerciseGroupEntity(String name) {
+		super();
+		this.name = name;
+	}
+	
 	public ExerciseGroupEntity(String name, String description, String author, String source,
 			List<ExerciseEntity> exercises, List<KeywordEntity> keywords, List<AssignmentEntity> assignments,
 			LevelEntity level) {

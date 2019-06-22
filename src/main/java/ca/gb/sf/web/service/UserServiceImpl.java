@@ -1,8 +1,6 @@
 package ca.gb.sf.web.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,16 +18,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import ca.gb.sf.models.AssignmentEntity;
-import ca.gb.sf.models.AssignmentStatus;
 import ca.gb.sf.models.EducatorEntity;
-import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.models.RoleEntity;
 import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.models.UserEntity;
-import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
-import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.RoleRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.AssignmentService;
@@ -165,7 +159,7 @@ public class UserServiceImpl implements UserService {
 			System.out.println("Student id = " + student.getId());
 			System.out.println("Exercise Group id= " + exerciseGroup.getId());
 
-			AssignmentEntity assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup);
+			AssignmentEntity assignment = assignmentService.findByUserAndExerciseGroup(student, exerciseGroup);
 
 			System.out.println(assignment);
 

@@ -1,0 +1,45 @@
+Proposed Feature List
+- Default to french
+- Ability to identify assignments by status (todo, completed)
+- Ability to update the assignment status when the exercise is completed.
+- Ability to find exercise group by keyword.
+- Ability to find exercise group by level.
+- Ability to find exercise group by keyword and level.
+- Ability to crud an exercise group.
+- Ability to crud a keyword.
+- Ability to crud a level.
+- Redo keyboard for narrow devices.
+-- Need smaller characters
+-- Keyboard on 6 lines
+-- Keyboard full width
+- Need to add exercises for French spelling words at different levels
+- Need to add exercises for accents
+- Need to fix the movement of letters on large words
+- Need to remove duplicate name prompt
+- Need to allow password reset via e-mail
+- Verify text prompt in SSL
+- Educator should be able to group students by class
+- Educator should be able to assign an exercise to a class
+- All exercise group should be browsable and completable without login
+- Need a type of legal disclaimer
+- Need help pages
+- Need to differentiate between English and French exercises and exercise groups
+- Need to allow educator to try any exercise
+- Need to cache the exercises on the same page (limit loading between pages)
+- Need statistics on the number of users logged into the system
+- Need statistics on the number of registered users
+- Need statistics on the number of exercises completed in a given day/month/year
+- Need to find a benefit (merit badge) for completing assignments.
+- Add graphics
+- Add merit badges
+- Add valid exception handling
+- Automatic login (cookie based)
+- Load/unload exercise / exercise groups from XML file (Backup)
+- Fix problem with non-selection on first page.
+- Context sensitive help.
+- Contact me page.
+- Captcha login, contact me, send e-mail for lost password.
+- Security
+- Background / Foreground (i.e.: color scheme)
+- Le e avec accent grave bousille le system
+- Deplacement de lettre a des problemes

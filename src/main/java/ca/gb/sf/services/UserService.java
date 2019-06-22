@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import ca.gb.sf.exceptions.ApplicationRuntimeException;
@@ -304,7 +303,7 @@ public class UserService extends CommonService implements CommonServiceInterface
 			System.out.println("Student id = " + student.getId());
 			System.out.println("Exercise Group id= " + exerciseGroup.getId());
 
-			AssignmentEntity assignment = assignmentService.findByStudentAndExerciseGroup(student, exerciseGroup);
+			AssignmentEntity assignment = assignmentService.findByUserAndExerciseGroup(student, exerciseGroup);
 
 			System.out.println(assignment);
 

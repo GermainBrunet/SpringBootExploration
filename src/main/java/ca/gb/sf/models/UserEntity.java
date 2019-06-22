@@ -23,6 +23,8 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+
+
 /**
  * User represents an individual using this system. Can be assigned different
  * roles that represent different levels of access. Is extended by the Educator
@@ -42,7 +44,7 @@ public class UserEntity extends PersistentObject implements Comparable<UserEntit
 	private static final long serialVersionUID = 6030006060053082867L;
 
 	// Name that will be visually displayed representing this user.
-	@Column(nullable = false)
+	@Column(name="displayName", nullable = false)
 	protected String displayName;
 	
 	// Email address associated with this user.  Used for password recovery.

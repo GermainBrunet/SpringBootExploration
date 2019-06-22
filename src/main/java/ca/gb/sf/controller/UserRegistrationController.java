@@ -36,9 +36,14 @@ public class UserRegistrationController {
     public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationForm userDto,
                                       BindingResult result){
 
-        UserEntity existing = userService.findByEmail(userDto.getEmail());
-        if (existing != null){
+        UserEntity existingEmail = userService.findByEmail(userDto.getEmail());
+        if (existingEmail != null){
             result.rejectValue("email", null, "There is already an account registered with that email");
+        }
+        
+        UserEntity existingName = userService.find(userDto.getDisplayName());
+        if (existingName != null){
+            result.rejectValue("displayName", null, "There is already an account registered with that display name");
         }
 
         if (result.hasErrors()){

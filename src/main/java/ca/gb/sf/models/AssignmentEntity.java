@@ -35,14 +35,16 @@ public class AssignmentEntity extends PersistentObject implements Serializable {
 
 	Integer stars;
 
-	AssignmentStatus assignmentStatus;
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "assignment_status_id", nullable = false)
+	AssignmentStatusEntity assignmentStatus;
 
 	public AssignmentEntity() {
 	};
 
-	public AssignmentEntity(UserEntity user, ExerciseGroupEntity exerciseGroup) {
+	public AssignmentEntity(UserEntity user, ExerciseGroupEntity exerciseGroup, AssignmentStatusEntity assignmentStatus) {
 		super();
-		this.assignmentStatus = AssignmentStatus.ASSIGNED;
+		this.assignmentStatus = assignmentStatus;
 		this.user = user;
 		this.exerciseGroup = exerciseGroup;
 	}
@@ -87,11 +89,11 @@ public class AssignmentEntity extends PersistentObject implements Serializable {
 		this.stars = stars;
 	}
 
-	public AssignmentStatus getAssignmentStatus() {
+	public AssignmentStatusEntity getAssignmentStatus() {
 		return assignmentStatus;
 	}
 
-	public void setAssignmentStatus(AssignmentStatus assignmentStatus) {
+	public void setAssignmentStatus(AssignmentStatusEntity assignmentStatus) {
 		this.assignmentStatus = assignmentStatus;
 	}
 

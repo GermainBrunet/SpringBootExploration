@@ -1,8 +1,6 @@
 package ca.gb.sf.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -12,10 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.DiscriminatorOptions;
-// import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OnDelete;
 
 /**
  * Extends the User class and are associated with students. An educator can have

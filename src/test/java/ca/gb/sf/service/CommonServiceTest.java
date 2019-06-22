@@ -21,9 +21,11 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import ca.gb.sf.H2IntegrationTest;
+import ca.gb.sf.models.AssignmentStatusEntity;
 import ca.gb.sf.models.EducatorEntity;
 import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.models.UserEntity;
+import ca.gb.sf.services.AssignmentStatusService;
 import ca.gb.sf.services.RoleService;
 import ca.gb.sf.services.UserService;
 import ca.gb.sf.util.SetupExercises;
@@ -42,6 +44,9 @@ public class CommonServiceTest extends H2IntegrationTest {
 	
 	@Autowired
 	private SetupExercises setupExercises;
+	
+	@Autowired
+	AssignmentStatusService assignmentStatusService;
 
 	private static final String adminName = "Admin";
 	private static final String userName = "user1";
@@ -90,6 +95,10 @@ public class CommonServiceTest extends H2IntegrationTest {
 		roleService.save("ROLE_USER");
 		roleService.save("ROLE_EDUCATOR");
 		roleService.save("ROLE_ADMIN");
+		
+		assignmentStatusService.save(AssignmentStatusEntity.ASSIGNED, "FR-Assigned", "Assigned");
+		assignmentStatusService.save(AssignmentStatusEntity.WORK_IN_PROGRESS, "FR-Work In Progress", "Work In Progress");
+		assignmentStatusService.save(AssignmentStatusEntity.COMPLETED, "FR-Completed", "Completed");
 		
 		simulateLogin(educatorName);
 

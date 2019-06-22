@@ -20,8 +20,6 @@ public class EducatorService extends CommonService {
 		
 		UserEntity userEntity = getCurrentUserEntity();
 		
-		System.out.println("UserEntity: " + userEntity);
-		
 		if (userEntity instanceof EducatorEntity) {
 			
 			EducatorEntity educatorEntity = (EducatorEntity) userEntity;
