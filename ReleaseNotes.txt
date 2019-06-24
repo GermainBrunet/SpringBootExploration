@@ -3,6 +3,7 @@ TODO: resize keyboard when letter mode.
 2019-06-23
 - Fixed bug preventing accented characters from being displayed.  (è) - need to test all the others.
 - Fixed bug that looses track of letters when swapping them.
+- Fixed bug requiring double input to start phaser.  Upgraded from phaser 2.2 to 2.13.2.
 
 2019-06-22
 - made assignment status into an object from an enum
