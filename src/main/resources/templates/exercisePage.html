@@ -680,10 +680,25 @@ function DisplayText(letters) {
 
 	// Function used to supports swapping letters
 	this.swap = function (toLetter, fromLetter) {
-		console.log('swap');
+		
+		console.log('swap me');
+		
 		var temp = this.displayCharacters[toLetter];
+		
 		this.displayCharacters[toLetter] = this.displayCharacters[fromLetter];
+		
 		this.displayCharacters[fromLetter] = temp;
+		
+		// sconsole.log('displayCharacters')
+		var newLetters = '';
+		for (var i = 0; i < this.displayCharacters.length; i++) {
+		 	var displayCharacter = this.displayCharacters[i];
+		 	console.log('swap - display letters: ' + displayCharacter.letter);
+		 	newLetters = newLetters + displayCharacter.letter;
+		}
+		
+		this.letters = newLetters;
+		
 	};
 
 	// Function to reposition letters
@@ -705,6 +720,8 @@ function DisplayText(letters) {
 		var xx = this.x + (this.letters.length - 1) * (letterSize + spaceSize);
 		
 		var displayCharacter = new DisplayCharacter(addLetter, this.letters.length - 1, xx, this.y);
+		
+		console.log('addLetter - displayCharacter: ' + displayCharacter.letter);
 
 		displayCharacter.display();
 		
@@ -935,7 +952,12 @@ function DisplayCharacter(letter, position, x, y) {
 	// Removes a sprite from the display.
 	this.remove = function() {
 		this.icon.destroy();
+	};
+	
+	this.getLetter = function() {
+		return letter;
 	}
+	
 }
 
 function stopDrag(startIcon, endIcon) {
