@@ -1,7 +1,16 @@
 server:
   port: 8080
+  tomcat: 
+    uri-encoding: UTF-8
 
 spring:
+  message:
+    encoding: UTF-8
+
+  http:
+    encoding:
+      charset: UTF-8
+      
   thymeleaf:
     cache: false
     check-template: true
@@ -19,7 +28,7 @@ spring:
 
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/eduproject
+    url: jdbc:postgresql://localhost:5433/eduproject?charSet=UNICODE
     username: eduuser
     password: admin
     

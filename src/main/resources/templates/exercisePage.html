@@ -35,6 +35,7 @@
 		</div>
 
 <div id="consolewindow">
+<div id="initialWord" style="display: none;" th:utext="${exercise.initialWord}"></div>
 
 <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 <script th:inline="javascript" id="rendered-js">
@@ -73,7 +74,9 @@
 	var line3 = gameWindowHeight - letterSize * 1 - spaceSize * 1;
 
 	// Load page specific values.
-	var initialWord = /*[[${exercise.initialWord}]]*/ 'default';
+	// var initialWord = /*[[${exercise.initialWord}]]*/ 'default';
+	// This approach gets around the encoding issue.
+	var initialWord = $( "#initialWord" ).text();
 	var targetWord = /*[[${exercise.targetWord}]]*/ 'default';
 	var exerciseGroupId = /*[[${exerciseGroupId}]]*/ '0';
 	var nextExerciseId = /*[[${nextExercise}]]*/ '0';
@@ -883,27 +886,27 @@ function DisplayCharacter(letter, position, x, y) {
 			this.icon = game.add.sprite(20, 20, 'dashIcon');
 		} else if (this.letter === String.fromCharCode(130)) {
 			this.icon = game.add.sprite(20, 20, 'eAiguIcon');
-		} else if (this.letter === String.fromCharCode(138)) {
+		} else if (this.letter === String.fromCharCode(138) || this.letter === String.fromCharCode(232)) {
 			this.icon = game.add.sprite(20, 20, 'eGraveIcon');
-		} else if (this.letter === String.fromCharCode(136)) {
+		} else if (this.letter === String.fromCharCode(136) || this.letter === String.fromCharCode(234)) {
 			this.icon = game.add.sprite(20, 20, 'eCirconflexIcon');
-		} else if (this.letter === String.fromCharCode(137)) {
+		} else if (this.letter === String.fromCharCode(137) || this.letter === String.fromCharCode(235)) {
 			this.icon = game.add.sprite(20, 20, 'eTremaIcon');
-		} else if (this.letter === String.fromCharCode(133)) {
+		} else if (this.letter === String.fromCharCode(133) || this.letter === String.fromCharCode(224)) {
 			this.icon = game.add.sprite(20, 20, 'aGraveIcon');
-		} else if (this.letter === String.fromCharCode(131)) {
+		} else if (this.letter === String.fromCharCode(131) || this.letter === String.fromCharCode(226)) {
 			this.icon = game.add.sprite(20, 20, 'aCirconflexIcon');
-		} else if (this.letter === String.fromCharCode(140)) {
+		} else if (this.letter === String.fromCharCode(140) || this.letter === String.fromCharCode(238)) {
 			this.icon = game.add.sprite(20, 20, 'iCircomflexIcon');
-		} else if (this.letter === String.fromCharCode(139)) {
+		} else if (this.letter === String.fromCharCode(139) || this.letter === String.fromCharCode(239)) {
 			this.icon = game.add.sprite(20, 20, 'iTremaIcon');
-		} else if (this.letter === String.fromCharCode(147)) {
+		} else if (this.letter === String.fromCharCode(147) || this.letter === String.fromCharCode(244)) {
 			this.icon = game.add.sprite(20, 20, 'oCircomflexIcon');
-		} else if (this.letter === String.fromCharCode(150)) {
+		} else if (this.letter === String.fromCharCode(150) || this.letter === String.fromCharCode(251)) {
 			this.icon = game.add.sprite(20, 20, 'uCirconflexIcon');
-		} else if (this.letter === String.fromCharCode(151)) {
+		} else if (this.letter === String.fromCharCode(151) || this.letter === String.fromCharCode(249)) {
 			this.icon = game.add.sprite(20, 20, 'uGraveIcon');
-		} else if (this.letter === String.fromCharCode(135)) {
+		} else if (this.letter === String.fromCharCode(135) || this.letter === String.fromCharCode(231)) {
 			this.icon = game.add.sprite(20, 20, 'cCedilleIcon');
 		} else {
 			// Only allow letters.

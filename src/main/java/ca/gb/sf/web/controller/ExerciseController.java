@@ -28,96 +28,105 @@ import ca.gb.sf.web.form.SearchForm;
 public class ExerciseController {
 
 	@Autowired
-    ExerciseGroupService exerciseGroupService;
+	ExerciseGroupService exerciseGroupService;
 
 	@Autowired
-    ExerciseService exerciseService;
-	
+	ExerciseService exerciseService;
+
 	@Autowired
 	AssignmentService assignmentService;
-	
+
 	@Autowired
 	UserRepository userRepository;
 
 	@Transactional
-    @GetMapping("/exerciseList")
-    public String exerciseList(@PageableDefault(size = 5) Pageable pageable, SearchForm searchForm, Model model) {
-    	
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	
-    	StudentEntity student = (StudentEntity) userRepository.findByDisplayName(auth.getName());
-    	
-    	String searchString = searchForm.getSearch();
-    	
-    	Page<ExerciseGroupEntity> exerciseGroupPage = exerciseGroupService.findPaginatedByStudent(student, pageable, searchString);
-    	
-    	PageWrapper<ExerciseGroupEntity> exerciseGroups = new PageWrapper<ExerciseGroupEntity> (exerciseGroupPage, "/exerciseList");
-    	
-        model.addAttribute("page", exerciseGroups);
+	@GetMapping("/exerciseList")
+	public String exerciseList(@PageableDefault(size = 5) Pageable pageable, SearchForm searchForm, Model model) {
 
-    	model.addAttribute("searchForm", new SearchForm());        
-        
-        return "exerciseList";
-    }
-    
-    @GetMapping("/exercisePage/{exerciseGroupId}/{exerciseId}")
-    public String product(@PathVariable("exerciseGroupId") long exerciseGroupId, @PathVariable("exerciseId") int exerciseId, Model model) {
-    	
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	
-    	StudentEntity student = (StudentEntity) userRepository.findByDisplayName(auth.getName());
-    	
-    	System.out.println("1: " + student.getId());
-    	
-    	ExerciseGroupEntity exerciseGroup = exerciseGroupService.findById(exerciseGroupId);
-    	
-    	System.out.println("2");
-    	
-    	List<ExerciseEntity> exercises = exerciseService.findByExerciseGroup(exerciseGroup);
-    	
-    	System.out.println("size: " + exercises.size());
-    	
-    	ExerciseEntity exerciseEntity = null;
-    	Boolean lastExercise = false;
-    	int previousExercise = exerciseId - 1;
-    	int nextExercise = exerciseId + 1;
-    	
-    	if (previousExercise < 0) {
-    		
-    		previousExercise = 0;
-    		
-    	}
-    	
-    	if (exerciseId <= exercises.size()) {
-    		
-    		System.out.println("Setting exercise");
-    		
-    		exerciseEntity = exercises.get(exerciseId);
-    		
-    	}
-    	
-    	if ((exerciseId + 1) == exercises.size()) {
-    		
-    		lastExercise = true;
-    		nextExercise = exercises.size() - 1;
-    		
-    	}
-    	
-    	model.addAttribute("exercise", exerciseEntity);
-        model.addAttribute("lastExercise", lastExercise);
-        model.addAttribute("currentExercise", exerciseId);
-        model.addAttribute("previousExercise", previousExercise);
-        model.addAttribute("nextExercise", nextExercise);
-        model.addAttribute("exerciseGroupId", exerciseGroupId);
-        model.addAttribute("exerciseGroup", exerciseGroup);
-        
-        // model.addAttribute("assignmentId", assignmentId);
-        
-    	model.addAttribute("searchForm", new SearchForm()); 
-    	
-        return "exercisePage";
-    }
-    
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    
+		StudentEntity student = (StudentEntity) userRepository.findByDisplayName(auth.getName());
+
+		String searchString = searchForm.getSearch();
+
+		Page<ExerciseGroupEntity> exerciseGroupPage = exerciseGroupService.findPaginatedByStudent(student, pageable,
+				searchString);
+
+		PageWrapper<ExerciseGroupEntity> exerciseGroups = new PageWrapper<ExerciseGroupEntity>(exerciseGroupPage,
+				"/exerciseList");
+
+		model.addAttribute("page", exerciseGroups);
+
+		model.addAttribute("searchForm", new SearchForm());
+
+		return "exerciseList";
+	}
+
+	@GetMapping("/exercisePage/{exerciseGroupId}/{exerciseId}")
+	public String product(@PathVariable("exerciseGroupId") long exerciseGroupId,
+			@PathVariable("exerciseId") int exerciseId, Model model) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		StudentEntity student = (StudentEntity) userRepository.findByDisplayName(auth.getName());
+
+		System.out.println("1: " + student.getId());
+
+		ExerciseGroupEntity exerciseGroup = exerciseGroupService.findById(exerciseGroupId);
+
+		System.out.println("2");
+
+		List<ExerciseEntity> exercises = exerciseService.findByExerciseGroup(exerciseGroup);
+
+		System.out.println("size: " + exercises.size());
+
+		ExerciseEntity exerciseEntity = null;
+		Boolean lastExercise = false;
+		int previousExercise = exerciseId - 1;
+		int nextExercise = exerciseId + 1;
+
+		if (previousExercise < 0) {
+
+			previousExercise = 0;
+
+		}
+
+		if (exerciseId <= exercises.size()) {
+
+			System.out.println("Setting exercise");
+
+			exerciseEntity = exercises.get(exerciseId);
+
+		}
+
+		if ((exerciseId + 1) == exercises.size()) {
+
+			lastExercise = true;
+			nextExercise = exercises.size() - 1;
+
+		}
+
+		String initialWord = exerciseEntity.getInitialWord();
+
+		for (int i = 0; i < initialWord.length(); i++) {
+			char character = initialWord.charAt(i); // This gives the character 'a'
+			int ascii = (int) character;
+			System.out.println(ascii);
+		}
+
+		model.addAttribute("exercise", exerciseEntity);
+		model.addAttribute("lastExercise", lastExercise);
+		model.addAttribute("currentExercise", exerciseId);
+		model.addAttribute("previousExercise", previousExercise);
+		model.addAttribute("nextExercise", nextExercise);
+		model.addAttribute("exerciseGroupId", exerciseGroupId);
+		model.addAttribute("exerciseGroup", exerciseGroup);
+
+		// model.addAttribute("assignmentId", assignmentId);
+
+		model.addAttribute("searchForm", new SearchForm());
+
+		return "exercisePage";
+	}
+
 }

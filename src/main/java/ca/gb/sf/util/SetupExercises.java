@@ -76,6 +76,7 @@ public class SetupExercises {
 		createExercise5();
 		createExercise6();
 		createExercise7();
+		createExercise8();
 		
 	}
 	
