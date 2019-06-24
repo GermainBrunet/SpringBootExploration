@@ -41,5 +41,5 @@ Proposed Feature List
 - Captcha login, contact me, send e-mail for lost password.
 - Security
 - Background / Foreground (i.e.: color scheme)
-- Le e avec accent grave bousille le system
-- Deplacement de lettre a des problemes
+- Le e avec accent grave bousille le system (Fixed)
+- Deplacement de lettre a des problemes (Fixed)

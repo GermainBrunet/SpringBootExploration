@@ -1,5 +1,9 @@
 TODO: resize keyboard when letter mode.
 
+2019-06-23
+- Fixed bug preventing accented characters from being displayed.  (è) - need to test all the others.
+- Fixed bug that looses track of letters when swapping them.
+
 2019-06-22
 - made assignment status into an object from an enum
 - added stats to count number of completed assignments
