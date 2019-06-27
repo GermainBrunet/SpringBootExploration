@@ -5,14 +5,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -21,8 +18,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -47,14 +47,17 @@ public class UserEntity extends AuditedObject implements Comparable<UserEntity>,
 	private static final long serialVersionUID = 6030006060053082867L;
 
 	// Name that will be visually displayed representing this user.
+	@NotNull
 	@Column(name="displayName", nullable = false)
 	protected String displayName;
 	
 	// Email address associated with this user.  Used for password recovery.
+	@NotNull
 	@Column(nullable = false)
 	protected String email;
 	
 	// Password to identify this user.
+	@NotNull
 	@Column(nullable = false)
 	protected String password;
 
@@ -200,6 +203,7 @@ public class UserEntity extends AuditedObject implements Comparable<UserEntity>,
 		this.assignment = assignment;
 	}
 	
+	/**
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -233,6 +237,54 @@ public class UserEntity extends AuditedObject implements Comparable<UserEntity>,
 			return false;
 		return true;
 	}
+	**/
+
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder()
+				.append(this.id)
+				.append(this.displayName)
+				.append(this.email)
+				.toHashCode();
+		
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof UserEntity == false) {
+			
+			return false;
+			
+		}
+		
+		if (this == obj) {
+			
+			return true;
+			
+		}
+		
+		final UserEntity userEntity = (UserEntity) obj;
+
+		return new EqualsBuilder()
+				.append(this.id, userEntity.getId())
+				.append(this.displayName, userEntity.getDisplayName())
+				.append(this.email, userEntity.getEmail())
+				.isEquals();
+		
+	}
+	
+	@Override
+	public int compareTo(UserEntity userEntity) {
+		
+		return new CompareToBuilder()
+				.append(this.getId(), userEntity.getId())
+				.append(this.getDisplayName(), userEntity.getDisplayName())
+				.append(this.getEmail(), userEntity.getEmail())
+				.toComparison();
+		
+	}
 
 	/**
 	 * String representation of this object. Includes the parent object toString.
@@ -242,29 +294,29 @@ public class UserEntity extends AuditedObject implements Comparable<UserEntity>,
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("User [");
-		if (displayName != null)
-			builder.append("displayName=").append(displayName).append(", ");
-		if (email != null)
-			builder.append("email=").append(email).append(", ");
-		if (password != null)
-			builder.append("password=").append(password).append(", ");
-		if (roles != null)
-		 	builder.append("roles=").append(roles).append(", ");
 		if (super.toString() != null)
-			builder.append("toString()=").append(super.toString());
+			builder.append(super.toString());
+		if (displayName != null) {
+			builder.append("displayName=");
+			builder.append(displayName);
+			builder.append(", ");
+		}
+		if (email != null) {
+			builder.append("email=");
+			builder.append(email);
+			builder.append(", ");
+		}
+		if (password != null) {
+			builder.append("password=");
+			builder.append(password);
+			builder.append(", ");
+		}
+		if (roles != null) {
+		 	builder.append("roles=");
+		 	builder.append(roles);
+		}
 		builder.append("]");
 		return builder.toString();
 	}
-
-	@Override
-	public int compareTo(UserEntity o) {
-		
-		return new CompareToBuilder()
-				.append(this.getId(), o.getId())
-				.append(this.getDisplayName(), o.getDisplayName())
-				.append(this.getEmail(), o.getEmail())
-				.toComparison();
-		
-	}
-
+	
 }

@@ -149,25 +149,6 @@ public class AssignmentRepositoryTest extends H2IntegrationTest {
 	}
 	
 
-	private UserEntity createUserEntity(String userName) {
 
-		UserEntity userEntity = new UserEntity();
-
-		userEntity.setDisplayName(userName);
-		userEntity.setEmail(userName);
-		userEntity.setPassword(userName);
-
-		return userRepository.save(userEntity);
-
-	}
-
-	private ExerciseGroupEntity createExerciseGroupEntity(String exerciseGroupName) {
-
-		ExerciseGroupEntity exerciseGroupEntity = new ExerciseGroupEntity(exerciseGroupName, "description", "author",
-				"source", null, null, null, null);
-
-		return exerciseGroupRepository.save(exerciseGroupEntity);
-
-	}
 
 }

@@ -1,20 +1,14 @@
 package ca.gb.sf.letters;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -54,6 +48,9 @@ public class DrawAny {
 	}
 
 	static public void draw(String iconName, String fileName, double size) throws Exception {
+		
+		FileInputStream fileInputStreamReader = null;
+		
 		try {
 			int width = new Double(size).intValue();
 			int height = new Double(size).intValue();
@@ -112,7 +109,7 @@ public class DrawAny {
 
 			File file = new File(TARGET_FOLDER + iconName + sizeFileName + ".PNG");
 
-			FileInputStream fileInputStreamReader = new FileInputStream(file);
+			fileInputStreamReader = new FileInputStream(file);
 			byte[] bytes = new byte[(int) file.length()];
 			fileInputStreamReader.read(bytes);
 			// String encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
@@ -134,6 +131,10 @@ public class DrawAny {
 
 		} catch (IOException ie) {
 			ie.printStackTrace();
+		} finally {
+			
+			fileInputStreamReader.close();
+			
 		}
 
 	}

@@ -3,8 +3,6 @@ package ca.gb.sf.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import ca.gb.sf.models.AssignmentEntity;
-import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
 import ca.gb.sf.repositories.ExerciseGroupRepository;
-import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.UserService;
 import ca.gb.sf.util.PageWrapper;
@@ -38,9 +34,6 @@ public class ExerciseSelectionController {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private ExerciseRepository exerciseRepository;
 
 	@Autowired
 	private ExerciseGroupRepository exerciseGroupRepository;

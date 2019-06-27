@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
 	AssignmentRepositoryTest.class,
 	AssignmentStatusRepositoryTest.class,
 	ExerciseGroupRepositoryTest.class,
+	ExerciseGroupRepositoryCustomTest.class,
 	ExerciseRepositoryTest.class,
 	KeywordRepositoryTest.class,
 	LevelRepositoryTest.class,

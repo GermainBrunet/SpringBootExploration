@@ -83,7 +83,10 @@ public class KeywordEntity extends AuditedObject implements Comparable<KeywordEn
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("KeywordEntity [keyword=");
+		builder.append("KeywordEntity [");
+		if (super.toString() != null)
+			builder.append(super.toString());
+		builder.append("keyword=");
 		builder.append(keyword);
 		builder.append("]");
 		return builder.toString();

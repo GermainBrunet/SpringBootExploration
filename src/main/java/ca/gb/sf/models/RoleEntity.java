@@ -59,9 +59,20 @@ public class RoleEntity extends PersistentObject implements Comparable<RoleEntit
 		return true;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Role{" + "id=" + getId() + ", name='" + name + '\'' + '}';
+		StringBuilder builder = new StringBuilder();
+		builder.append("RoleEntity [");
+		if (super.toString() != null)
+			builder.append(super.toString());
+		if (name != null) {
+			builder.append("name=");
+			builder.append(name);
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 	@Override

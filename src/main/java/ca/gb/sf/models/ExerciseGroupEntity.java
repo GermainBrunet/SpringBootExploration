@@ -207,47 +207,26 @@ public class ExerciseGroupEntity extends AuditedObject implements Comparable<Exe
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("ExerciseGroupEntity [");
-		builder.append("id=");
-		builder.append(id);
+		if (super.toString() != null)
+			builder.append(super.toString());
 		if (name != null) {
-			builder.append(", ");
 			builder.append("name=");
 			builder.append(name);
+			builder.append(", ");
 		}
 		if (description != null) {
-			builder.append(", ");
 			builder.append("description=");
 			builder.append(description);
+			builder.append(", ");
 		}
 		if (author != null) {
-			builder.append(", ");
 			builder.append("author=");
 			builder.append(author);
+			builder.append(", ");
 		}
 		if (source != null) {
-			builder.append(", ");
 			builder.append("source=");
 			builder.append(source);
-		}
-		if (createTimestamp != null) {
-			builder.append(", ");
-			builder.append("createTimestamp=");
-			builder.append(createTimestamp);
-		}
-		if (createUser != null) {
-			builder.append(", ");
-			builder.append("createUser=");
-			builder.append(createUser.getId());
-		}
-		if (updateTimestamp != null) {
-			builder.append(", ");
-			builder.append("updateTimestamp=");
-			builder.append(updateTimestamp);
-		}
-		if (updateUser != null) {
-			builder.append(", ");
-			builder.append("updateUser=");
-			builder.append(updateUser.getId());
 		}
 		builder.append("]");
 		return builder.toString();

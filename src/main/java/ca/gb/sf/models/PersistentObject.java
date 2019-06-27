@@ -1,20 +1,13 @@
 package ca.gb.sf.models;
 
-import java.sql.Timestamp;
-
-import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Parent object from which all other objects are derived. Provides a common id
- * for all objects. Provides Create and Update <code>timestamp</code> and
- * <code>user</code> objects for tracking purposes.
+ * Parent object from which all other persisted objects are derived. Provides
+ * reusable id for all objects.  Should be extended by objects that are outside user control.  (i.e.: Roles, Assignment Status)
  */
 
 @MappedSuperclass
@@ -35,9 +28,9 @@ public class PersistentObject {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("StaticObject [id=");
+		builder.append("id=");
 		builder.append(id);
-		builder.append("]");
+		builder.append(", ");
 		return builder.toString();
 	}
 

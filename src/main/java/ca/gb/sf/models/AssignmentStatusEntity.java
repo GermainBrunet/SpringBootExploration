@@ -2,9 +2,15 @@ package ca.gb.sf.models;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Entity that represents the status of an assignment.
@@ -16,7 +22,9 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "assignment_status", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "code" }) })
-public class AssignmentStatusEntity extends AuditedObject implements Serializable {
+public class AssignmentStatusEntity extends AuditedObject implements Comparable<AssignmentStatusEntity>, Serializable {
+
+	private static final long serialVersionUID = 7541039066884580615L;
 
 	public final static String ASSIGNED = "ASSIGNED";
 	
@@ -24,13 +32,16 @@ public class AssignmentStatusEntity extends AuditedObject implements Serializabl
 	
 	public final static String COMPLETED = "COMPLETED";
 	
-	private static final long serialVersionUID = 7541039066884580615L;
-	
-	
+	@NotNull
+	@Column(nullable = false)
 	private String code;
 	
+	@NotNull
+	@Column(nullable = false)
 	private String nameFrench;
 	
+	@NotNull
+	@Column(nullable = false)
 	private String nameEnglish;
 
 	public AssignmentStatusEntity() {};
@@ -72,9 +83,55 @@ public class AssignmentStatusEntity extends AuditedObject implements Serializabl
 	}
 
 	@Override
+	public int compareTo(AssignmentStatusEntity assignmentStatusEntity) {
+		
+		return new CompareToBuilder()
+				.append(this.id, assignmentStatusEntity.getId())
+				.append(this.code, assignmentStatusEntity.getCode())
+				.toComparison();
+		
+	}
+
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder()
+				.append(this.id)
+				.append(this.code)
+				.toHashCode();
+		
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof AssignmentStatusEntity == false) {
+			
+			return false;
+			
+		}
+		
+		if (this == obj) {
+			
+			return true;
+			
+		}
+		
+		final AssignmentStatusEntity assignmentStatusEntity = (AssignmentStatusEntity) obj;
+
+		return new EqualsBuilder()
+				.append(this.getId(), assignmentStatusEntity.getId())
+				.append(this.getCode(), assignmentStatusEntity.getCode())
+				.isEquals();
+		
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("AssignmentStatusEntity [");
+		if (super.toString() != null)
+			builder.append(super.toString());
 		if (code != null) {
 			builder.append("code=");
 			builder.append(code);
@@ -92,5 +149,5 @@ public class AssignmentStatusEntity extends AuditedObject implements Serializabl
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

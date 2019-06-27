@@ -9,6 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Object that represents an exercise that has been assigned to a user.
  * Requires that both a user and an exercise group be present.
@@ -17,7 +21,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "assignments", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "user_id", "exercise_group_id" }) })
-public class AssignmentEntity extends AuditedObject implements Serializable {
+public class AssignmentEntity extends AuditedObject implements Comparable<AssignmentEntity>, Serializable {
 
 	private static final long serialVersionUID = 8766191881287121581L;
 
@@ -98,21 +102,90 @@ public class AssignmentEntity extends AuditedObject implements Serializable {
 	}
 
 	@Override
+	public int compareTo(AssignmentEntity assignmentEntity) {
+		
+		return new CompareToBuilder()
+				.append(this.id, assignmentEntity.getId())
+				.append(this.exerciseGroup, assignmentEntity.getExerciseGroup())
+				.append(this.user, assignmentEntity.getUser())
+				.append(this.assignmentStatus, assignmentEntity.getAssignmentStatus())
+				.toComparison();
+		
+	}
+
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder()
+				.append(this.id)
+				.append(this.exerciseGroup)
+				.append(this.user)
+				.append(this.assignmentStatus)
+				.toHashCode();
+		
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof AssignmentEntity == false) {
+			
+			return false;
+			
+		}
+		
+		if (this == obj) {
+			
+			return true;
+			
+		}
+		
+		final AssignmentEntity assignmentEntity = (AssignmentEntity) obj;
+
+		return new EqualsBuilder()
+				.append(this.id, assignmentEntity.getId())
+				.append(this.exerciseGroup, assignmentEntity.getExerciseGroup())
+				.append(this.user, assignmentEntity.getUser())
+				.append(this.assignmentStatus, assignmentEntity.getAssignmentStatus())
+				.isEquals();
+		
+	}
+	
+	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Assignment [");
-		if (exerciseGroup != null)
-			builder.append("exercise=").append(exerciseGroup).append(", ");
-		if (speedToComplete != null)
-			builder.append("speedToComplete=").append(speedToComplete).append(", ");
-		if (stepsToComplete != null)
-			builder.append("stepsToComplete=").append(stepsToComplete).append(", ");
-		if (stars != null)
-			builder.append("stars=").append(stars).append(", ");
-		if (assignmentStatus != null)
-			builder.append("assignmentStatus=").append(assignmentStatus).append(", ");
 		if (super.toString() != null)
-			builder.append("toString()=").append(super.toString());
+			builder.append(super.toString());
+		if (exerciseGroup != null) {
+			builder.append("exerciseGroup=");
+			builder.append(exerciseGroup);
+			builder.append(", ");
+		}
+		if (user != null) {
+			builder.append("user=");
+			builder.append(user);
+			builder.append(", ");
+		}
+		if (speedToComplete != null) {
+			builder.append("speedToComplete=");
+			builder.append(speedToComplete);
+			builder.append(", ");
+		}
+		if (stepsToComplete != null) {
+			builder.append("stepsToComplete=");
+			builder.append(stepsToComplete);
+			builder.append(", ");
+		}
+		if (stars != null) {
+			builder.append("stars=");
+			builder.append(stars);
+			builder.append(", ");
+		}
+		if (assignmentStatus != null) {
+			builder.append("assignmentStatus=");
+			builder.append(assignmentStatus);
+		}
 		builder.append("]");
 		return builder.toString();
 	}

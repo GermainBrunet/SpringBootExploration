@@ -93,10 +93,18 @@ public class LevelEntity extends AuditedObject implements Comparable<LevelEntity
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("LevelEntity [name=");
-		builder.append(name);
-		builder.append(", exerciseGroup=");
-		builder.append(exerciseGroup);
+		builder.append("LevelEntity [");
+		if (super.toString() != null)
+			builder.append(super.toString());
+		if (name != null) {
+			builder.append("name=");
+			builder.append(name);
+			builder.append(", ");
+		}
+		if (exerciseGroup != null) {
+			builder.append("exerciseGroup=");
+			builder.append(exerciseGroup);
+		}
 		builder.append("]");
 		return builder.toString();
 	}

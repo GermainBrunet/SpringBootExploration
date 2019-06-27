@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.DiscriminatorOptions;
 
 /**
@@ -59,7 +61,41 @@ public class StudentEntity extends UserEntity implements Serializable {
 		this.educator = educator;
 	}
 
-	
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder()
+				.append(this.id)
+				.append(this.displayName)
+				.append(this.email)
+				.toHashCode();
+		
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof StudentEntity == false) {
+			
+			return false;
+			
+		}
+		
+		if (this == obj) {
+			
+			return true;
+			
+		}
+		
+		final StudentEntity studentEntity = (StudentEntity) obj;
+
+		return new EqualsBuilder()
+				.append(this.id, studentEntity.getId())
+				.append(this.displayName, studentEntity.getDisplayName())
+				.append(this.email, studentEntity.getEmail())
+				.isEquals();
+		
+	}
 	
 	/**
 	 * String representation of this object. Includes the parent object toString.
@@ -70,10 +106,12 @@ public class StudentEntity extends UserEntity implements Serializable {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Student [");
-		if (educator != null)
-			builder.append("educator=").append(educator.getId()).append(", ");
 		if (super.toString() != null)
-			builder.append("toString()=").append(super.toString());
+			builder.append(super.toString());
+		if (educator != null) {
+			builder.append("educator=");
+			builder.append(educator.getId());
+		}
 		builder.append("]");
 		return builder.toString();
 	}

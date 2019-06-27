@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,11 +26,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import ca.gb.sf.SpringContextIntegrationTest;
 import ca.gb.sf.Start;
-import ca.gb.sf.exceptions.LoggingAccessDeniedHandler;
 import ca.gb.sf.models.AssignmentEntity;
 import ca.gb.sf.models.AssignmentStatusEntity;
 import ca.gb.sf.models.EducatorEntity;
@@ -41,10 +37,6 @@ import ca.gb.sf.models.ExerciseGroupEntity;
 import ca.gb.sf.models.RoleEntity;
 import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.models.UserEntity;
-import ca.gb.sf.repositories.AssignmentRepository;
-import ca.gb.sf.repositories.ExerciseGroupRepository;
-import ca.gb.sf.repositories.ExerciseRepository;
-import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.AssignmentService;
 import ca.gb.sf.services.AssignmentStatusService;
 import ca.gb.sf.services.ExerciseGroupService;
@@ -54,8 +46,6 @@ import ca.gb.sf.services.LevelService;
 import ca.gb.sf.services.RoleService;
 import ca.gb.sf.services.UserService;
 import ca.gb.sf.util.SetupExercises;
-import ca.gb.sf.web.form.StudentForm;
-import ca.gb.sf.web.form.UserRegistrationForm;
 
 @SpringBootTest(classes = Start.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -233,8 +223,8 @@ public class SetupTest extends SpringContextIntegrationTest {
 		ExerciseGroupEntity exerciseGroup2 = exerciseGroupService.findByName("lafo 1.3");
 		ExerciseGroupEntity exerciseGroup3 = exerciseGroupService.findByName("malo 1.4");
 		
-		AssignmentEntity assignment1 = assignmentService.create(student, exerciseGroup1);
-		AssignmentEntity assignment2 = assignmentService.create(student, exerciseGroup2);
+		assignmentService.create(student, exerciseGroup1);
+		assignmentService.create(student, exerciseGroup2);
 		
 		List<AssignmentEntity> assignments = assignmentService.findListByStudent(student);
 		
@@ -283,10 +273,9 @@ public class SetupTest extends SpringContextIntegrationTest {
 		ExerciseGroupEntity exerciseGroup1 = exerciseGroupService.findByName("la 1.2");
 
 		// List<Exercise> exercises = exerciseRepository.findExercisesByStudentAndExerciseGroup(student, exerciseGroup1);
-		AssignmentEntity assignment = assignmentService.findByUserAndExerciseGroup(student, exerciseGroup1);
+		assignmentService.findByUserAndExerciseGroup(student, exerciseGroup1);
 		
-		List<ExerciseEntity> exercises = exerciseService.findByExerciseGroup(exerciseGroup1);
-		
+		exerciseService.findByExerciseGroup(exerciseGroup1);
 		
 		System.out.println("Loading Exercise");
 		

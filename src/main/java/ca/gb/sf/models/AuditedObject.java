@@ -4,25 +4,18 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Parent object from which all other objects are derived. Provides a common id
- * for all objects. Provides Create and Update <code>timestamp</code> and
- * <code>user</code> objects for tracking purposes.
+ * Audited object that provides the following features: created user and time
+ * stamp, update user and time stamp. Should be extended by objects that are
+ * under user controlled. (i.e.: Users, Exercises, Assignments, etc.)
  */
 
 @MappedSuperclass
 public class AuditedObject extends PersistentObject {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "create_user_id")
@@ -37,14 +30,6 @@ public class AuditedObject extends PersistentObject {
 
 	@Column
 	protected Timestamp updateTimestamp;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public UserEntity getCreateUser() {
 		return createUser;
@@ -81,7 +66,8 @@ public class AuditedObject extends PersistentObject {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("PersistentObject [id=").append(id).append(", ");
+		if (super.toString() != null)
+			builder.append(super.toString());
 		if (createUser != null)
 			builder.append("createUser=").append(createUser.getId()).append(", ");
 		if (createTimestamp != null)
@@ -89,8 +75,7 @@ public class AuditedObject extends PersistentObject {
 		if (updateUser != null)
 			builder.append("updateUser=").append(updateUser.getId()).append(", ");
 		if (updateTimestamp != null)
-			builder.append("updateTimestamp=").append(updateTimestamp);
-		builder.append("]");
+			builder.append("updateTimestamp=").append(updateTimestamp).append(", ");;
 		return builder.toString();
 	}
 

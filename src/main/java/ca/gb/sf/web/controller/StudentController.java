@@ -1,16 +1,11 @@
 package ca.gb.sf.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,18 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import ca.gb.sf.models.AssignmentEntity;
-import ca.gb.sf.models.EducatorEntity;
-import ca.gb.sf.models.ExerciseEntity;
 import ca.gb.sf.models.StudentEntity;
 import ca.gb.sf.repositories.AssignmentRepository;
-import ca.gb.sf.repositories.ExerciseRepository;
 import ca.gb.sf.repositories.UserRepository;
 import ca.gb.sf.services.UserService;
 import ca.gb.sf.util.PageWrapper;
-import ca.gb.sf.web.form.SearchForm;
 import ca.gb.sf.web.form.StudentForm;
-import ca.gb.sf.web.form.UserRegistrationForm;
-import ca.gb.sf.web.service.ExerciseGroupWebService;
 
 @Controller
 public class StudentController {
@@ -41,9 +30,6 @@ public class StudentController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ExerciseRepository exerciseRepository;
 
     @Autowired
     private AssignmentRepository assignmentRepository;

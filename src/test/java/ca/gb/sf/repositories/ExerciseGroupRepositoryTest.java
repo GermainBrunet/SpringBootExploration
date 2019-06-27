@@ -29,12 +29,6 @@ public class ExerciseGroupRepositoryTest extends H2IntegrationTest {
 	@Autowired
 	ExerciseRepository exerciseRepository;
 
-	@Autowired
-	KeywordRepository keywordRepository;
-
-	@Autowired
-	LevelRepository levelRepository;
-
 	@Test
 	public void crudTest() {
 		
@@ -500,26 +494,5 @@ public class ExerciseGroupRepositoryTest extends H2IntegrationTest {
 		assertTrue(exerciseCountDifferenceAfterDelete == 0);
 		
 	}
-	
-	
-	
-	
-	
-	private KeywordEntity createKeywordEntity(String keyword) {
-		
-		KeywordEntity keywordEntity = new KeywordEntity(keyword);
-		
-		return keywordRepository.save(keywordEntity);
-		
-	}
-	
-	private LevelEntity createLevelEntity(String name) {
-		
-		LevelEntity levelEntity = new LevelEntity(name);
-		
-		return levelRepository.save(levelEntity);
-		
-	}
-	
 	
 }

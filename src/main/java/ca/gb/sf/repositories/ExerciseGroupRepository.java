@@ -31,7 +31,7 @@ import ca.gb.sf.models.LevelEntity;
 
 @CrossOrigin
 @RepositoryRestResource(collectionResourceRel = "exerciseGroup", path = "exerciseGroup")
-public interface ExerciseGroupRepository extends CrudRepository<ExerciseGroupEntity, Long> {
+public interface ExerciseGroupRepository extends CrudRepository<ExerciseGroupEntity, Long>, ExerciseGroupRepositoryCustom {
 
 	// Find by Name
 	@Query(value = "SELECT eg " 
@@ -126,6 +126,16 @@ public interface ExerciseGroupRepository extends CrudRepository<ExerciseGroupEnt
 	Page<ExerciseGroupEntity> findByStudentIdAndName(@Param("userId") Long userId, Pageable pageable,
 			@Param("searchString") String searchString);
 
+	@Query(value = "SELECT * " 
+			+ "     FROM exercise_groups eg "
+			// + "     INNER JOIN Assignments a ON eg.id = a.exercise_group_id " 
+			+ "     INNER JOIN Level l ON l.id = eg.level_id "
+			+ "     WHERE "
+			+ "       a.user_id = :userId AND " 
+			+ "       lower(eg.name) LIKE :searchString", nativeQuery = true)
+	Page<ExerciseGroupEntity> findByLevelKeywordsAndName(@Param("userId") Long userId, Pageable pageable,
+			@Param("searchString") String searchString);
+	
 
 	// Find All
 	Page<ExerciseGroupEntity> findAll(Pageable pageable);

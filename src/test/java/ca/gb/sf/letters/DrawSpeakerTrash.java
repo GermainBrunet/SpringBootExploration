@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,6 +58,9 @@ public class DrawSpeakerTrash {
 	}
 
 	static public void draw(String letter, String name, double size) throws Exception {
+		
+		FileInputStream fileInputStreamReader = null;
+		
 		try {
 			int width = new Double(size).intValue();
 			int height = new Double(size).intValue();
@@ -111,7 +112,7 @@ public class DrawSpeakerTrash {
 
 			File file = new File(TARGET_FOLDER + name + sizeFileName + ".PNG");
 
-			FileInputStream fileInputStreamReader = new FileInputStream(file);
+			fileInputStreamReader = new FileInputStream(file);
 			byte[] bytes = new byte[(int) file.length()];
 			fileInputStreamReader.read(bytes);
 			// String encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
@@ -133,6 +134,10 @@ public class DrawSpeakerTrash {
 
 		} catch (IOException ie) {
 			ie.printStackTrace();
+		} finally {
+			
+			fileInputStreamReader.close();
+			
 		}
 
 	}

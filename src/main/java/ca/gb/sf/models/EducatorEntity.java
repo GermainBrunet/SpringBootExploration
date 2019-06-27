@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.DiscriminatorOptions;
 
 /**
@@ -86,6 +88,42 @@ public class EducatorEntity extends UserEntity implements Serializable {
 		
 	}
 	
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder()
+				.append(this.id)
+				.append(this.displayName)
+				.append(this.email)
+				.toHashCode();
+		
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof EducatorEntity == false) {
+			
+			return false;
+			
+		}
+		
+		if (this == obj) {
+			
+			return true;
+			
+		}
+		
+		final EducatorEntity educatorEntity = (EducatorEntity) obj;
+
+		return new EqualsBuilder()
+				.append(this.id, educatorEntity.getId())
+				.append(this.displayName, educatorEntity.getDisplayName())
+				.append(this.email, educatorEntity.getEmail())
+				.isEquals();
+		
+	}
+	
 	/**
 	 * String representation of this object. Includes the parent object toString.
 	 * Used for debugging purposes.
@@ -95,7 +133,7 @@ public class EducatorEntity extends UserEntity implements Serializable {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Educator [");
 		if (super.toString() != null)
-			builder.append("toString()=").append(super.toString());
+			builder.append(super.toString());
 		builder.append("]");
 		return builder.toString();
 	}

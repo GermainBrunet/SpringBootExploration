@@ -175,35 +175,34 @@ public class ExerciseEntity extends AuditedObject implements Comparable<Exercise
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Exercise [");
-		builder.append("id=");
-		builder.append(getId());
+		if (super.toString() != null)
+			builder.append(super.toString());
 		if (initialWord != null) {
-			builder.append(", ");
 			builder.append("initialWord=");
 			builder.append(initialWord);
+			builder.append(", ");
 		}
 		if (targetWord != null) {
-			builder.append(", ");
 			builder.append("targetWord=");
 			builder.append(targetWord);
+			builder.append(", ");
 		}
 		if (writtenInstructions != null) {
-			builder.append(", ");
 			builder.append("writtenInstructions=");
 			builder.append(writtenInstructions);
+			builder.append(", ");
 		}
 		if (readInstructions != null) {
-			builder.append(", ");
 			builder.append("readInstructions=");
 			builder.append(readInstructions);
+			builder.append(", ");
 		}
 		if (exerciseOrder != null) {
-			builder.append(", ");
 			builder.append("exerciseOrder=");
 			builder.append(exerciseOrder);
+			builder.append(", ");
 		}
 		if (exerciseGroup != null) {
-			builder.append(", ");
 			builder.append("exerciseGroupId=");
 			builder.append(exerciseGroup.getId());
 		}
