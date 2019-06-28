@@ -254,6 +254,22 @@ function create() {
     	}
     };
 
+    function deleteLastLetter() {
+    	return function() {
+    		
+    		console.log('deleteLastLetter');
+    		
+    		var lastLetter = displayText.displayCharacters.length - 1;
+    		
+    		if (lastLetter >= 0) {
+    		
+    			var lastIcon = displayText.displayCharacters[lastLetter].icon;
+    		
+    			displayText.deleteLetter(lastIcon);
+    		}
+    	}
+    }
+    
     // Line 1 - Speaker
    	this.speakerIcon.anchor.setTo(0, 0);
     this.speakerIcon.x = sideSpace;
@@ -353,7 +369,7 @@ function create() {
     this.trashIcon.x = sideSpace;
     this.trashIcon.y = line2;
     this.trashIcon.inputEnabled = true;
-    this.trashIcon.events.onInputDown.add(speakerPressed(), this);    
+    this.trashIcon.events.onInputDown.add(deleteLastLetter(), this);    
     
     // Line 2 - Display Keyboard
     this.aIcon.anchor.setTo(0, 0);
