@@ -5,6 +5,8 @@ TODO: resize keyboard when letter mode.
 - Added model tests
 - Added ExerciseGroupRepository custom repository to allow different searches
 - Updated setup
+- Fixed test on swap Marco
+- Fixed Trash - Marco
 
 2019-06-23
 - Fixed bug preventing accented characters from being displayed.  (è) - need to test all the others.

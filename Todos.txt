@@ -43,5 +43,5 @@ Proposed Feature List
 - Background / Foreground (i.e.: color scheme)
 - Le e avec accent grave bousille le system (Fixed)
 - Deplacement de lettre a des problemes (Fixed)
-- Missing verification on swap - Marco 
-- Delete Icon does not delete - Marco
+- Missing verification on swap - Marco (Fixed)
+- Delete Icon does not delete - Marco (Fixed)
