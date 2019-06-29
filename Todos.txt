@@ -45,3 +45,4 @@ Proposed Feature List
 - Deplacement de lettre a des problemes (Fixed)
 - Missing verification on swap - Marco (Fixed)
 - Delete Icon does not delete - Marco (Fixed)
+- sauvegarder les nouveaux exercises - Marco
