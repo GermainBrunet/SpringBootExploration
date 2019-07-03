@@ -682,7 +682,7 @@ function DisplayText(letters) {
 		console.log('target: ' + targetWord);
 		
 		if (this.letters === targetWord) {
-			
+
 			speakerSuccess();
 		
 		}
@@ -714,7 +714,7 @@ function DisplayText(letters) {
 		}
 		
 		this.letters = newLetters;
-		this.display();
+		//this.display();
 	};
 
 	// Function to reposition letters
@@ -865,6 +865,8 @@ function DisplayText(letters) {
 
 		this.displayLocation();
 
+		this.display();
+		
 	};
 
   this.displayLocation = function () {
@@ -976,6 +978,12 @@ function DisplayCharacter(letter, position, x, y) {
 	
 }
 
+function speakerSuccess() {
+	
+	responsiveVoice.speak('Bravo', 'French Female');
+
+};
+
 function stopDrag(startIcon, endIcon) {
 	displayText.location(startIcon, endIcon.x, endIcon.y);
 }
@@ -990,11 +998,7 @@ function speakerInstructions() {
 
 };
 
-function speakerSuccess() {
-	
-	responsiveVoice.speak('Bravo', 'French Female');
 
-};
 
 </script>
 

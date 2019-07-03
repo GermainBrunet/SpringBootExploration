@@ -46,3 +46,4 @@ Proposed Feature List
 - Missing verification on swap - Marco (Fixed)
 - Delete Icon does not delete - Marco (Fixed)
 - sauvegarder les nouveaux exercises - Marco
+- Finishing an exercise - Marco

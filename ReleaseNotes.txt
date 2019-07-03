@@ -1,5 +1,8 @@
 TODO: resize keyboard when letter mode.
 
+2019-07-02
+- Fixed swapping bug
+
 2019-06-27
 - Enabled automatic code generation for metamodel
 - Added model tests
