@@ -24,6 +24,12 @@ public class HomeController {
         return "legal";
     }
 
+    @GetMapping("/term")
+    public String term() {
+        return "term";
+    }
+
+    
     @GetMapping("/login")
     public String login(SearchForm searchForm, Model model) {
 

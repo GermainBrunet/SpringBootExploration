@@ -1,7 +1,11 @@
 TODO: resize keyboard when letter mode.
 
+2019-07-03
+- added seperate legal and terms page - Marco
+- Updated banner - Marco
+
 2019-07-02
-- Fixed swapping bug
+- Fixed swapping bug - Marco
 
 2019-06-27
 - Enabled automatic code generation for metamodel

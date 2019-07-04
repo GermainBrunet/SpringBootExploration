@@ -93,7 +93,7 @@
 						<input id="terms" type="checkbox" th:field="*{terms}" />&nbsp;<label
 							class="control-label" for="terms"><span
 							th:text="#{registration.iAgreeStart}"></span>&nbsp;<a
-							href="legal" th:text="#{registration.iAgreeMiddle}"></a>&nbsp;<span
+							href="term" th:text="#{registration.iAgreeMiddle}"></a>&nbsp;<span
 							th:text="#{registration.iAgreeEnd}"></span> </label>
 						<p class="error-message"
 							th:each="error : ${#fields.errors('terms')}" th:text="${error}">Validation
